@@ -436,18 +436,14 @@
     <!-- ACTION BUTTONS -->
     <div class="action-row" id="actionRow" style="margin-top:16px;"></div>
 
-    <!-- WEEKLY CHECKIN -->
+    <!-- EMAIL CONFIRMATION -->
     <div class="checkin-card" id="checkinCard">
-      <div class="checkin-title en-text">📧 Get weekly support emails</div>
-      <div class="checkin-title fr-text hidden">📧 Recevez des courriels de soutien hebdomadaires</div>
-      <p class="checkin-sub en-text">We'll check in with you every week with new strategies, encouragement, and guidance. Free.</p>
-      <p class="checkin-sub fr-text hidden">Nous vous contacterons chaque semaine avec de nouvelles stratégies, encouragements et conseils. Gratuit.</p>
-      <div class="checkin-form">
-        <input type="email" class="checkin-input en-text" id="checkinEmail" placeholder="your@email.com" />
-        <input type="email" class="checkin-input fr-text hidden" id="checkinEmailFr" placeholder="votre@courriel.com" />
-        <button class="btn-checkin en-text" onclick="subscribeCheckin()">Subscribe</button>
-        <button class="btn-checkin fr-text hidden" onclick="subscribeCheckin()">S'abonner</button>
-      </div>
+      <div class="checkin-title en-text">📬 Your outputs are ready</div>
+      <div class="checkin-title fr-text hidden">📬 Vos résultats sont prêts</div>
+      <p class="checkin-sub en-text">Download your PDFs above or copy your content. Your email <strong>${answers && answers.email ? answers.email : ''}</strong> has been recorded for delivery.</p>
+      <p class="checkin-sub fr-text hidden">Téléchargez vos PDFs ci-dessus ou copiez votre contenu. Votre courriel a été enregistré pour la livraison.</p>
+      <p style="font-size:12px;color:var(--text-light);margin-top:8px;" class="en-text">Need ongoing support? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Upgrade to the monthly plan →</a></p>
+      <p style="font-size:12px;color:var(--text-light);margin-top:8px;display:none;" class="fr-text hidden">Besoin d'un soutien continu? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Passez au plan mensuel →</a></p>
     </div>
 
     <button class="btn-restart en-text" onclick="restart()">← Start over for another person</button>
@@ -551,9 +547,16 @@
       ]
     },
     {
+      id: 'situation',
+      eyebrow: { en: 'Your story', fr: 'Votre histoire' },
+      title: { en: 'Tell us about your situation', fr: 'Parlez-nous de votre situation' },
+      subtitle: { en: 'The more specific you are, the more personalized your outputs will be. What have you observed? What has happened recently? What are you most worried about?', fr: 'Plus vous êtes précis, plus vos résultats seront personnalisés. Qu\'avez-vous observé? Que s\'est-il passé récemment? Qu\'est-ce qui vous inquiète le plus?' },
+      type: 'textarea',
+    },
+    {
       id: 'names',
       eyebrow: { en: 'Personalization', fr: 'Personnalisation' },
-      title: { en: 'Last step — a few details', fr: 'Dernière étape — quelques détails' },
+      title: { en: 'Almost done — a few details', fr: 'Presque terminé — quelques détails' },
       subtitle: { en: 'Your information is private and used only to personalize your outputs.', fr: 'Vos informations sont privées et utilisées uniquement pour personnaliser vos résultats.' },
       type: 'names',
     }
@@ -622,6 +625,13 @@
         </button>`;
       });
       html += `</div>`;
+    } else if (q.type === 'textarea') {
+      html += `
+        <textarea class="text-input" style="height:160px;resize:vertical;line-height:1.6;" id="situationInput"
+          placeholder="${lang === 'en' ? 'Ex: My son has been drinking heavily for 3 years. He lost his job last month and his relationship is falling apart. He refuses to admit he has a problem and gets angry when we bring it up. Last week he missed his daughter\'s birthday...' : 'Ex: Mon fils boit beaucoup depuis 3 ans. Il a perdu son emploi le mois dernier et sa relation est en train de s\'effondrer. Il refuse d\'admettre qu\'il a un problème et se fâche quand on en parle...'}"
+          oninput="answers.situation=this.value">${answers.situation || ''}</textarea>
+        <p style="font-size:11px;color:var(--text-light);margin-top:8px;">${lang === 'en' ? '💡 The more details you share, the more personalized your letter, guide and script will be.' : '💡 Plus vous partagez de détails, plus votre lettre, guide et script seront personnalisés.'}</p>
+      `;
     } else if (q.type === 'names') {
       html += `
         <div style="display:flex;flex-direction:column;gap:16px;">
@@ -670,6 +680,10 @@
     const q = questions[currentQ];
     if (q.type === 'grid' && !answers[q.id]) {
       alert(lang === 'en' ? 'Please select an option to continue.' : 'Veuillez sélectionner une option pour continuer.');
+      return;
+    }
+    if (q.type === 'textarea' && (!answers.situation || answers.situation.trim().length < 20)) {
+      alert(lang === 'en' ? 'Please describe your situation in a few sentences to continue.' : 'Veuillez décrire votre situation en quelques phrases pour continuer.');
       return;
     }
     if (q.type === 'names') {
@@ -725,6 +739,7 @@ Their attitude toward help: ${attitudeContext[answers.attitude] || answers.attit
 Tone: ${answers.tone}
 Sender name: ${senderName}
 Patient name: ${patientName}
+Situation details: ${answers.situation || 'No additional details provided'}
 Language: ${outputLang}
     `.trim();
 
