@@ -523,6 +523,21 @@
     .fade-in.visible { opacity: 1; transform: translateY(0); }
 
     /* DISCLAIMER */
+    .pricing-tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (max-width: 700px) {
+      .pricing-tiers-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+      }
+    }
     .disclaimer {
       background: var(--bg-dark);
       padding: 20px 40px;
@@ -572,8 +587,10 @@
     <div class="trust-item"><span class="trust-icon">✓</span><span class="en-text">Bilingual FR / EN</span><span class="fr-text" style="display:none;">Bilingue FR / AN</span></div>
     <div class="trust-item"><span class="trust-icon">✓</span><span class="en-text">Plans from $9</span><span class="fr-text" style="display:none;">Plans à partir de 9$</span></div>
     <div class="trust-item"><span class="trust-icon">✓</span><span class="en-text">Ready in under 60 seconds</span><span class="fr-text" style="display:none;">Prêt en moins de 60 secondes</span></div>
-    <div class="trust-item"><span class="trust-icon">✓</span><span class="en-text">4 weeks of weekly support included</span><span class="fr-text" style="display:none;">4 semaines de soutien hebdomadaire inclus</span></div>
+    <div class="trust-item"><span class="trust-icon">✓</span><span class="en-text">100% money-back guarantee</span><span class="fr-text" style="display:none;">Garantie de remboursement 100%</span></div>
   </div>
+  <p style="font-size:12px;color:var(--text-light);margin-top:24px;max-width:500px;text-align:center;" class="en-text">⚠️ TheFirstWord is designed for adults (18+) seeking help for another adult. If you are concerned about a minor (under 18), please contact a youth addiction specialist directly.</p>
+  <p style="font-size:12px;color:var(--text-light);margin-top:24px;max-width:500px;text-align:center;display:none;" class="fr-text">⚠️ TheFirstWord est conçu pour les adultes (18+) qui cherchent à aider un autre adulte. Si vous êtes préoccupé par un mineur (moins de 18 ans), veuillez contacter directement un spécialiste en dépendance jeunesse.</p>
 </section>
 
 <div class="section-divider"></div>
@@ -777,6 +794,41 @@
     </div>
     <p style="font-size:13px;color:rgba(255,255,255,0.4);text-align:center;" class="en-text">Secure payment powered by Stripe · 100% money-back guarantee</p>
     <p style="display:none;font-size:13px;color:rgba(255,255,255,0.4);text-align:center;" class="fr-text">Paiement sécurisé par Stripe · Garantie de remboursement 100%</p>
+
+    <!-- SUBSCRIPTION UPSELL -->
+    <div style="margin-top:40px;background:rgba(42,127,127,0.15);border:1px solid rgba(42,127,127,0.3);border-radius:16px;padding:36px;text-align:left;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;">
+        <div style="flex:1;min-width:240px;">
+          <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;" class="en-text">🔄 Ongoing Support Plan</p>
+          <p style="display:none;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;" class="fr-text">🔄 Plan de soutien continu</p>
+          <h3 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:white;margin-bottom:4px;">$19<span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.6);" class="en-text">/month</span><span style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.6);display:none;" class="fr-text">/mois</span></h3>
+          <p style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:16px;" class="en-text">Cancel anytime</p>
+          <p style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:16px;display:none;" class="fr-text">Annulez à tout moment</p>
+          <ul style="list-style:none;">
+            <li style="font-size:13px;color:rgba(255,255,255,0.8);padding:5px 0;display:flex;gap:8px;"><span style="color:var(--teal);">✓</span><span class="en-text">Everything in Complete plan</span><span class="fr-text" style="display:none;">Tout du plan Complet</span></li>
+            <li style="font-size:13px;color:rgba(255,255,255,0.8);padding:5px 0;display:flex;gap:8px;"><span style="color:var(--teal);">✓</span><span class="en-text">Unlimited regenerations — new approach anytime</span><span class="fr-text" style="display:none;">Régénérations illimitées — nouvelle approche à tout moment</span></li>
+            <li style="font-size:13px;color:rgba(255,255,255,0.8);padding:5px 0;display:flex;gap:8px;"><span style="color:var(--teal);">✓</span><span class="en-text">Weekly check-in emails for as long as you need</span><span class="fr-text" style="display:none;">Courriels de suivi hebdomadaires aussi longtemps que nécessaire</span></li>
+            <li style="font-size:13px;color:rgba(255,255,255,0.8);padding:5px 0;display:flex;gap:8px;"><span style="color:var(--teal);">✓</span><span class="en-text">New Plan B strategies as situation evolves</span><span class="fr-text" style="display:none;">Nouvelles stratégies Plan B selon l'évolution de la situation</span></li>
+          </ul>
+        </div>
+        <div style="flex:1;min-width:220px;background:rgba(0,0,0,0.2);border-radius:12px;padding:20px;">
+          <p style="font-size:13px;font-weight:600;color:var(--teal);margin-bottom:12px;" class="en-text">💡 Why this makes sense:</p>
+          <p style="font-size:13px;font-weight:600;color:var(--teal);margin-bottom:12px;display:none;" class="fr-text">💡 Pourquoi c'est logique :</p>
+          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:12px;" class="en-text">A single therapy session costs <strong style="color:white;">$150–200</strong>. Our monthly plan is <strong style="color:var(--teal);">90% less</strong> — and available 24/7, the moment you need it.</p>
+          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:12px;display:none;" class="fr-text">Une seule séance de thérapie coûte <strong style="color:white;">150–200$</strong>. Notre plan mensuel coûte <strong style="color:var(--teal);">90% moins cher</strong> — et disponible 24/7, dès que vous en avez besoin.</p>
+          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;" class="en-text">Intervention rarely works on the first try. Families who stay consistent have a <strong style="color:white;">significantly higher success rate</strong>. This plan keeps you supported for the long game.</p>
+          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;display:none;" class="fr-text">Une intervention fonctionne rarement du premier coup. Les familles qui restent constantes ont un <strong style="color:white;">taux de succès nettement plus élevé</strong>. Ce plan vous soutient sur le long terme.</p>
+          <a href="app.html" style="display:block;margin-top:16px;background:var(--teal);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="en-text">Start Monthly Plan — $19/mo</a>
+          <a href="app.html" style="display:none;margin-top:16px;background:var(--teal);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="fr-text">Commencer — 19$/mois</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGE DISCLAIMER -->
+    <div style="margin-top:24px;background:rgba(232,165,75,0.08);border:1px solid rgba(232,165,75,0.2);border-radius:10px;padding:16px 20px;">
+      <p style="font-size:12px;color:rgba(232,165,75,0.8);line-height:1.6;" class="en-text">⚠️ <strong>Important:</strong> TheFirstWord is designed exclusively for adults (18+) seeking help for another adult struggling with addiction. If your loved one is under 18, their situation requires a specialized youth approach. Please contact a youth addiction specialist or crisis line directly.</p>
+      <p style="font-size:12px;color:rgba(232,165,75,0.8);line-height:1.6;display:none;" class="fr-text">⚠️ <strong>Important :</strong> TheFirstWord est conçu exclusivement pour les adultes (18+) cherchant à aider un autre adulte aux prises avec une dépendance. Si votre proche a moins de 18 ans, sa situation nécessite une approche jeunesse spécialisée. Veuillez contacter directement un spécialiste en dépendance jeunesse.</p>
+    </div>
   </div>
 </div>
 
