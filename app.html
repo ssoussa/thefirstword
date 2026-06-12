@@ -634,8 +634,12 @@
             <input type="text" class="text-input" id="patientNameInput" placeholder="${lang === 'en' ? 'e.g. Mathieu' : 'ex. Mathieu'}" value="${answers.patientName || ''}" oninput="answers.patientName=this.value" />
           </div>
           <div>
-            <p style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:8px;">${lang === 'en' ? 'Your email (for weekly check-ins)' : 'Votre courriel (pour les suivis hebdomadaires)'}</p>
+            <p style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:8px;">${lang === 'en' ? 'Your email — required for delivery & weekly support' : 'Votre courriel — requis pour la livraison et le soutien hebdomadaire'} <span style="color:var(--cta);">*</span></p>
             <input type="email" class="text-input" id="emailInput" placeholder="${lang === 'en' ? 'your@email.com' : 'votre@courriel.com'}" value="${answers.email || ''}" oninput="answers.email=this.value" />
+            <p style="font-size:11px;color:var(--text-light);margin-top:6px;">${lang === 'en' ? '🔒 Your email is private and never shared. Used only to deliver your outputs and send weekly check-ins (Complete plan).' : '🔒 Votre courriel est privé et jamais partagé. Utilisé uniquement pour livrer vos résultats et envoyer des suivis hebdomadaires (plan Complet).'}</p>
+          </div>
+          <div style="background:rgba(232,165,75,0.08);border:1px solid rgba(232,165,75,0.2);border-radius:10px;padding:14px;">
+            <p style="font-size:12px;color:rgba(196,98,45,0.9);line-height:1.6;">${lang === 'en' ? '⚠️ TheFirstWord is designed for adults (18+) helping another adult. If your loved one is under 18, please contact a youth addiction specialist directly.' : '⚠️ TheFirstWord est conçu pour les adultes (18+) aidant un autre adulte. Si votre proche a moins de 18 ans, veuillez contacter directement un spécialiste en dépendance jeunesse.'}</p>
           </div>
         </div>
       `;
@@ -671,6 +675,10 @@
     if (q.type === 'names') {
       if (!answers.senderName || !answers.patientName) {
         alert(lang === 'en' ? 'Please enter both names to continue.' : 'Veuillez entrer les deux prénoms pour continuer.');
+        return;
+      }
+      if (!answers.email) {
+        alert(lang === 'en' ? 'Please enter your email to continue.' : 'Veuillez entrer votre courriel pour continuer.');
         return;
       }
     }
