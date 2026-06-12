@@ -534,8 +534,11 @@
     }
     @media (max-width: 700px) {
       .pricing-tiers-grid {
-        grid-template-columns: 1fr;
-        max-width: 400px;
+        grid-template-columns: 1fr !important;
+        max-width: 100% !important;
+      }
+      .pricing-tiers-grid > div {
+        transform: none !important;
       }
     }
     .disclaimer {
@@ -737,8 +740,8 @@
     <p class="section-label fr-text" style="display:none;">Tarification simple</p>
     <h2 style="font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,48px);font-weight:700;letter-spacing:-1px;color:white;margin-bottom:16px;" class="en-text">Choose your plan.</h2>
     <h2 style="display:none;font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,48px);font-weight:700;letter-spacing:-1px;color:white;margin-bottom:16px;" class="fr-text">Choisissez votre plan.</h2>
-    <p style="font-size:17px;color:rgba(255,255,255,0.6);margin-bottom:48px;font-weight:300;" class="en-text">One-time payment. No subscription. 100% money-back guarantee.</p>
-    <p style="display:none;font-size:17px;color:rgba(255,255,255,0.6);margin-bottom:48px;font-weight:300;" class="fr-text">Paiement unique. Pas d'abonnement. Garantie de remboursement 100%.</p>
+    <p style="font-size:17px;color:rgba(255,255,255,0.6);margin-bottom:48px;font-weight:300;" class="en-text">One-time plans or monthly support. 100% money-back guarantee.</p>
+    <p style="display:none;font-size:17px;color:rgba(255,255,255,0.6);margin-bottom:48px;font-weight:300;" class="fr-text">Plans uniques ou soutien mensuel. Garantie de remboursement 100%.</p>
     <div class="pricing-tiers-grid">
       <div style="background:white;border-radius:16px;padding:32px 24px;">
         <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;" class="en-text">Starter</p>
@@ -792,9 +795,6 @@
         <a href="app.html" style="display:none;background:var(--bg-dark);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="fr-text">Commencer pour 29$</a>
       </div>
     </div>
-    <p style="font-size:13px;color:rgba(255,255,255,0.4);text-align:center;" class="en-text">Secure payment powered by Stripe · 100% money-back guarantee</p>
-    <p style="display:none;font-size:13px;color:rgba(255,255,255,0.4);text-align:center;" class="fr-text">Paiement sécurisé par Stripe · Garantie de remboursement 100%</p>
-
     <!-- SUBSCRIPTION UPSELL -->
     <div style="margin-top:40px;background:rgba(42,127,127,0.15);border:1px solid rgba(42,127,127,0.3);border-radius:16px;padding:36px;text-align:left;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;">
