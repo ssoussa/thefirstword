@@ -126,7 +126,8 @@
     }
     .price-card:hover { border-color: var(--teal); transform: translateY(-2px); }
     .price-card.selected { border-color: var(--teal); box-shadow: 0 0 0 4px rgba(42,127,127,0.1); }
-    .price-card.popular { border-color: var(--teal); }
+    .price-card.popular { border-color: var(--divider); }
+    .price-card.popular.selected { border-color: var(--teal); box-shadow: 0 0 0 4px rgba(42,127,127,0.1); }
     .popular-badge {
       position: absolute;
       top: -12px;
@@ -276,8 +277,8 @@
       <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px;" class="fr-text hidden">Choisissez votre plan</p>
       <h2 class="pricing-title en-text">One payment. Everything you need.</h2>
       <h2 class="pricing-title fr-text hidden">Un paiement. Tout ce dont vous avez besoin.</h2>
-      <p class="pricing-subtitle en-text">No subscription. No hidden fees. 100% money-back guarantee.</p>
-      <p class="pricing-subtitle fr-text hidden">Pas d'abonnement. Pas de frais cachés. Garantie de remboursement 100%.</p>
+      <p class="pricing-subtitle en-text">One-time payment or monthly plan. No hidden fees. 100% money-back guarantee.</p>
+      <p class="pricing-subtitle fr-text hidden">Paiement unique ou plan mensuel. Pas de frais cachés. Garantie de remboursement 100%.</p>
 
       <div class="pricing-grid">
         <!-- STARTER -->
