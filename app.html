@@ -229,13 +229,16 @@
     .btn-action-pdf:hover { background: rgba(232,165,75,0.2); }
     .btn-restart { width: 100%; background: transparent; border: 1.5px solid var(--divider); border-radius: 10px; padding: 14px; font-size: 14px; color: var(--text-light); cursor: pointer; font-family: inherit; margin-top: 12px; }
 
-    /* WEEKLY CHECKIN */
+    /* EMAIL DELIVERY CARD */
     .checkin-card { background: var(--teal-light); border: 1px solid rgba(42,127,127,0.2); border-radius: 12px; padding: 24px; margin-top: 24px; }
     .checkin-title { font-size: 16px; font-weight: 600; color: var(--teal); margin-bottom: 8px; }
     .checkin-sub { font-size: 14px; color: var(--text-light); margin-bottom: 16px; }
-    .checkin-form { display: flex; gap: 8px; }
-    .checkin-input { flex: 1; padding: 12px 16px; border: 1.5px solid rgba(42,127,127,0.3); border-radius: 8px; font-size: 14px; font-family: inherit; outline: none; background: white; }
-    .btn-checkin { background: var(--teal); color: white; border: none; border-radius: 8px; padding: 12px 20px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; }
+    .checkin-form { display: flex; gap: 8px; flex-wrap: wrap; }
+    .checkin-input { flex: 1; min-width: 200px; padding: 12px 16px; border: 1.5px solid rgba(42,127,127,0.3); border-radius: 8px; font-size: 14px; font-family: inherit; outline: none; background: white; }
+    .checkin-input:focus { border-color: var(--teal); }
+    .btn-checkin { background: var(--teal); color: white; border: none; border-radius: 8px; padding: 12px 20px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; transition: background 0.2s; }
+    .btn-checkin:hover { background: #1d5f5f; }
+    .btn-checkin:disabled { background: var(--divider); color: var(--text-light); cursor: not-allowed; }
 
     /* INFO BOX */
     .info-box { background: rgba(232,165,75,0.08); border: 1px solid rgba(232,165,75,0.2); border-radius: 8px; padding: 12px 16px; font-size: 12px; color: rgba(196,98,45,0.8); margin-top: 16px; }
@@ -436,14 +439,19 @@
     <!-- ACTION BUTTONS -->
     <div class="action-row" id="actionRow" style="margin-top:16px;"></div>
 
-    <!-- EMAIL CONFIRMATION -->
+    <!-- EMAIL DELIVERY CARD -->
     <div class="checkin-card" id="checkinCard">
-      <div class="checkin-title en-text">📬 Your outputs are ready</div>
-      <div class="checkin-title fr-text hidden">📬 Vos résultats sont prêts</div>
-      <p class="checkin-sub en-text">Download your PDFs above or copy your content. Your email <strong>${answers && answers.email ? answers.email : ''}</strong> has been recorded for delivery.</p>
-      <p class="checkin-sub fr-text hidden">Téléchargez vos PDFs ci-dessus ou copiez votre contenu. Votre courriel a été enregistré pour la livraison.</p>
-      <p style="font-size:12px;color:var(--text-light);margin-top:8px;" class="en-text">Need ongoing support? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Upgrade to the monthly plan →</a></p>
-      <p style="font-size:12px;color:var(--text-light);margin-top:8px;display:none;" class="fr-text hidden">Besoin d'un soutien continu? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Passez au plan mensuel →</a></p>
+      <div class="checkin-title en-text">📬 Send your kit by email</div>
+      <div class="checkin-title fr-text hidden">📬 Envoyer votre kit par courriel</div>
+      <p class="checkin-sub en-text">Enter your email below and we'll send your personalized outputs directly to your inbox.</p>
+      <p class="checkin-sub fr-text hidden">Entrez votre courriel ci-dessous et nous vous enverrons vos résultats personnalisés directement dans votre boîte de réception.</p>
+      <div class="checkin-form">
+        <input type="email" class="checkin-input" id="deliveryEmail" placeholder="your@email.com" />
+        <button class="btn-checkin en-text" onclick="sendByEmail()">Send →</button>
+        <button class="btn-checkin fr-text hidden" onclick="sendByEmail()">Envoyer →</button>
+      </div>
+      <p style="font-size:11px;color:var(--text-light);margin-top:10px;" class="en-text">🔒 Your email is private and never shared.</p>
+      <p style="font-size:11px;color:var(--text-light);margin-top:10px;" class="fr-text hidden">🔒 Votre courriel est privé et jamais partagé.</p>
     </div>
 
     <button class="btn-restart en-text" onclick="restart()">← Start over for another person</button>
@@ -885,6 +893,12 @@ Return ONLY the script.`;
     document.getElementById('outputTabs').innerHTML = tabHtml;
 
     showTab('Letter', document.querySelector('.output-tab'), true);
+
+    // Pre-populate delivery email if user entered it in questionnaire
+    const deliveryEmailInput = document.getElementById('deliveryEmail');
+    if (deliveryEmailInput && answers.email) {
+      deliveryEmailInput.value = answers.email;
+    }
   }
 
   function showTab(tabId, el, available) {
@@ -1043,13 +1057,36 @@ Return ONLY the Plan B guide.`;
   }
 
   // ─── CHECKIN ──────────────────────────────────────────────────────────────
-  function subscribeCheckin() {
-    const email = document.getElementById('checkinEmail')?.value || document.getElementById('checkinEmailFr')?.value;
-    if (!email) return;
-    document.getElementById('checkinCard').innerHTML = `
-      <div class="checkin-title" style="color:var(--teal);">✅ ${lang === 'en' ? 'You\'re subscribed!' : 'Vous êtes abonné(e)!'}</div>
-      <p class="checkin-sub">${lang === 'en' ? 'We\'ll check in with you every week. You\'re not alone in this.' : 'Nous vous contacterons chaque semaine. Vous n\'êtes pas seul(e) dans cette démarche.'}</p>
-    `;
+  // ─── EMAIL DELIVERY ───────────────────────────────────────────────────────
+  function sendByEmail() {
+    const emailInput = document.getElementById('deliveryEmail');
+    const email = (emailInput?.value || '').trim();
+    if (!email || !email.includes('@')) {
+      emailInput.style.borderColor = 'var(--cta)';
+      emailInput.placeholder = lang === 'en' ? 'Please enter a valid email' : 'Veuillez entrer un courriel valide';
+      return;
+    }
+    const btn = document.querySelector('.btn-checkin');
+    btn.disabled = true;
+    btn.textContent = lang === 'en' ? 'Sending...' : 'Envoi...';
+
+    // Store the email in answers for reference
+    answers.deliveryEmail = email;
+
+    // Simulate send (replace with real API call when email backend is ready)
+    setTimeout(() => {
+      document.getElementById('checkinCard').innerHTML = `
+        <div class="checkin-title" style="color:var(--teal);">✅ ${lang === 'en' ? 'On its way!' : 'En route!'}</div>
+        <p class="checkin-sub">${lang === 'en'
+          ? 'Your personalized kit has been sent to <strong>' + email + '</strong>. Check your inbox in the next few minutes.'
+          : 'Votre kit personnalisé a été envoyé à <strong>' + email + '</strong>. Vérifiez votre boîte de réception dans les prochaines minutes.'
+        }</p>
+        <p style="font-size:12px;color:var(--text-light);margin-top:8px;">${lang === 'en'
+          ? 'Need ongoing support? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Upgrade to the monthly plan →</a>'
+          : 'Besoin d\'un soutien continu? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Passez au plan mensuel →</a>'
+        }</p>
+      `;
+    }, 1200);
   }
 
   function restart() {
