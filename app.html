@@ -263,7 +263,9 @@
 <body>
 
 <nav>
-  <a href="index.html" class="nav-logo">The<span>First</span>Word</a>
+  <a href="index.html" class="nav-logo">
+    <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/ehn-family-coach/main/logo-en.png" alt="TheFirstWord" style="height:48px;width:auto;display:block;" />
+  </a>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
     <button class="lang-btn" onclick="setLang('fr')">FR</button>
@@ -635,6 +637,11 @@
     document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`).classList.add('active');
     document.querySelectorAll('.en-text').forEach(el => el.classList.toggle('hidden', l !== 'en'));
     document.querySelectorAll('.fr-text').forEach(el => el.classList.toggle('hidden', l !== 'fr'));
+    // Swap logo
+    const logoEn = 'https://raw.githubusercontent.com/ssoussa/ehn-family-coach/main/logo-en.png';
+    const logoFr = 'https://raw.githubusercontent.com/ssoussa/ehn-family-coach/main/logo-fr.png';
+    const navLogo = document.getElementById('nav-logo-img');
+    if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
     renderQuestion();
   }
 
@@ -1089,7 +1096,7 @@ Return ONLY the Plan B guide.`;
 
   // ─── CHECKIN ──────────────────────────────────────────────────────────────
   // ─── EMAIL DELIVERY ───────────────────────────────────────────────────────
-  function sendByEmail() {
+  async function sendByEmail() {
     const emailInput = document.getElementById('deliveryEmail');
     const email = (emailInput?.value || '').trim();
     if (!email || !email.includes('@')) {
