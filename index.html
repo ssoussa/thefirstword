@@ -556,7 +556,9 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">The<span>First</span>Word</a>
+  <a href="#" class="nav-logo">
+    <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/ehn-family-coach/main/logo-en.png" alt="TheFirstWord" style="height:48px;width:auto;display:block;" />
+  </a>
   <div class="nav-links">
     <div class="lang-toggle">
       <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -934,7 +936,9 @@
 
 <!-- FOOTER -->
 <footer>
-  <a href="#" class="footer-logo">The<span>First</span>Word</a>
+  <a href="#" class="footer-logo">
+    <img id="footer-logo-img" src="https://raw.githubusercontent.com/ssoussa/ehn-family-coach/main/logo-en.png" alt="TheFirstWord" style="height:52px;width:auto;display:block;" />
+  </a>
   <div class="footer-links">
     <a href="#" class="en-text">Privacy</a>
     <a href="#" class="fr-text" style="display:none;">Confidentialité</a>
@@ -955,6 +959,14 @@
   // LANGUAGE TOGGLE
   let currentLang = 'en';
   function setLang(lang) {
+    // Swap logos
+    const logoEn = 'https://raw.githubusercontent.com/ssoussa/ehn-family-coach/main/logo-en.png';
+    const logoFr = 'https://raw.githubusercontent.com/ssoussa/ehn-family-coach/main/logo-fr.png';
+    const src = lang === 'fr' ? logoFr : logoEn;
+    const navLogo = document.getElementById('nav-logo-img');
+    const footerLogo = document.getElementById('footer-logo-img');
+    if (navLogo) navLogo.src = src;
+    if (footerLogo) footerLogo.src = src;
     currentLang = lang;
     document.querySelectorAll('.en-text').forEach(el => el.style.display = lang === 'en' ? '' : 'none');
     document.querySelectorAll('.fr-text').forEach(el => el.style.display = lang === 'fr' ? '' : 'none');
