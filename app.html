@@ -1135,6 +1135,7 @@ Return ONLY the Plan B guide.`;
           email,
           name: (answers.senderName || '').charAt(0).toUpperCase() + (answers.senderName || '').slice(1),
           lang,
+          plan: selectedPlan,
           outputs: {
             letter: outputs.letter || '',
             guide: outputs.guide || '',
