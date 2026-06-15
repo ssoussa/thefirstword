@@ -460,6 +460,7 @@
   // ─── LANGUAGE ─────────────────────────────────────────────────────────────
   function setLang(l) {
     lang = l;
+    sessionStorage.setItem('tfw_lang', l);
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
     document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`).classList.add('active');
     document.querySelectorAll('.en-text').forEach(el => el.classList.toggle('hidden', l !== 'en'));
@@ -854,13 +855,17 @@ Return ONLY the Plan B strategy.`;
     const params = new URLSearchParams(window.location.search);
     const isReturning = params.get('returning') === 'true';
     const returnEmail = params.get('email');
-    const returnLang  = params.get('lang');
     const isPlanB     = params.get('planb') === 'true';
     const isViewKit   = params.get('view') === 'kit';
 
-    // Apply language from URL param even for fresh visitors (e.g. from French homepage)
-    if (returnLang && (returnLang === 'en' || returnLang === 'fr') && returnLang !== lang) {
-      setLang(returnLang);
+    // Detect language — URL param takes priority, then sessionStorage from homepage, then default EN
+    const urlLang      = params.get('lang');
+    const storedLang   = sessionStorage.getItem('tfw_lang');
+    const detectedLang = urlLang || storedLang || 'en';
+    const returnLang   = detectedLang;
+
+    if (detectedLang && detectedLang !== lang) {
+      setLang(detectedLang);
     }
 
     if (isReturning && returnEmail) {
