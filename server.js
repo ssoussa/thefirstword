@@ -406,9 +406,40 @@ async function sendEmail(to, subject, html) {
   return response.json();
 }
 
+// ─── RATE LIMITING (in-memory, no package needed) ────────────────────────────
+
+const rateLimitMap = new Map();
+const RATE_LIMIT_MAX = 10;       // max requests
+const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // per hour
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now - entry.start > RATE_LIMIT_WINDOW) {
+    rateLimitMap.set(ip, { count: 1, start: now });
+    return true;
+  }
+  if (entry.count >= RATE_LIMIT_MAX) return false;
+  entry.count++;
+  return true;
+}
+
+// Clean up old entries every hour to prevent memory leaks
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of rateLimitMap.entries()) {
+    if (now - entry.start > RATE_LIMIT_WINDOW) rateLimitMap.delete(ip);
+  }
+}, RATE_LIMIT_WINDOW);
+
 // ─── API: GENERATE ────────────────────────────────────────────────────────────
 
 app.post("/api/generate", async (req, res) => {
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress || 'unknown';
+  if (!checkRateLimit(ip)) {
+    return res.status(429).json({ error: "Too many requests. Please wait before trying again." });
+  }
+
   const { prompt } = req.body;
   if (!prompt) return res.status(400).json({ error: "Missing prompt" });
 
@@ -459,17 +490,27 @@ app.post("/api/send-email", async (req, res) => {
         const clientAnswers = req.body.answers || {};
         const isMonthly = plan === 'monthly';
 
+        // Check if subscriber already exists so we don't overwrite signed_up_at or week flags
+        let existingRecord = null;
+        try {
+          const existing = await supabaseQuery('subscribers', `email=eq.${encodeURIComponent(email)}&select=id,signed_up_at,week1_sent,week2_sent,week3_sent,week4_sent,active&limit=1`);
+          if (Array.isArray(existing) && existing[0]?.id) existingRecord = existing[0];
+        } catch(e) { /* non-blocking */ }
+
         const rowData = {
           email,
           name: name || '',
           lang: lang || 'en',
           plan: plan || 'starter',
-          signed_up_at: new Date().toISOString(),
-          active: isMonthly,
-          week1_sent: false,
-          week2_sent: false,
-          week3_sent: false,
-          week4_sent: false,
+          // Only set signed_up_at on new records — preserve existing so weekly email timing isn't disrupted
+          signed_up_at: existingRecord ? existingRecord.signed_up_at : new Date().toISOString(),
+          // Only set active=true for monthly. Non-monthly stays false. Don't reset to false if already monthly.
+          active: isMonthly ? true : (existingRecord ? existingRecord.active : false),
+          // Only reset week flags for new monthly subscribers — preserve for existing
+          week1_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week1_sent : false),
+          week2_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week2_sent : false),
+          week3_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week3_sent : false),
+          week4_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week4_sent : false),
           relationship: clientAnswers.relationship || '',
           substance: clientAnswers.substance || '',
           duration: clientAnswers.duration || '',
