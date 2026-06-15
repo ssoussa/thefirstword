@@ -465,6 +465,14 @@ app.post("/api/generate", async (req, res) => {
     if (data.content?.[0]?.text) {
       res.json({ letter: data.content[0].text });
     } else {
+      // Notify operator of unexpected AI response
+      try {
+        await sendEmail('thefirstword.ca@gmail.com', '⚠️ TheFirstWord — AI generation error', emailWrapper(`
+          <p style="font-size:15px;color:#1a1a1a;margin:0 0 12px;">An /api/generate call returned an unexpected response from the Anthropic API.</p>
+          <p style="font-size:13px;color:#6b6460;">Response: <code>${JSON.stringify(data).slice(0, 500)}</code></p>
+          <p style="font-size:13px;color:#6b6460;margin-top:8px;">Time: ${new Date().toISOString()}</p>
+        `, 'en'));
+      } catch(e) { /* non-blocking */ }
       res.status(500).json({ error: "Unexpected response from AI. Please try again." });
     }
   } catch (err) {
@@ -941,6 +949,45 @@ app.post("/api/send-planb-email", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Failed to send Plan B email." });
   }
+});
+
+// ─── HEALTH CHECK ─────────────────────────────────────────────────────────────
+
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", ts: new Date().toISOString() });
+});
+
+// ─── ROBOTS.TXT ───────────────────────────────────────────────────────────────
+
+app.get("/robots.txt", (req, res) => {
+  res.type("text/plain");
+  res.send(`User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://thefirstword.ca/sitemap.xml`);
+});
+
+// ─── SITEMAP.XML ──────────────────────────────────────────────────────────────
+
+app.get("/sitemap.xml", (req, res) => {
+  const today = new Date().toISOString().split("T")[0];
+  res.type("application/xml");
+  res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://thefirstword.ca/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://thefirstword.ca/app.html</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+</urlset>`);
 });
 
 // ─── CATCH ALL ────────────────────────────────────────────────────────────────
