@@ -8,139 +8,563 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg: #F7F4EF; --bg-dark: #1C2B3A; --text: #1C2B3A; --text-light: #5a6a7a;
-      --teal: #2A7F7F; --teal-light: #e8f4f4; --cta: #C4622D; --cta-hover: #a8511f;
-      --divider: #E8E2D9; --white: #FFFFFF;
+      --bg: #F7F4EF;
+      --bg-dark: #1C2B3A;
+      --text: #1C2B3A;
+      --text-light: #5a6a7a;
+      --teal: #2A7F7F;
+      --teal-light: #e8f4f4;
+      --cta: #C4622D;
+      --cta-hover: #a8511f;
+      --divider: #E8E2D9;
+      --white: #FFFFFF;
     }
+
     html { scroll-behavior: smooth; }
-    body { background: var(--bg); font-family: 'Inter', sans-serif; color: var(--text); line-height: 1.6; overflow-x: hidden; }
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(247,244,239,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--divider); padding: 10px 40px; display: flex; align-items: center; justify-content: space-between; }
+
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(247,244,239,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--divider);
+      padding: 8px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+    .nav-logo span { color: var(--teal); }
     .nav-links { display: flex; align-items: center; gap: 32px; }
-    .nav-links a { font-size: 14px; color: var(--text-light); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .nav-links a {
+      font-size: 14px;
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
     .nav-links a:hover { color: var(--text); }
-    .nav-cta { background: var(--cta); color: white !important; padding: 10px 22px; border-radius: 6px; font-weight: 600 !important; transition: background 0.2s !important; }
-    .nav-cta:hover { background: var(--cta-hover) !important; }
-    @media (max-width: 600px) { nav { padding: 14px 20px; } .nav-links { gap: 16px; } .nav-links a:not(.nav-cta) { display: none; } }
-    .lang-toggle { display: flex; align-items: center; gap: 4px; background: rgba(28,43,58,0.08); border-radius: 6px; padding: 4px; }
-    .lang-btn { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 4px; border: none; cursor: pointer; background: transparent; color: var(--text-light); font-family: inherit; transition: all 0.15s; }
-    .lang-btn.active { background: white; color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-    .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 80px; }
-    .hero-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--teal); margin-bottom: 24px; }
-    .hero-typing { font-family: 'Playfair Display', serif; font-size: clamp(18px, 3vw, 26px); color: var(--text-light); font-style: italic; margin-bottom: 16px; min-height: 40px; }
-    .cursor { display: inline-block; width: 2px; height: 1em; background: var(--teal); margin-left: 2px; vertical-align: middle; animation: blink 1s step-end infinite; }
-    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
-    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(42px, 7vw, 80px); font-weight: 700; line-height: 1.1; letter-spacing: -2px; color: var(--text); margin-bottom: 24px; max-width: 800px; }
-    .hero h1 em { font-style: italic; color: var(--teal); }
-    .hero-sub { font-size: clamp(16px, 2vw, 20px); color: var(--text-light); max-width: 560px; margin: 0 auto 48px; line-height: 1.7; font-weight: 300; }
+    .nav-cta {
+      background: var(--cta);
+      color: white !important;
+      padding: 10px 22px;
+      border-radius: 6px;
+      font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--cta-hover) !important; color: white !important; }
+
+    /* NAV LOGO SIZE */
+    #nav-logo-img {
+      height: 52px;
+      width: auto;
+    }
+    @media (max-width: 600px) {
+      nav { padding: 8px 20px; }
+      .nav-links { gap: 16px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+      #nav-logo-img { height: 44px; }
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 88px 24px 80px;
+      position: relative;
+    }
+    @media (max-width: 600px) {
+      .hero { padding: 72px 24px 60px; }
+    }
+    .hero-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 24px;
+    }
+    .hero-typing {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(18px, 3vw, 26px);
+      color: var(--text-light);
+      font-style: italic;
+      margin-bottom: 16px;
+      min-height: 40px;
+    }
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--teal);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(42px, 7vw, 80px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -2px;
+      color: var(--text);
+      margin-bottom: 24px;
+      max-width: 800px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--teal);
+    }
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--text-light);
+      max-width: 560px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
     .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
-    .btn-primary { background: var(--cta); color: white; padding: 16px 36px; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; font-family: inherit; }
+    .btn-primary {
+      background: var(--cta);
+      color: white;
+      padding: 16px 36px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
     .btn-primary:hover { background: var(--cta-hover); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(196,98,45,0.3); }
-    .btn-secondary { background: transparent; color: var(--text); padding: 16px 36px; border-radius: 8px; font-size: 16px; font-weight: 500; text-decoration: none; border: 1.5px solid var(--divider); transition: all 0.2s; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      padding: 16px 36px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      text-decoration: none;
+      border: 1.5px solid var(--divider);
+      transition: all 0.2s;
+    }
     .btn-secondary:hover { border-color: var(--text); }
-    .hero-trust { margin-top: 64px; display: flex; align-items: center; gap: 32px; flex-wrap: wrap; justify-content: center; }
-    .trust-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-light); }
+    .hero-trust {
+      margin-top: 64px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-light);
+    }
     .trust-icon { color: var(--teal); font-size: 16px; }
-    .section-divider { height: 1px; background: var(--divider); max-width: 1100px; margin: 0 auto; }
-    .section-label { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--teal); margin-bottom: 20px; }
+
+    /* DIVIDER */
+    .section-divider {
+      height: 1px;
+      background: var(--divider);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* PROBLEM */
+    .section { padding: 100px 24px; max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 20px;
+    }
     .problem-section { background: var(--bg); }
     .problem-inner { max-width: 1100px; margin: 0 auto; padding: 100px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    @media (max-width: 768px) { .problem-inner { grid-template-columns: 1fr; gap: 40px; } }
-    .problem-text h2 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 700; line-height: 1.2; margin-bottom: 24px; letter-spacing: -1px; }
-    .problem-text p { font-size: 17px; color: var(--text-light); line-height: 1.8; margin-bottom: 16px; font-weight: 300; }
-    .problem-stats { display: flex; flex-direction: column; gap: 24px; }
-    .stat-card { background: white; border-radius: 12px; padding: 28px 32px; border: 1px solid var(--divider); box-shadow: 0 2px 12px rgba(28,43,58,0.06); }
-    .stat-number { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 700; color: var(--teal); line-height: 1; margin-bottom: 8px; }
+    @media (max-width: 768px) { .problem-inner { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; } }
+    .problem-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      letter-spacing: -1px;
+    }
+    .problem-text p {
+      font-size: 17px;
+      color: var(--text-light);
+      line-height: 1.8;
+      margin-bottom: 16px;
+      font-weight: 300;
+    }
+    .problem-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 28px 32px;
+      border: 1px solid var(--divider);
+      box-shadow: 0 2px 12px rgba(28,43,58,0.06);
+    }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--teal);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
     .stat-label { font-size: 14px; color: var(--text-light); font-weight: 400; line-height: 1.5; }
+
+    /* HOW IT WORKS */
     .how-section { background: var(--bg-dark); color: white; }
     .how-inner { max-width: 1100px; margin: 0 auto; padding: 100px 24px; }
+    @media (max-width: 768px) { .how-inner { padding: 60px 24px; } }
     .how-inner .section-label { color: var(--teal); }
-    .how-inner h2 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 700; letter-spacing: -1px; margin-bottom: 64px; max-width: 600px; }
+    .how-inner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 64px;
+      max-width: 600px;
+    }
     .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
     @media (max-width: 768px) { .steps { grid-template-columns: 1fr; gap: 32px; } }
-    .step-number { font-family: 'Playfair Display', serif; font-size: 64px; font-weight: 700; color: rgba(42,127,127,0.2); line-height: 1; margin-bottom: 16px; }
+    .step { position: relative; }
+    .step-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 64px;
+      font-weight: 700;
+      color: rgba(42,127,127,0.2);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
     .step h3 { font-size: 20px; font-weight: 600; margin-bottom: 12px; color: white; }
     .step p { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300; }
+
+    /* OUTPUTS */
     .outputs-section { background: var(--bg); }
     .outputs-inner { max-width: 1100px; margin: 0 auto; padding: 100px 24px; }
-    .outputs-inner h2 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 700; letter-spacing: -1px; margin-bottom: 16px; }
+    @media (max-width: 768px) { .outputs-inner { padding: 60px 24px; } }
+    .outputs-inner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
     .outputs-subtitle { font-size: 17px; color: var(--text-light); margin-bottom: 56px; font-weight: 300; }
     .outputs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
     @media (max-width: 768px) { .outputs-grid { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 480px) { .outputs-grid { grid-template-columns: 1fr; } }
-    .output-card { background: white; border-radius: 12px; padding: 32px 28px; border: 1px solid var(--divider); transition: all 0.2s; box-shadow: 0 2px 12px rgba(28,43,58,0.04); }
+    .output-card {
+      background: white;
+      border-radius: 12px;
+      padding: 32px 28px;
+      border: 1px solid var(--divider);
+      transition: all 0.2s;
+      box-shadow: 0 2px 12px rgba(28,43,58,0.04);
+    }
     .output-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(28,43,58,0.1); border-color: var(--teal); }
     .output-emoji { font-size: 32px; margin-bottom: 16px; display: block; }
     .output-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
     .output-card p { font-size: 14px; color: var(--text-light); line-height: 1.6; font-weight: 300; }
-    .output-card-planb { grid-column: span 1; background: white; border-color: var(--divider); }
+    .output-card-planb {
+      grid-column: span 2;
+      background: var(--teal-light);
+      border-color: rgba(42,127,127,0.2);
+    }
     @media (max-width: 480px) { .output-card-planb { grid-column: span 1; } }
+
+    /* PRICING */
     .pricing-section { background: var(--bg-dark); }
-    .pricing-tiers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px; max-width: 900px; margin-left: auto; margin-right: auto; }
-    .pricing-tiers-grid > div { display: flex; flex-direction: column; }
-    .pricing-tiers-grid ul { flex: 1; }
-    @media (max-width: 700px) { .pricing-tiers-grid { grid-template-columns: 1fr !important; } .pricing-tiers-grid > div { transform: none !important; } }
+    .pricing-inner { max-width: 800px; margin: 0 auto; padding: 100px 24px; text-align: center; }
+    @media (max-width: 768px) { .pricing-inner { padding: 60px 24px; } }
+    .pricing-inner .section-label { color: var(--teal); }
+    .pricing-inner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: white;
+      margin-bottom: 16px;
+    }
+    .pricing-inner .subtitle { font-size: 17px; color: rgba(255,255,255,0.6); margin-bottom: 56px; font-weight: 300; }
+    .pricing-card {
+      background: white;
+      border-radius: 16px;
+      padding: 56px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .pricing-badge {
+      position: absolute;
+      top: 24px; right: 24px;
+      background: var(--teal);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+    .pricing-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .pricing-amount sup { font-size: 32px; vertical-align: top; margin-top: 12px; }
+    .pricing-note { font-size: 15px; color: var(--text-light); margin-bottom: 40px; }
+    .pricing-features { list-style: none; margin-bottom: 40px; text-align: left; }
+    .pricing-features li {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--divider);
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+    }
+    .pricing-features li:last-child { border-bottom: none; }
+    .check { color: var(--teal); font-size: 18px; flex-shrink: 0; }
+    .pricing-cta {
+      width: 100%;
+      background: var(--cta);
+      color: white;
+      padding: 18px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .pricing-cta:hover { background: var(--cta-hover); transform: translateY(-1px); }
+    .pricing-sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 20px; }
+
+    /* STORY */
     .story-section { background: var(--bg); }
     .story-inner { max-width: 800px; margin: 0 auto; padding: 100px 24px; }
-    .story-quote { font-family: 'Playfair Display', serif; font-size: clamp(22px, 3vw, 32px); font-style: italic; line-height: 1.6; color: var(--text); margin-bottom: 48px; padding-left: 32px; border-left: 3px solid var(--teal); }
+    @media (max-width: 768px) { .story-inner { padding: 60px 24px; } }
+    .story-inner .section-label { margin-bottom: 32px; }
+    .story-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 3vw, 32px);
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 48px;
+      padding-left: 32px;
+      border-left: 3px solid var(--teal);
+    }
     .story-body { font-size: 17px; color: var(--text-light); line-height: 1.9; font-weight: 300; }
     .story-body p { margin-bottom: 24px; }
     .story-body strong { color: var(--text); font-weight: 500; }
-    .story-signature { margin-top: 48px; display: flex; align-items: center; gap: 16px; }
-    .story-avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), #1d5f5f); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: white; }
+    .story-signature {
+      margin-top: 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .story-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), #1d5f5f);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: white;
+    }
     .story-name { font-weight: 600; font-size: 16px; }
     .story-title { font-size: 13px; color: var(--text-light); margin-top: 2px; }
-
-    /* TESTIMONIALS */
-    .testimonials-section { background: var(--bg-dark); }
-    .testimonials-inner { max-width: 1100px; margin: 0 auto; padding: 100px 24px; }
-    .testimonials-inner .section-label { color: var(--teal); }
-    .testimonials-inner h2 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 44px); font-weight: 700; color: white; letter-spacing: -1px; margin-bottom: 12px; }
-    .testimonials-subtitle { font-size: 16px; color: rgba(255,255,255,0.5); margin-bottom: 56px; font-weight: 300; }
-    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 56px; }
-    @media (max-width: 900px) { .testimonials-grid { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 600px) { .testimonials-grid { grid-template-columns: 1fr; } }
-    .testimonial-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px 28px; transition: all 0.2s; display: flex; flex-direction: column; }
-    .testimonial-card:hover { background: rgba(255,255,255,0.09); border-color: rgba(42,127,127,0.4); }
-    .testimonial-stars { color: #E8A54B; font-size: 14px; letter-spacing: 2px; margin-bottom: 16px; }
-    .testimonial-quote { font-family: Georgia, serif; font-size: 15px; color: rgba(255,255,255,0.85); line-height: 1.8; margin-bottom: 24px; font-style: italic; flex: 1; }
-    .testimonial-author { display: flex; align-items: center; gap: 12px; margin-top: auto; }
-    .testimonial-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), #1d5f5f); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: white; flex-shrink: 0; }
-    .testimonial-name { font-size: 14px; font-weight: 600; color: white; }
-    .testimonial-role { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; }
-    .testimonial-submit-box { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 40px; max-width: 640px; margin: 0 auto; text-align: center; }
-    .testimonial-submit-box h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: white; margin-bottom: 8px; }
-    .testimonial-submit-box p { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 24px; }
-    .t-textarea { width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; font-size: 14px; font-family: inherit; color: white; outline: none; height: 96px; resize: vertical; margin-bottom: 12px; }
-    .t-textarea:focus { border-color: var(--teal); }
-    .t-textarea::placeholder { color: rgba(255,255,255,0.3); }
-    .t-name { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; font-size: 14px; font-family: inherit; color: white; outline: none; margin-bottom: 12px; }
-    .t-name:focus { border-color: var(--teal); }
-    .t-name::placeholder { color: rgba(255,255,255,0.3); }
-    .t-btn { width: 100%; background: var(--teal); color: white; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.2s; }
-    .t-btn:hover { background: #1d5f5f; }
-    .t-note { font-size: 11px; color: rgba(255,255,255,0.25); text-align: center; margin-top: 10px; }
 
     /* FAQ */
     .faq-section { background: white; }
     .faq-inner { max-width: 700px; margin: 0 auto; padding: 100px 24px; }
-    .faq-inner h2 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 40px); font-weight: 700; letter-spacing: -1px; margin-bottom: 48px; }
+    @media (max-width: 768px) { .faq-inner { padding: 60px 24px; } }
+    .faq-inner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 48px;
+    }
     .faq-item { border-bottom: 1px solid var(--divider); padding: 24px 0; cursor: pointer; }
-    .faq-question { font-size: 16px; font-weight: 500; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .faq-question {
+      font-size: 16px;
+      font-weight: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
     .faq-arrow { color: var(--teal); font-size: 20px; transition: transform 0.2s; flex-shrink: 0; }
-    .faq-answer { font-size: 15px; color: var(--text-light); line-height: 1.7; margin-top: 16px; display: none; font-weight: 300; }
+    .faq-answer {
+      font-size: 15px;
+      color: var(--text-light);
+      line-height: 1.7;
+      margin-top: 16px;
+      display: none;
+      font-weight: 300;
+    }
     .faq-item.open .faq-arrow { transform: rotate(45deg); }
     .faq-item.open .faq-answer { display: block; }
 
-    .cta-section { background: linear-gradient(135deg, var(--teal) 0%, #1d5f5f 100%); padding: 100px 24px; text-align: center; cursor: pointer; }
-    .cta-section h2 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 56px); font-weight: 700; color: white; letter-spacing: -1px; margin-bottom: 20px; max-width: 700px; margin-left: auto; margin-right: auto; }
+    /* CTA SECTION */
+    .cta-section {
+      background: linear-gradient(135deg, var(--teal) 0%, #1d5f5f 100%);
+      padding: 100px 24px;
+      text-align: center;
+    }
+    @media (max-width: 768px) { .cta-section { padding: 60px 24px; } }
+    .cta-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      color: white;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
     .cta-section p { font-size: 18px; color: rgba(255,255,255,0.75); margin-bottom: 48px; font-weight: 300; }
-    .btn-white { background: white; color: var(--teal); padding: 18px 48px; border-radius: 8px; font-size: 18px; font-weight: 600; text-decoration: none; display: inline-block; transition: all 0.2s; font-family: inherit; border: none; cursor: pointer; }
+    .btn-white {
+      background: white;
+      color: var(--teal);
+      padding: 18px 48px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s;
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+    }
     .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
 
+    /* FOOTER */
+    footer {
+      background: var(--bg-dark);
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    #footer-logo-img {
+      height: 44px;
+      width: auto;
+      background: white;
+      border-radius: 8px;
+      padding: 6px 14px;
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: rgba(255,255,255,0.8); }
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); }
+
+    /* LANGUAGE TOGGLE */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(28,43,58,0.08);
+      border-radius: 6px;
+      padding: 4px;
+    }
+    .lang-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-light);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .lang-btn.active { background: white; color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+    /* ANIMATIONS */
     .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
-    .disclaimer { background: var(--bg-dark); padding: 20px 40px; text-align: center; font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.05); }
+
+    /* DISCLAIMER */
+    .pricing-tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (max-width: 700px) {
+      .pricing-tiers-grid {
+        grid-template-columns: 1fr !important;
+        max-width: 100% !important;
+      }
+      .pricing-tiers-grid > div {
+        transform: none !important;
+      }
+    }
+    .disclaimer {
+      background: var(--bg-dark);
+      padding: 20px 40px;
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      line-height: 1.6;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
   </style>
 </head>
 <body>
@@ -148,7 +572,7 @@
 <!-- NAV -->
 <nav>
   <a href="#" style="display:flex;align-items:center;text-decoration:none;line-height:0;">
-    <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:90px;width:auto;" />
+    <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" />
   </a>
   <div class="nav-links">
     <div class="lang-toggle">
@@ -158,13 +582,11 @@
     <a href="#how-it-works" class="en-text">How it works</a>
     <a href="#how-it-works" class="fr-text" style="display:none;">Comment ça marche</a>
     <a href="#pricing" class="en-text">Pricing</a>
-    <a href="#pricing" class="fr-text" style="display:none;">Tarifs</a>
-    <a href="#testimonials" class="en-text">Stories</a>
-    <a href="#testimonials" class="fr-text" style="display:none;">Témoignages</a>
-    <a href="#resources" class="en-text">Resources</a>
+      <a href="#resources" class="en-text">Resources</a>
     <a href="#resources" class="fr-text" style="display:none;">Ressources</a>
+      <a href="#pricing" class="fr-text" style="display:none;">Tarifs</a>
     <a href="app.html" class="nav-cta en-text">Start Now</a>
-    <a href="app.html?lang=fr" class="nav-cta fr-text" style="display:none;">Commencer</a>
+    <a href="app.html" class="nav-cta fr-text" style="display:none;">Commencer</a>
   </div>
 </nav>
 
@@ -179,7 +601,7 @@
   <p class="hero-sub fr-text" style="display:none;">Vous aimez quelqu'un qui lutte contre la dépendance. Vous ne savez pas quoi dire. TheFirstWord vous donne les mots exacts, les scripts et les outils pour commencer la conversation la plus importante de leur vie.</p>
   <div class="hero-actions">
     <a href="app.html" class="btn-primary en-text">Get Started — from $9</a>
-    <a href="app.html?lang=fr" class="btn-primary fr-text" style="display:none;">Commencer — à partir de 9$</a>
+    <a href="app.html" class="btn-primary fr-text" style="display:none;">Commencer — à partir de 9$</a>
     <a href="#how-it-works" class="btn-secondary en-text">See how it works</a>
     <a href="#how-it-works" class="btn-secondary fr-text" style="display:none;">Voir comment ça marche</a>
   </div>
@@ -249,17 +671,24 @@
       </div>
       <div class="step fade-in">
         <div class="step-number">02</div>
-        <h3 class="en-text">Receive your personalized intervention kit</h3>
-        <h3 class="fr-text" style="display:none;">Recevez votre kit d'intervention personnalisé</h3>
-        <p class="en-text">Select the tone that fits your relationship — loving, firm, hopeful, or urgent. Our AI generates your complete kit in under 60 seconds.</p>
-        <p class="fr-text" style="display:none;">Sélectionnez le ton qui convient — aimant, ferme, plein d'espoir ou urgent. Notre IA génère votre kit complet en moins de 60 secondes.</p>
+        <h3 class="en-text">Choose your approach</h3>
+        <h3 class="fr-text" style="display:none;">Choisissez votre approche</h3>
+        <p class="en-text">Select the tone that fits your relationship — loving, firm, hopeful, or urgent. Our AI adapts everything to your specific situation and the substance involved.</p>
+        <p class="fr-text" style="display:none;">Sélectionnez le ton qui convient à votre relation — aimant, ferme, plein d'espoir ou urgent. Notre IA adapte tout à votre situation et à la substance en cause.</p>
       </div>
       <div class="step fade-in">
         <div class="step-number">03</div>
-        <h3 class="en-text">Say the words that matter most</h3>
-        <h3 class="fr-text" style="display:none;">Dites les mots qui comptent le plus</h3>
-        <p class="en-text">Use your personalized letter, script, or SMS to start the conversation. If the first approach doesn't work, generate a Plan B with a completely new strategy.</p>
-        <p class="fr-text" style="display:none;">Utilisez votre lettre, script ou SMS personnalisé pour commencer la conversation. Si la première approche ne fonctionne pas, générez un Plan B avec une stratégie entièrement nouvelle.</p>
+        <h3 class="en-text">Get your personalized tools instantly</h3>
+        <h3 class="fr-text" style="display:none;">Obtenez vos outils personnalisés instantanément</h3>
+        <p class="en-text">In under 60 seconds, receive your personalized letter, guide, and more — tailored to your loved one's name, your relationship, and your situation. Ready to use, share, or print.</p>
+        <p class="fr-text" style="display:none;">En moins de 60 secondes, recevez votre lettre, guide et plus — adaptés au prénom de votre proche, à votre relation et à votre situation. Prêts à utiliser, partager ou imprimer.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-number">04</div>
+        <h3 class="en-text">4 weeks of guided support — Complete plan only</h3>
+        <h3 class="fr-text" style="display:none;">4 semaines de soutien guidé — Plan Complet seulement</h3>
+        <p class="en-text">With the Monthly plan ($19/mo), receive weekly check-in emails for as long as you need — new strategies, encouragement, and guidance as your situation evolves. Because intervention is rarely a one-time conversation.</p>
+        <p class="fr-text" style="display:none;">Avec le plan Complet (29$), recevez des courriels de suivi hebdomadaires pendant 4 semaines — nouvelles stratégies et encouragements. Parce qu'une intervention est rarement une conversation unique.</p>
       </div>
     </div>
   </div>
@@ -272,15 +701,51 @@
     <p class="section-label fr-text" style="display:none;">Ce que vous recevez</p>
     <h2 class="en-text">Choose your plan. Get what you need.</h2>
     <h2 class="fr-text" style="display:none;">Choisissez votre plan. Obtenez ce dont vous avez besoin.</h2>
-    <p class="outputs-subtitle en-text">Every output is personalized to your loved one's situation, your relationship, and your chosen tone.</p>
-    <p class="outputs-subtitle fr-text" style="display:none;">Chaque résultat est personnalisé selon la situation de votre proche, votre relation et le ton que vous avez choisi.</p>
+    <p class="outputs-subtitle en-text">Choose the plan that fits your needs. Every output is personalized to your loved one's situation, your relationship, and your chosen tone. Subscribe monthly for ongoing weekly support.</p>
+    <p class="outputs-subtitle fr-text" style="display:none;">Choisissez le plan qui correspond à vos besoins. Chaque résultat est personnalisé selon la situation de votre proche. Ajoutez des courriels de suivi hebdomadaires pour un soutien continu.</p>
     <div class="outputs-grid">
-      <div class="output-card fade-in"><span class="output-emoji">✉️</span><h3 class="en-text">Intervention Letter</h3><h3 class="fr-text" style="display:none;">Lettre d'intervention</h3><p class="en-text">A deeply personal letter in your voice, for your loved one to read. Download as PDF.</p><p class="fr-text" style="display:none;">Une lettre profondément personnelle dans votre voix. Téléchargez en PDF.</p></div>
-      <div class="output-card fade-in"><span class="output-emoji">📋</span><h3 class="en-text">Conversation Guide</h3><h3 class="fr-text" style="display:none;">Guide de conversation</h3><p class="en-text">Step-by-step coaching on when, where, how to open, and how to handle resistance.</p><p class="fr-text" style="display:none;">Un coaching étape par étape — quand, où, comment commencer et gérer la résistance.</p></div>
-      <div class="output-card fade-in"><span class="output-emoji">💬</span><h3 class="en-text">SMS Message</h3><h3 class="fr-text" style="display:none;">Message SMS</h3><p class="en-text">A short, powerful text you can send right now. Sometimes a text opens a door a conversation can't.</p><p class="fr-text" style="display:none;">Un message texte court et puissant. Parfois un texto ouvre une porte qu'une conversation ne peut pas.</p></div>
-      <div class="output-card fade-in"><span class="output-emoji">🎭</span><h3 class="en-text">Spoken Script</h3><h3 class="fr-text" style="display:none;">Script parlé</h3><p class="en-text">Word-for-word dialogue with stage directions. Read it aloud. It's exactly what to say, and how.</p><p class="fr-text" style="display:none;">Un dialogue mot pour mot avec des didascalies. Lisez-le à voix haute.</p></div>
-      <div class="output-card output-card-planb fade-in"><span class="output-emoji">🔄</span><h3 class="en-text">Plan B Strategy</h3><h3 class="fr-text" style="display:none;">Stratégie Plan B</h3><p class="en-text">If the first attempt didn't work — describe what happened and get a completely new strategy. Different angle, different approach. Because giving up is not an option.</p><p class="fr-text" style="display:none;">Si la première tentative n'a pas fonctionné — décrivez ce qui s'est passé et obtenez une stratégie entièrement nouvelle.</p></div>
-      <div class="output-card fade-in"><span class="output-emoji">📧</span><h3 class="en-text">4-Week Support Emails</h3><h3 class="fr-text" style="display:none;">4 semaines de courriels de soutien</h3><p class="en-text">Monthly plan subscribers receive weekly check-in emails — new strategies and encouragement for as long as you need.</p><p class="fr-text" style="display:none;">Les abonnés au plan mensuel reçoivent des courriels de suivi hebdomadaires avec de nouvelles stratégies et encouragements.</p></div>
+      <div class="output-card fade-in">
+        <span class="output-emoji">✉️</span>
+        <h3 class="en-text">Intervention Letter</h3>
+        <h3 class="fr-text" style="display:none;">Lettre d'intervention</h3>
+        <p class="en-text">A deeply personal letter for your loved one to read — in your voice, with your words, referencing your real situation. Download as PDF.</p>
+        <p class="fr-text" style="display:none;">Une lettre profondément personnelle que votre proche peut lire — dans votre voix, avec vos mots, en référence à votre situation réelle. Téléchargez en PDF.</p>
+      </div>
+      <div class="output-card fade-in">
+        <span class="output-emoji">📋</span>
+        <h3 class="en-text">Conversation Guide</h3>
+        <h3 class="fr-text" style="display:none;">Guide de conversation</h3>
+        <p class="en-text">Step-by-step coaching on how to approach the conversation — when, where, how to open, and how to handle resistance.</p>
+        <p class="fr-text" style="display:none;">Un coaching étape par étape sur la façon d'aborder la conversation — quand, où, comment commencer et gérer la résistance.</p>
+      </div>
+      <div class="output-card fade-in">
+        <span class="output-emoji">💬</span>
+        <h3 class="en-text">SMS Message</h3>
+        <h3 class="fr-text" style="display:none;">Message SMS</h3>
+        <p class="en-text">A short, powerful text message you can send right now. Because sometimes a text opens a door that a conversation can't.</p>
+        <p class="fr-text" style="display:none;">Un message texte court et puissant que vous pouvez envoyer maintenant. Parfois un texto ouvre une porte qu'une conversation ne peut pas.</p>
+      </div>
+      <div class="output-card fade-in">
+        <span class="output-emoji">🎭</span>
+        <h3 class="en-text">Spoken Script</h3>
+        <h3 class="fr-text" style="display:none;">Script parlé</h3>
+        <p class="en-text">Word-for-word dialogue with stage directions. Read it out loud. It's exactly what to say, and exactly how to say it.</p>
+        <p class="fr-text" style="display:none;">Un dialogue mot pour mot avec des didascalies. Lisez-le à voix haute. C'est exactement quoi dire, et exactement comment le dire.</p>
+      </div>
+      <div class="output-card output-card-planb fade-in">
+        <span class="output-emoji">🔄</span>
+        <h3 class="en-text">Plan B Strategy</h3>
+        <h3 class="fr-text" style="display:none;">Stratégie Plan B</h3>
+        <p class="en-text">If the first attempt didn't work — describe what happened and get a completely new strategy. Different angle, different messenger, new approach. Because giving up is not an option.</p>
+        <p class="fr-text" style="display:none;">Si la première tentative n'a pas fonctionné — décrivez ce qui s'est passé et obtenez une stratégie entièrement nouvelle. Angle différent, messager différent, nouvelle approche.</p>
+      </div>
+      <div class="output-card fade-in" style="background:var(--teal-light);border-color:rgba(42,127,127,0.2);">
+        <span class="output-emoji">📧</span>
+        <h3 class="en-text">4-Week Support Emails</h3>
+        <h3 class="fr-text" style="display:none;">4 semaines de courriels de soutien</h3>
+        <p class="en-text">Included in the Complete and Monthly plans — if the first approach didn't work, describe what happened and get a completely new strategy with a different angle, different tone, and different approach.</p>
+        <p class="fr-text" style="display:none;">Exclusif au plan Complet — recevez des suivis hebdomadaires pendant 4 semaines avec de nouvelles stratégies et encouragements. Disponible avec le plan Complet seulement.</p>
+      </div>
     </div>
   </div>
 </div>
@@ -289,7 +754,7 @@
 
 <!-- PRICING -->
 <div class="pricing-section" id="pricing">
-  <div style="max-width:1000px;margin:0 auto;padding:100px 24px;text-align:center;">
+  <div class="pricing-inner" style="max-width:1000px;">
     <p class="section-label en-text">Simple pricing</p>
     <p class="section-label fr-text" style="display:none;">Tarification simple</p>
     <h2 style="font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,48px);font-weight:700;letter-spacing:-1px;color:white;margin-bottom:16px;" class="en-text">Choose your plan.</h2>
@@ -311,7 +776,7 @@
           <li style="font-size:13px;padding:8px 0;display:flex;gap:8px;color:#ccc;"><span style="color:#ddd;">—</span><span class="en-text">Plan B Strategy</span><span class="fr-text" style="display:none;">Stratégie Plan B</span></li>
         </ul>
         <a href="app.html" style="display:block;background:var(--bg-dark);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="en-text">Start for $9</a>
-        <a href="app.html?lang=fr" style="display:none;background:var(--bg-dark);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="fr-text">Commencer pour 9$</a>
+        <a href="app.html" style="display:none;background:var(--bg-dark);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="fr-text">Commencer pour 9$</a>
       </div>
       <div style="background:white;border-radius:16px;padding:32px 24px;border:3px solid var(--teal);position:relative;transform:scale(1.03);box-shadow:0 8px 32px rgba(42,127,127,0.2);">
         <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--teal);color:white;font-size:11px;font-weight:600;padding:5px 16px;border-radius:20px;white-space:nowrap;" class="en-text">⭐ Most Popular</div>
@@ -329,7 +794,7 @@
           <li style="font-size:13px;padding:8px 0;display:flex;gap:8px;color:#ccc;"><span style="color:#ddd;">—</span><span class="en-text">Plan B Strategy</span><span class="fr-text" style="display:none;">Stratégie Plan B</span></li>
         </ul>
         <a href="app.html" style="display:block;background:var(--cta);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="en-text">Start for $19</a>
-        <a href="app.html?lang=fr" style="display:none;background:var(--cta);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="fr-text">Commencer pour 19$</a>
+        <a href="app.html" style="display:none;background:var(--cta);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="fr-text">Commencer pour 19$</a>
       </div>
       <div style="background:white;border-radius:16px;padding:32px 24px;">
         <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;" class="en-text">Complete</p>
@@ -345,10 +810,10 @@
           <li style="font-size:13px;padding:8px 0;display:flex;gap:8px;color:var(--text);"><span style="color:var(--teal);font-weight:700;">✓</span><span class="en-text">Plan B Strategy</span><span class="fr-text" style="display:none;">Stratégie Plan B</span></li>
         </ul>
         <a href="app.html" style="display:block;background:var(--bg-dark);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="en-text">Start for $29</a>
-        <a href="app.html?lang=fr" style="display:none;background:var(--bg-dark);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="fr-text">Commencer pour 29$</a>
+        <a href="app.html" style="display:none;background:var(--bg-dark);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="fr-text">Commencer pour 29$</a>
       </div>
     </div>
-    <!-- MONTHLY UPSELL -->
+    <!-- SUBSCRIPTION UPSELL -->
     <div style="margin-top:40px;background:rgba(42,127,127,0.15);border:1px solid rgba(42,127,127,0.3);border-radius:16px;padding:36px;text-align:left;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;">
         <div style="flex:1;min-width:240px;">
@@ -359,24 +824,28 @@
           <p style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:16px;display:none;" class="fr-text">Annulez à tout moment</p>
           <ul style="list-style:none;">
             <li style="font-size:13px;color:rgba(255,255,255,0.8);padding:5px 0;display:flex;gap:8px;"><span style="color:var(--teal);">✓</span><span class="en-text">Everything in Complete plan</span><span class="fr-text" style="display:none;">Tout du plan Complet</span></li>
-            <li style="font-size:13px;color:rgba(255,255,255,0.8);padding:5px 0;display:flex;gap:8px;"><span style="color:var(--teal);">✓</span><span class="en-text">Unlimited Plan B strategies</span><span class="fr-text" style="display:none;">Stratégies Plan B illimitées</span></li>
-            <li style="font-size:13px;color:rgba(255,255,255,0.8);padding:5px 0;display:flex;gap:8px;"><span style="color:var(--teal);">✓</span><span class="en-text">Weekly check-ins for as long as you need</span><span class="fr-text" style="display:none;">Suivis hebdomadaires aussi longtemps que nécessaire</span></li>
+            <li style="font-size:13px;color:rgba(255,255,255,0.8);padding:5px 0;display:flex;gap:8px;"><span style="color:var(--teal);">✓</span><span class="en-text">Unlimited Plan B strategies — new approach anytime</span><span class="fr-text" style="display:none;">Stratégies Plan B illimitées — nouvelle approche à tout moment</span></li>
+            <li style="font-size:13px;color:rgba(255,255,255,0.8);padding:5px 0;display:flex;gap:8px;"><span style="color:var(--teal);">✓</span><span class="en-text">Weekly check-in emails for as long as you need</span><span class="fr-text" style="display:none;">Courriels de suivi hebdomadaires aussi longtemps que nécessaire</span></li>
             <li style="font-size:13px;color:rgba(255,255,255,0.8);padding:5px 0;display:flex;gap:8px;"><span style="color:var(--teal);">✓</span><span class="en-text">Cancel anytime — no commitment</span><span class="fr-text" style="display:none;">Annulez en tout temps — sans engagement</span></li>
           </ul>
         </div>
         <div style="flex:1;min-width:220px;background:rgba(0,0,0,0.2);border-radius:12px;padding:20px;">
           <p style="font-size:13px;font-weight:600;color:var(--teal);margin-bottom:12px;" class="en-text">💡 Why this makes sense:</p>
           <p style="font-size:13px;font-weight:600;color:var(--teal);margin-bottom:12px;display:none;" class="fr-text">💡 Pourquoi c'est logique :</p>
-          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:12px;" class="en-text">A single therapy session costs <strong style="color:white;">$150–200</strong>. Our monthly plan is <strong style="color:var(--teal);">90% less</strong> — available 24/7, whenever you need it.</p>
-          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:12px;display:none;" class="fr-text">Une seule séance de thérapie coûte <strong style="color:white;">150–200$</strong>. Notre plan mensuel coûte <strong style="color:var(--teal);">90% moins cher</strong> — disponible 24/7.</p>
+          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:12px;" class="en-text">A single therapy session costs <strong style="color:white;">$150–200</strong>. Our monthly plan is <strong style="color:var(--teal);">90% less</strong> — and available 24/7, the moment you need it.</p>
+          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:12px;display:none;" class="fr-text">Une seule séance de thérapie coûte <strong style="color:white;">150–200$</strong>. Notre plan mensuel coûte <strong style="color:var(--teal);">90% moins cher</strong> — et disponible 24/7, dès que vous en avez besoin.</p>
+          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;" class="en-text">Intervention rarely works on the first try. Families who stay consistent have a <strong style="color:white;">significantly higher success rate</strong>. This plan keeps you supported for the long game.</p>
+          <p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.7;display:none;" class="fr-text">Une intervention fonctionne rarement du premier coup. Les familles qui restent constantes ont un <strong style="color:white;">taux de succès nettement plus élevé</strong>. Ce plan vous soutient sur le long terme.</p>
           <a href="app.html" style="display:block;margin-top:16px;background:var(--teal);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="en-text">Start Monthly Plan — $19/mo</a>
-          <a href="app.html?lang=fr" style="display:none;margin-top:16px;background:var(--teal);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="fr-text">Commencer — 19$/mois</a>
+          <a href="app.html" style="display:none;margin-top:16px;background:var(--teal);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="fr-text">Commencer — 19$/mois</a>
         </div>
       </div>
     </div>
+
+    <!-- AGE DISCLAIMER -->
     <div style="margin-top:24px;background:rgba(232,165,75,0.08);border:1px solid rgba(232,165,75,0.2);border-radius:10px;padding:16px 20px;">
-      <p style="font-size:12px;color:rgba(232,165,75,0.8);line-height:1.6;" class="en-text">⚠️ <strong>Important:</strong> TheFirstWord is designed exclusively for adults (18+) seeking help for another adult struggling with addiction. If your loved one is under 18, please contact a youth addiction specialist directly.</p>
-      <p style="font-size:12px;color:rgba(232,165,75,0.8);line-height:1.6;display:none;" class="fr-text">⚠️ <strong>Important :</strong> TheFirstWord est conçu exclusivement pour les adultes (18+) cherchant à aider un autre adulte. Si votre proche a moins de 18 ans, veuillez contacter directement un spécialiste en dépendance jeunesse.</p>
+      <p style="font-size:12px;color:rgba(232,165,75,0.8);line-height:1.6;" class="en-text">⚠️ <strong>Important:</strong> TheFirstWord is designed exclusively for adults (18+) seeking help for another adult struggling with addiction. If your loved one is under 18, their situation requires a specialized youth approach. Please contact a youth addiction specialist or crisis line directly.</p>
+      <p style="font-size:12px;color:rgba(232,165,75,0.8);line-height:1.6;display:none;" class="fr-text">⚠️ <strong>Important :</strong> TheFirstWord est conçu exclusivement pour les adultes (18+) cherchant à aider un autre adulte aux prises avec une dépendance. Si votre proche a moins de 18 ans, sa situation nécessite une approche jeunesse spécialisée. Veuillez contacter directement un spécialiste en dépendance jeunesse.</p>
     </div>
   </div>
 </div>
@@ -386,17 +855,21 @@
   <div class="story-inner">
     <p class="section-label en-text">Why I built this</p>
     <p class="section-label fr-text" style="display:none;">Pourquoi j'ai créé ceci</p>
-    <div class="story-quote en-text fade-in">"Addiction doesn't knock on your door and introduce itself. It creeps in quietly — and before you know it, someone you love is disappearing in front of you."</div>
-    <div class="story-quote fr-text fade-in" style="display:none;">"La dépendance ne frappe pas à votre porte pour se présenter. Elle s'installe silencieusement — et avant que vous le réalisiez, quelqu'un que vous aimez disparaît devant vous."</div>
+    <div class="story-quote en-text fade-in">
+      "Addiction doesn't knock on your door and introduce itself. It creeps in quietly — and before you know it, someone you love is disappearing in front of you."
+    </div>
+    <div class="story-quote fr-text fade-in" style="display:none;">
+      "La dépendance ne frappe pas à votre porte pour se présenter. Elle s'installe silencieusement — et avant que vous le réalisiez, quelqu'un que vous aimez disparaît devant vous."
+    </div>
     <div class="story-body">
-      <p class="en-text">I know this personally. I watched it happen in my own family. And like most families, we didn't talk about it. We stayed silent. We hoped it would pass.</p>
-      <p class="fr-text" style="display:none;">Je le sais personnellement. Je l'ai regardé se produire dans ma propre famille. Et comme la plupart des familles, nous n'en parlions pas. Nous restions silencieux. Nous espérions que ça passerait.</p>
-      <p class="en-text">Then I spent 5 years in admissions at one of Canada's leading addiction treatment centers. The same call kept coming in — a mother, a brother, a spouse — scared, desperate, not knowing what to say to get their loved one to finally seek help.</p>
-      <p class="fr-text" style="display:none;">Puis j'ai passé 5 ans aux admissions dans l'un des principaux centres de traitement de la dépendance au Canada. Le même appel revenait — une mère, un frère, un conjoint — effrayé, désespéré, ne sachant pas quoi dire.</p>
-      <p class="en-text">They always asked the same question: <strong>"How do I start this conversation?"</strong> And every time, I felt powerless. They left without the tools to actually help.</p>
-      <p class="fr-text" style="display:none;">Ils posaient toujours la même question : <strong>« Comment commencer cette conversation ? »</strong> Et à chaque fois, je me sentais impuissant. Ils repartaient sans les outils pour vraiment aider.</p>
+      <p class="en-text">I know this personally. I watched it happen in my own family. And like most families, especially in Arab and Middle Eastern culture, we didn't talk about it. We stayed silent. We protected the image. We hoped it would pass.</p>
+      <p class="fr-text" style="display:none;">Je le sais personnellement. Je l'ai regardé se produire dans ma propre famille. Et comme la plupart des familles, surtout dans la culture arabe et moyen-orientale, nous n'en parlions pas. Nous restions silencieux. Nous protégions l'image. Nous espérions que ça passerait.</p>
+      <p class="en-text">It didn't. Then I spent 5 years in admissions at one of Canada's leading addiction treatment centers. The same call kept coming in — a mother, a brother, a spouse — scared, desperate, not knowing what to say to get their loved one to finally realize they need help and take the biggest decision of their life: getting treatment.</p>
+      <p class="fr-text" style="display:none;">Ça n'a pas passé. Puis j'ai passé 5 ans aux admissions dans l'un des principaux centres de traitement de la dépendance au Canada. Le même appel revenait — une mère, un frère, un conjoint — effrayé, désespéré, ne sachant pas quoi dire pour que son proche réalise enfin qu'il a besoin d'aide.</p>
+      <p class="en-text">They always asked the same question: <strong>"How do I start this conversation?"</strong> And every time, I felt powerless. We'd tell them to write a letter. We'd suggest an interventionist. But they left without the tools to actually help.</p>
+      <p class="fr-text" style="display:none;">Ils posaient toujours la même question : <strong>« Comment commencer cette conversation ? »</strong> Et à chaque fois, je me sentais impuissant. On leur disait d'écrire une lettre. On leur suggérait un intervenant. Mais ils repartaient sans les outils pour vraiment aider.</p>
       <p class="en-text"><strong>So I built TheFirstWord.</strong> Because no family should ever feel alone in that moment. Because the right words, said the right way, can be the difference between your loved one getting help — or not.</p>
-      <p class="fr-text" style="display:none;"><strong>Alors j'ai créé TheFirstWord.</strong> Parce qu'aucune famille ne devrait se sentir seule dans ce moment. Parce que les bons mots, dits de la bonne façon, peuvent faire la différence.</p>
+      <p class="fr-text" style="display:none;"><strong>Alors j'ai créé TheFirstWord.</strong> Parce qu'aucune famille ne devrait se sentir seule dans ce moment. Parce que les bons mots, dits de la bonne façon, peuvent faire la différence entre que votre proche obtienne de l'aide — ou non.</p>
     </div>
     <div class="story-signature">
       <div class="story-avatar">S</div>
@@ -409,189 +882,151 @@
   </div>
 </div>
 
-<!-- TESTIMONIALS -->
-<div class="testimonials-section" id="testimonials">
-  <div class="testimonials-inner">
-    <p class="section-label en-text">From families like yours</p>
-    <p class="section-label fr-text" style="display:none;">De familles comme la vôtre</p>
-    <h2 class="en-text">They found the words. So can you.</h2>
-    <h2 class="fr-text" style="display:none;">Ils ont trouvé les mots. Vous le pouvez aussi.</h2>
-    <p class="testimonials-subtitle en-text">Real experiences from families who used TheFirstWord to start the conversation.</p>
-    <p class="testimonials-subtitle fr-text" style="display:none;">Des expériences réelles de familles qui ont utilisé TheFirstWord pour commencer la conversation.</p>
-    <div class="testimonials-grid" id="testimonialsGrid">
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-quote en-text">"I had been trying to find the right words for two years. I filled in the questionnaire and within a minute I had a letter that said everything I felt but couldn't articulate. My son read it and cried. We got him into treatment three weeks later."</p>
-        <p class="testimonial-quote fr-text" style="display:none;">"Cela faisait deux ans que j'essayais de trouver les bons mots. En une minute j'avais une lettre qui disait tout ce que je ressentais. Mon fils l'a lue et a pleuré. Nous l'avons amené en traitement trois semaines plus tard."</p>
-        <div class="testimonial-author"><div class="testimonial-avatar">M</div><div><div class="testimonial-name">Marie L.</div><div class="testimonial-role en-text">Mother of a son in recovery</div><div class="testimonial-role fr-text" style="display:none;">Mère d'un fils en rétablissement</div></div></div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-quote en-text">"My husband had been drinking heavily for 4 years. The tone options helped me realize I needed to lead with love, not ultimatums. The script gave me exactly what to say when he pushed back."</p>
-        <p class="testimonial-quote fr-text" style="display:none;">"Mon mari buvait beaucoup depuis 4 ans. Les options de ton m'ont aidée à réaliser que je devais mener avec l'amour, pas les ultimatums. Le script m'a donné exactement quoi dire quand il résistait."</p>
-        <div class="testimonial-author"><div class="testimonial-avatar">S</div><div><div class="testimonial-name">Sarah K.</div><div class="testimonial-role en-text">Spouse of someone in treatment</div><div class="testimonial-role fr-text" style="display:none;">Conjointe d'une personne en traitement</div></div></div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-quote en-text">"My sister had used opioids for 6 years. Every conversation ended in a fight. The guide taught me to stop arguing about the past and focus on what's possible. She agreed to call a treatment center after our first real talk."</p>
-        <p class="testimonial-quote fr-text" style="display:none;">"Ma sœur utilisait des opioïdes depuis 6 ans. Chaque conversation se terminait en dispute. Le guide m'a appris à arrêter de parler du passé. Elle a accepté d'appeler un centre de traitement après notre première vraie discussion."</p>
-        <div class="testimonial-author"><div class="testimonial-avatar">J</div><div><div class="testimonial-name">James T.</div><div class="testimonial-role en-text">Brother of someone in recovery</div><div class="testimonial-role fr-text" style="display:none;">Frère d'une personne en rétablissement</div></div></div>
-      </div>
-    </div>
-    <!-- SUBMIT FORM -->
-    <div class="testimonial-submit-box">
-      <div id="t-success" style="display:none;padding:20px 0;">
-        <p style="font-size:16px;color:var(--teal);font-weight:600;" class="en-text">💚 Thank you. Your words will help another family find the courage to act.</p>
-        <p style="font-size:16px;color:var(--teal);font-weight:600;display:none;" class="fr-text">💚 Merci. Vos mots aideront une autre famille à trouver le courage d'agir.</p>
-      </div>
-      <div id="t-form">
-        <h3 class="en-text">Did TheFirstWord help you?</h3>
-        <h3 class="fr-text" style="display:none;">TheFirstWord vous a-t-il aidé?</h3>
-        <p class="en-text">Share your experience. Other families are looking for hope.</p>
-        <p class="fr-text" style="display:none;">Partagez votre expérience. D'autres familles cherchent de l'espoir.</p>
-        <textarea id="tMsg" class="t-textarea" placeholder="Share how TheFirstWord helped you... / Partagez comment TheFirstWord vous a aidé..."></textarea>
-        <input type="text" id="tName" class="t-name" placeholder="First name (optional) / Prénom (facultatif)" />
-        <button class="t-btn" onclick="submitHomepageTestimonial()">
-          <span class="en-text">Share my experience →</span>
-          <span class="fr-text" style="display:none;">Partager mon expérience →</span>
-        </button>
-        <p class="t-note en-text">Reviews are approved before publishing. Your privacy is fully protected.</p>
-        <p class="t-note fr-text" style="display:none;">Les avis sont approuvés avant publication. Votre vie privée est entièrement protégée.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- FAQ -->
 <div class="faq-section">
   <div class="faq-inner">
     <h2 class="en-text">Questions you might have</h2>
     <h2 class="fr-text" style="display:none;">Questions que vous pourriez avoir</h2>
+
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-question"><span class="en-text">Is this a real person writing the letter?</span><span class="fr-text" style="display:none;">Est-ce une vraie personne qui écrit la lettre?</span><span class="faq-arrow">+</span></div>
-      <div class="faq-answer en-text">TheFirstWord uses advanced AI to generate deeply personalized content based on the details you provide. The result is written in your voice, for your specific situation — not a generic template.</div>
-      <div class="faq-answer fr-text" style="display:none;">TheFirstWord utilise une IA avancée pour générer du contenu profondément personnalisé basé sur les détails que vous fournissez. Le résultat est écrit dans votre voix, pour votre situation spécifique.</div>
+      <div class="faq-question">
+        <span class="en-text">Is this a real person writing the letter?</span>
+        <span class="fr-text" style="display:none;">Est-ce une vraie personne qui écrit la lettre?</span>
+        <span class="faq-arrow">+</span>
+      </div>
+      <div class="faq-answer en-text">TheFirstWord uses advanced AI to generate deeply personalized content based on the details you provide. The result is written in your voice, for your specific situation — not a generic template. Think of it as having a professional interventionist available 24/7.</div>
+      <div class="faq-answer fr-text" style="display:none;">TheFirstWord utilise une IA avancée pour générer du contenu profondément personnalisé basé sur les détails que vous fournissez. Le résultat est écrit dans votre voix, pour votre situation spécifique — pas un modèle générique.</div>
     </div>
+
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-question"><span class="en-text">What if the first attempt doesn't work?</span><span class="fr-text" style="display:none;">Et si la première tentative ne fonctionne pas?</span><span class="faq-arrow">+</span></div>
-      <div class="faq-answer en-text">That's exactly what Plan B is for. Describe what happened, and TheFirstWord generates a completely new strategy — different angle, different approach. Recovery is rarely linear. Neither is intervention.</div>
-      <div class="faq-answer fr-text" style="display:none;">C'est exactement pour ça que le Plan B existe. Décrivez ce qui s'est passé, et TheFirstWord génère une stratégie entièrement nouvelle — angle différent, approche différente.</div>
+      <div class="faq-question">
+        <span class="en-text">What if the first attempt doesn't work?</span>
+        <span class="fr-text" style="display:none;">Et si la première tentative ne fonctionne pas?</span>
+        <span class="faq-arrow">+</span>
+      </div>
+      <div class="faq-answer en-text">That's exactly what Plan B is for. Describe what happened, and TheFirstWord generates a completely new strategy — different angle, different approach, different messenger. Recovery is rarely linear. Neither is intervention.</div>
+      <div class="faq-answer fr-text" style="display:none;">C'est exactement pour ça que le Plan B existe. Décrivez ce qui s'est passé, et TheFirstWord génère une stratégie entièrement nouvelle — angle différent, approche différente, messager différent.</div>
     </div>
+
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-question"><span class="en-text">Is my information private?</span><span class="fr-text" style="display:none;">Mes informations sont-elles privées?</span><span class="faq-arrow">+</span></div>
-      <div class="faq-answer en-text">Yes. The information you share is used only to generate your personalized outputs. We do not store, sell, or share your personal information.</div>
+      <div class="faq-question">
+        <span class="en-text">Is my information private?</span>
+        <span class="fr-text" style="display:none;">Mes informations sont-elles privées?</span>
+        <span class="faq-arrow">+</span>
+      </div>
+      <div class="faq-answer en-text">Yes. The information you share is used only to generate your personalized outputs. We do not store, sell, or share your personal information. Payment is handled securely by Stripe.</div>
       <div class="faq-answer fr-text" style="display:none;">Oui. Les informations que vous partagez ne sont utilisées que pour générer vos résultats personnalisés. Nous ne stockons, ne vendons ni ne partageons vos informations personnelles.</div>
     </div>
+
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-question"><span class="en-text">Does it work in French and English?</span><span class="fr-text" style="display:none;">Fonctionne-t-il en français et en anglais?</span><span class="faq-arrow">+</span></div>
-      <div class="faq-answer en-text">Yes — TheFirstWord is fully bilingual. All outputs are available in French or English. The French is written to be natural and Québécois-friendly, not translated from English.</div>
-      <div class="faq-answer fr-text" style="display:none;">Oui — TheFirstWord est entièrement bilingue. Tous les résultats sont disponibles en français ou en anglais. Le français est écrit pour être naturel et québécois.</div>
+      <div class="faq-question">
+        <span class="en-text">Does it work in French and English?</span>
+        <span class="fr-text" style="display:none;">Fonctionne-t-il en français et en anglais?</span>
+        <span class="faq-arrow">+</span>
+      </div>
+      <div class="faq-answer en-text">Yes — TheFirstWord is fully bilingual. You can generate all outputs in French, English, or both. The French is written to be natural and Québécois-friendly, not translated from English.</div>
+      <div class="faq-answer fr-text" style="display:none;">Oui — TheFirstWord est entièrement bilingue. Vous pouvez générer tous les résultats en français, en anglais ou les deux. Le français est écrit pour être naturel et québécois, pas traduit de l'anglais.</div>
     </div>
+
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-question"><span class="en-text">What if they react badly to the conversation?</span><span class="fr-text" style="display:none;">Et s'ils réagissent mal à la conversation?</span><span class="faq-arrow">+</span></div>
-      <div class="faq-answer en-text">Resistance is normal — and expected. The Conversation Guide specifically prepares you for pushback, anger, and denial. If the first conversation doesn't go as planned, Plan B gives you a completely new angle. Most families need multiple attempts. Consistency matters more than perfection.</div>
-      <div class="faq-answer fr-text" style="display:none;">La résistance est normale — et attendue. Le Guide de conversation vous prépare spécifiquement à la résistance, la colère et le déni. Si la première conversation ne se passe pas comme prévu, le Plan B vous donne un angle entièrement nouveau.</div>
+      <div class="faq-question">
+        <span class="en-text">Is this a guarantee my loved one will get help?</span>
+        <span class="fr-text" style="display:none;">Est-ce une garantie que mon proche obtiendra de l'aide?</span>
+        <span class="faq-arrow">+</span>
+      </div>
+      <div class="faq-answer en-text">No tool can guarantee outcomes in human relationships. TheFirstWord gives you the best possible words and approach — but the conversation is yours. What we can tell you is that families who communicate clearly and compassionately have a significantly better chance of reaching their loved one.</div>
+      <div class="faq-answer fr-text" style="display:none;">Aucun outil ne peut garantir les résultats dans les relations humaines. TheFirstWord vous donne les meilleurs mots et la meilleure approche possible — mais la conversation est la vôtre.</div>
     </div>
   </div>
 </div>
 
-<!-- RESOURCES -->
+<!-- RESOURCES SECTION -->
 <div id="resources" style="background:#f0f7f7;padding:80px 40px;">
   <div style="max-width:800px;margin:0 auto;text-align:center;">
+
     <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#2A7F7F;margin-bottom:12px;" class="en-text">SUPPORT RESOURCES</p>
     <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#2A7F7F;margin-bottom:12px;" class="fr-text" style="display:none;">RESSOURCES DE SOUTIEN</p>
+
     <h2 style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#1C2B3A;margin-bottom:16px;" class="en-text">You don't have to figure this out alone.</h2>
     <h2 style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#1C2B3A;margin-bottom:16px;" class="fr-text" style="display:none;">Vous n'avez pas à traverser ça seul(e).</h2>
+
     <p style="font-size:16px;color:#5a6a7a;margin-bottom:48px;line-height:1.7;" class="en-text">If you or your loved one needs immediate support, these free, confidential resources are available 24/7.</p>
     <p style="font-size:16px;color:#5a6a7a;margin-bottom:48px;line-height:1.7;" class="fr-text" style="display:none;">Si vous ou votre proche avez besoin d'un soutien immédiat, ces ressources gratuites et confidentielles sont disponibles 24h/24, 7j/7.</p>
+
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;text-align:left;">
       <div style="background:white;border-radius:14px;padding:28px 32px;border:1px solid #e8e0d8;box-shadow:0 2px 12px rgba(0,0,0,0.04);">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><span style="font-size:28px;">🇨🇦</span><p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2A7F7F;">QUÉBEC — FRANÇAIS</p></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <span style="font-size:28px;">🇨🇦</span>
+          <div>
+            <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2A7F7F;">QUÉBEC — FRANÇAIS</p>
+          </div>
+        </div>
         <p style="margin:0 0 8px;font-size:17px;font-weight:700;color:#1C2B3A;">Drogue Aide et Référence</p>
         <p style="margin:0 0 16px;font-size:14px;color:#5a6a7a;line-height:1.6;">Ligne provinciale de prévention des dépendances. Gratuit, confidentiel, disponible 24h/24.</p>
         <a href="tel:18002652626" style="display:inline-block;background:#1C2B3A;color:white;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:18px;font-weight:700;letter-spacing:1px;">1-800-265-2626</a>
       </div>
+
       <div style="background:white;border-radius:14px;padding:28px 32px;border:1px solid #e8e0d8;box-shadow:0 2px 12px rgba(0,0,0,0.04);">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><span style="font-size:28px;">🇨🇦</span><p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2A7F7F;">QUÉBEC — ENGLISH</p></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <span style="font-size:28px;">🇨🇦</span>
+          <div>
+            <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2A7F7F;">QUÉBEC — ENGLISH</p>
+          </div>
+        </div>
         <p style="margin:0 0 8px;font-size:17px;font-weight:700;color:#1C2B3A;">Drug and Alcohol Helpline</p>
         <p style="margin:0 0 16px;font-size:14px;color:#5a6a7a;line-height:1.6;">Free, confidential support for families and individuals dealing with substance use. Available 24/7.</p>
         <a href="tel:18005658603" style="display:inline-block;background:#1C2B3A;color:white;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:18px;font-weight:700;letter-spacing:1px;">1-800-565-8603</a>
       </div>
     </div>
+
     <p style="margin-top:32px;font-size:13px;color:#5a6a7a;" class="en-text">TheFirstWord is a communication support tool and does not replace professional medical or psychological advice.</p>
-    <p style="margin-top:32px;font-size:13px;color:#5a6a7a;display:none;" class="fr-text">TheFirstWord est un outil de soutien à la communication et ne remplace pas un avis médical ou psychologique professionnel.</p>
+    <p style="margin-top:32px;font-size:13px;color:#5a6a7a;" class="fr-text" style="display:none;">TheFirstWord est un outil de soutien à la communication et ne remplace pas un avis médical ou psychologique professionnel.</p>
+
   </div>
 </div>
 
-<!-- FINAL CTA -->
-<div class="cta-section" onclick="window.location.href='app.html'">
+<div class="cta-section" id="start" onclick="window.location.href='app.html'">
   <h2 class="en-text">The conversation starts with one word. Let's find it.</h2>
   <h2 class="fr-text" style="display:none;">La conversation commence par un mot. Trouvons-le.</h2>
   <p class="en-text">Join the families who refused to stay silent.</p>
   <p class="fr-text" style="display:none;">Rejoignez les familles qui ont refusé de rester silencieuses.</p>
   <button class="btn-white en-text" onclick="window.location.href='app.html'">Get Started Now — from $9</button>
-  <button class="btn-white fr-text" style="display:none;" onclick="window.location.href='app.html?lang=fr'">Commencer maintenant — à partir de 9$</button>
+  <button class="btn-white fr-text" style="display:none;" onclick="window.location.href='app.html'">Commencer maintenant — à partir de 9$</button>
 </div>
 
 <!-- FOOTER -->
-<footer style="background:var(--bg-dark);padding:56px 40px;">
-  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:32px;">
-    <div>
-      <a href="#" style="display:flex;align-items:center;text-decoration:none;line-height:0;margin-bottom:16px;">
-        <img id="footer-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:70px;width:auto;background:white;border-radius:10px;padding:10px 20px;" />
-      </a>
-      <p style="font-size:13px;color:rgba(255,255,255,0.4);max-width:240px;line-height:1.6;" class="en-text">Start the conversation that changes everything.</p>
-      <p style="font-size:13px;color:rgba(255,255,255,0.4);max-width:240px;line-height:1.6;display:none;" class="fr-text">Commencez la conversation qui change tout.</p>
-      <p style="font-size:12px;color:rgba(255,255,255,0.2);margin-top:8px;">🇨🇦 Built in Canada</p>
-    </div>
-    <div style="display:flex;gap:48px;flex-wrap:wrap;">
-      <div>
-        <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;" class="en-text">Product</p>
-        <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;display:none;" class="fr-text">Produit</p>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <a href="app.html" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;" class="en-text">Get Started</a>
-          <a href="app.html?lang=fr" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;display:none;" class="fr-text">Commencer</a>
-          <a href="#pricing" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;" class="en-text">Pricing</a>
-          <a href="#pricing" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;display:none;" class="fr-text">Tarifs</a>
-          <a href="#how-it-works" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;" class="en-text">How it works</a>
-          <a href="#how-it-works" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;display:none;" class="fr-text">Comment ça marche</a>
-        </div>
-      </div>
-      <div>
-        <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;" class="en-text">Support</p>
-        <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;display:none;" class="fr-text">Soutien</p>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <a href="mailto:thefirstword.ca@gmail.com" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;" class="en-text">Contact Us</a>
-          <a href="mailto:thefirstword.ca@gmail.com" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;display:none;" class="fr-text">Nous contacter</a>
-          <a href="#resources" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;" class="en-text">Crisis Resources</a>
-          <a href="#resources" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;display:none;" class="fr-text">Ressources de crise</a>
-          <a href="#testimonials" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;" class="en-text">Stories</a>
-          <a href="#testimonials" style="font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;display:none;" class="fr-text">Témoignages</a>
-        </div>
-      </div>
-    </div>
+<footer>
+  <a href="#" style="display:inline-flex;align-items:center;text-decoration:none;line-height:0;">
+    <img id="footer-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" />
+  </a>
+  <div class="footer-links">
+    <a href="#" class="en-text">Privacy</a>
+    <a href="#" class="fr-text" style="display:none;">Confidentialité</a>
+    <a href="#" class="en-text">Terms</a>
+    <a href="#" class="fr-text" style="display:none;">Conditions</a>
+    <a href="#" class="en-text">Contact</a>
+    <a href="#" class="fr-text" style="display:none;">Contact</a>
   </div>
-  <div style="max-width:1100px;margin:32px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center;">
-    <p style="font-size:12px;color:rgba(255,255,255,0.25);">© 2025 TheFirstWord. All rights reserved.</p>
-    <p style="font-size:11px;color:rgba(255,255,255,0.2);" class="en-text">100% money-back guarantee · Private & secure · Built in Canada</p>
-    <p style="font-size:11px;color:rgba(255,255,255,0.2);display:none;" class="fr-text">Garantie 100% · Privé et sécurisé · Fabriqué au Canada</p>
-  </div>
+  <p class="footer-copy">© 2025 TheFirstWord · thefirstword.ca</p>
 </footer>
 
+<!-- DISCLAIMER -->
 <div class="disclaimer">
-  TheFirstWord is a communication support tool. It is not a substitute for professional medical, psychological, or clinical advice. TheFirstWord is not responsible for the outcome of any conversation or intervention based on the content generated by this tool. / TheFirstWord est un outil de soutien à la communication. Il ne remplace pas un avis médical, psychologique ou clinique professionnel.
+  TheFirstWord is a communication support tool. It is not a substitute for professional medical, psychological, or clinical advice. Edgewood Health Network (EHN) and TheFirstWord are not responsible for the outcome of any conversation or intervention based on the content generated by this tool. / TheFirstWord est un outil de soutien à la communication. Il ne remplace pas un avis médical, psychologique ou clinique professionnel.
 </div>
 
 <script>
+  // LANGUAGE TOGGLE
   let currentLang = 'en';
-
   function setLang(lang) {
-    currentLang = lang;
-    sessionStorage.setItem('tfw_lang', lang);
     const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
     const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
     const src = lang === 'fr' ? logoFr : logoEn;
-    ['nav-logo-img','footer-logo-img'].forEach(id => { const el = document.getElementById(id); if (el) el.src = src; });
+    const navLogo = document.getElementById('nav-logo-img');
+    const footerLogo = document.getElementById('footer-logo-img');
+    if (navLogo) navLogo.src = src;
+    if (footerLogo) footerLogo.src = src;
+    currentLang = lang;
     document.querySelectorAll('.en-text').forEach(el => el.style.display = lang === 'en' ? '' : 'none');
     document.querySelectorAll('.fr-text').forEach(el => el.style.display = lang === 'fr' ? '' : 'none');
     document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
@@ -600,70 +1035,57 @@
 
   // TYPING ANIMATION
   const phrases = {
-    en: ["How do I convince my son to get help?","I don't know what to say to my husband...","My daughter is struggling and I feel helpless.","How do I start this conversation?"],
-    fr: ["Comment convaincre mon fils de chercher de l'aide?","Je ne sais pas quoi dire à mon mari...","Ma fille souffre et je me sens impuissante.","Comment commencer cette conversation?"]
+    en: [
+      "How do I convince my son to get help?",
+      "I don't know what to say to my husband...",
+      "My daughter is struggling and I feel helpless.",
+      "How do I start this conversation?"
+    ],
+    fr: [
+      "Comment convaincre mon fils de chercher de l'aide?",
+      "Je ne sais pas quoi dire à mon mari...",
+      "Ma fille souffre et je me sens impuissante.",
+      "Comment commencer cette conversation?"
+    ]
   };
-  let phraseIndex = 0, charIndex = 0, isDeleting = false;
-  const typingEl = document.getElementById('typingText');
+
+  let phraseIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let typingEl = document.getElementById('typingText');
+
   function type() {
-    const current = phrases[currentLang][phraseIndex % phrases[currentLang].length];
-    typingEl.innerHTML = isDeleting
-      ? '"' + current.substring(0, charIndex - 1) + '<span class="cursor"></span>"'
-      : '"' + current.substring(0, charIndex + 1) + '<span class="cursor"></span>"';
-    isDeleting ? charIndex-- : charIndex++;
-    if (!isDeleting && charIndex === current.length) setTimeout(() => { isDeleting = true; }, 2200);
-    else if (isDeleting && charIndex === 0) { isDeleting = false; phraseIndex++; }
+    const currentPhrases = phrases[currentLang];
+    const current = currentPhrases[phraseIndex % currentPhrases.length];
+    if (isDeleting) {
+      typingEl.innerHTML = '"' + current.substring(0, charIndex - 1) + '<span class="cursor"></span>"';
+      charIndex--;
+    } else {
+      typingEl.innerHTML = '"' + current.substring(0, charIndex + 1) + '<span class="cursor"></span>"';
+      charIndex++;
+    }
+    if (!isDeleting && charIndex === current.length) {
+      setTimeout(() => { isDeleting = true; }, 2200);
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      phraseIndex++;
+    }
     setTimeout(type, isDeleting ? 40 : 65);
   }
   setTimeout(type, 800);
 
   // SCROLL ANIMATIONS
-  const observer = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1 });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-  function toggleFaq(el) { el.classList.toggle('open'); }
-
-  // LOAD LIVE TESTIMONIALS
-  async function loadLiveTestimonials() {
-    try {
-      const res = await fetch('/api/testimonials');
-      const data = await res.json();
-      if (!data.testimonials || data.testimonials.length === 0) return;
-      const grid = document.getElementById('testimonialsGrid');
-      const roleMap = { son:{en:"Parent of a son",fr:"Parent d'un fils"}, daughter:{en:"Parent of a daughter",fr:"Parent d'une fille"}, spouse:{en:"Spouse / Partner",fr:"Conjoint(e)"}, sibling:{en:"Brother / Sister",fr:"Frère / Sœur"}, parent:{en:"Adult child",fr:"Enfant adulte"}, friend:{en:"Friend",fr:"Ami(e)"} };
-      grid.innerHTML = '';
-      data.testimonials.forEach(t => {
-        const initial = (t.name || 'A')[0].toUpperCase();
-        const stars = '★'.repeat(Math.min(5, Math.max(1, t.rating || 5)));
-        const role = (roleMap[t.relationship] || {en:'TheFirstWord user',fr:'Utilisateur TheFirstWord'})[currentLang];
-        grid.innerHTML += `<div class="testimonial-card"><div class="testimonial-stars">${stars}</div><p class="testimonial-quote">"${t.message}"</p><div class="testimonial-author"><div class="testimonial-avatar">${initial}</div><div><div class="testimonial-name">${t.name||'Anonymous'}</div><div class="testimonial-role">${role}</div></div></div></div>`;
-      });
-    } catch(e) { /* silently keep placeholders */ }
+  // FAQ TOGGLE
+  function toggleFaq(el) {
+    el.classList.toggle('open');
   }
-
-  async function submitHomepageTestimonial() {
-    const message = document.getElementById('tMsg')?.value?.trim();
-    const name = document.getElementById('tName')?.value?.trim();
-    if (!message || message.length < 20) {
-      alert(currentLang === 'fr' ? 'Veuillez écrire au moins une phrase.' : 'Please write at least a sentence.');
-      return;
-    }
-    const btn = document.querySelector('.t-btn');
-    btn.disabled = true;
-    btn.textContent = currentLang === 'fr' ? 'Envoi...' : 'Submitting...';
-    try {
-      await fetch('/api/testimonial', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ name:name||'', message, lang:currentLang, rating:5 }) });
-      document.getElementById('t-form').style.display = 'none';
-      document.getElementById('t-success').style.display = 'block';
-      document.querySelectorAll('#t-success .en-text').forEach(el => el.style.display = currentLang === 'en' ? '' : 'none');
-      document.querySelectorAll('#t-success .fr-text').forEach(el => el.style.display = currentLang === 'fr' ? '' : 'none');
-    } catch(e) {
-      btn.disabled = false;
-      btn.textContent = currentLang === 'fr' ? 'Partager mon expérience →' : 'Share my experience →';
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', loadLiveTestimonials);
 </script>
 </body>
 </html>
