@@ -378,6 +378,8 @@
 
     <button class="btn-restart en-text" onclick="restart()">← Start over for another person</button>
     <button class="btn-restart fr-text hidden" onclick="restart()">← Recommencer pour une autre personne</button>
+    <a href="index.html" style="display:block;width:100%;text-align:center;margin-top:8px;padding:12px;font-size:14px;color:var(--text-light);text-decoration:none;font-family:inherit;" class="en-text">↩ Back to homepage</a>
+    <a href="index.html" style="display:block;width:100%;text-align:center;margin-top:8px;padding:12px;font-size:14px;color:var(--text-light);text-decoration:none;font-family:inherit;" class="fr-text hidden">↩ Retour à l'accueil</a>
   </div>
 
   <!-- RETURNING CLIENT PLAN B VIEW -->
@@ -903,8 +905,8 @@ Return ONLY the Plan B strategy.`;
                 </h2>
                 <p style="font-size:14px;color:var(--text-light);line-height:1.7;max-width:460px;margin:0 auto 24px;">
                   ${lang === 'en'
-                    ? `Your kit for ${patientCap || 'your loved one'} is below. We'll regenerate it fresh using your saved profile.`
-                    : `Votre kit pour ${patientCap || 'votre proche'} est ci-dessous. Nous allons le régénérer en utilisant votre profil sauvegardé.`
+                    ? `We'll rebuild your kit fresh for ${patientCap || 'your loved one'} using your saved profile. Takes about 30 seconds — always personalized, never cached.`
+                    : `Nous allons reconstruire votre kit pour ${patientCap || 'votre proche'} en utilisant votre profil sauvegardé. Environ 30 secondes — toujours personnalisé.`
                   }
                 </p>
               </div>
@@ -977,6 +979,14 @@ Return ONLY the Plan B strategy.`;
   async function regenerateKit() {
     document.getElementById('returningPlanBView').classList.add('hidden');
     document.getElementById('loadingView').classList.remove('hidden');
+
+    // Update loading message to set expectations
+    const titleEl = document.querySelector('.loading-title');
+    const subEl   = document.querySelector('.loading-sub');
+    if (titleEl) titleEl.textContent = lang === 'en' ? 'Rebuilding your kit...' : 'Reconstruction de votre kit...';
+    if (subEl)   subEl.textContent   = lang === 'en'
+      ? 'Using your saved profile to generate a fresh, personalized kit. About 30 seconds.'
+      : 'Utilisation de votre profil sauvegardé pour générer un kit frais et personnalisé. Environ 30 secondes.';
 
     const senderName  = answers.senderName  || (lang === 'en' ? 'the family' : 'la famille');
     const patientName = answers.patientName || (lang === 'en' ? 'your loved one' : 'votre proche');
