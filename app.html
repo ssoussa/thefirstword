@@ -905,28 +905,26 @@ Return ONLY the Plan B strategy.`;
               document.getElementById('questionnaireView').classList.add('hidden');
               showOutputs(senderName, patientName);
             } else {
-              // No stored outputs (pre-fix client) — offer to regenerate
+              // No stored outputs yet — show rebuild screen
+              const planBUrl = '?returning=true&planb=true&email=' + encodeURIComponent(returnEmail) + '&lang=' + lang;
               document.getElementById('questionnaireView').classList.add('hidden');
               document.getElementById('returningPlanBView').classList.remove('hidden');
-              document.getElementById('returningWelcome').innerHTML = `
-                <div style="text-align:center;margin-bottom:28px;">
-                  <div style="font-size:40px;margin-bottom:12px;">📖</div>
-                  <h2 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px;">
-                    ${lang === 'en' ? (name ? `Welcome back, ${name}.` : 'Welcome back.') : (name ? `Bon retour, ${name}.` : 'Bon retour.')}
-                  </h2>
-                  <p style="font-size:14px;color:var(--text-light);line-height:1.7;max-width:460px;margin:0 auto 24px;">
-                    ${lang === 'en' ? "We'll rebuild your kit using your saved profile. Takes about 30 seconds." : "Nous allons reconstruire votre kit en utilisant votre profil sauvegardé. Environ 30 secondes."}
-                  </p>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:12px;">
-                  <button onclick="regenerateKit()" style="background:var(--cta);color:white;border:none;border-radius:12px;padding:18px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;">
-                    ${lang === 'en' ? '📖 Rebuild My Kit →' : '📖 Reconstruire mon kit →'}
-                  </button>
-                  <button onclick="window.location.search='?returning=true&planb=true&email=${encodeURIComponent(returnEmail)}&lang=${lang}'" style="background:transparent;color:var(--teal);border:1.5px solid var(--teal);border-radius:12px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;">
-                    ${lang === 'en' ? '🔄 Generate a Plan B instead →' : '🔄 Générer un Plan B à la place →'}
-                  </button>
-                </div>
-              `;
+              document.getElementById('returningWelcome').innerHTML =
+                '<div style="text-align:center;margin-bottom:28px;">' +
+                '<div style="font-size:40px;margin-bottom:12px;">📖</div>' +
+                '<h2 style="font-family:\'Playfair Display\',serif;font-size:24px;font-weight:700;margin-bottom:16px;">' +
+                (lang === 'en' ? (name ? 'Welcome back, ' + name + '.' : 'Welcome back.') : (name ? 'Bon retour, ' + name + '.' : 'Bon retour.')) +
+                '</h2>' +
+                '<p style="font-size:14px;color:var(--text-light);line-height:1.7;max-width:460px;margin:0 auto 24px;">' +
+                (lang === 'en' ? "We'll rebuild your kit using your saved profile. Takes about 30 seconds." : "Nous allons reconstruire votre kit en utilisant votre profil sauvegardé. Environ 30 secondes.") +
+                '</p></div>' +
+                '<div style="display:flex;flex-direction:column;gap:12px;">' +
+                '<button onclick="regenerateKit()" style="background:var(--cta);color:white;border:none;border-radius:12px;padding:18px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;">' +
+                (lang === 'en' ? '📖 Rebuild My Kit →' : '📖 Reconstruire mon kit →') +
+                '</button>' +
+                '<button onclick="window.location.search=\'' + planBUrl + '\'" style="background:transparent;color:var(--teal);border:1.5px solid var(--teal);border-radius:12px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;">' +
+                (lang === 'en' ? '🔄 Generate a Plan B instead →' : '🔄 Générer un Plan B à la place →') +
+                '</button></div>';
             }
             return;
           }
