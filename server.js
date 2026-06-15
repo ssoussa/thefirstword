@@ -135,69 +135,54 @@ function emailWrapper(content, lang = 'en') {
 
 // ─── KIT EMAIL ────────────────────────────────────────────────────────────────
 
-function buildKitEmail(outputs, recipientName, lang, subscriberId) {
+function buildKitEmail(outputs, recipientName, lang, subscriberId, recipientEmail) {
   const isEn = lang !== 'fr';
   const name = recipientName
     ? recipientName.charAt(0).toUpperCase() + recipientName.slice(1)
     : '';
 
-  function mdToHtml(text) {
+  // Build the kit URL for "Open My Full Kit" button
+  const kitUrl = `https://thefirstword.ca/app.html?returning=true&view=kit&email=${encodeURIComponent(recipientEmail || '')}&lang=${lang}`;
+
+  // Preview: first 300 chars of plain text, strip markdown
+  function preview(text) {
     if (!text) return '';
-    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-    const lines = text.split('\n');
-    let html = '';
-    let inList = false;
-
-    for (let line of lines) {
-      line = line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-      line = line.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
-
-      if (/^#{1,3}\s+/.test(line)) {
-        if (inList) { html += '</table>'; inList = false; }
-        const txt = line.replace(/^#{1,3}\s+/, '');
-        html += `<p style="margin:18px 0 6px;font-size:15px;font-weight:700;color:#1a1a1a;border-bottom:1px solid #e8e0d8;padding-bottom:4px;">${txt}</p>`;
-      }
-      else if (/^(\d+\.|-|•|\*)\s+/.test(line)) {
-        if (!inList) { html += '<table style="width:100%;margin:6px 0;" cellpadding="0" cellspacing="0">'; inList = true; }
-        const txt = line.replace(/^(\d+\.|-|•|\*)\s+/, '');
-        html += `<tr><td style="width:16px;font-size:14px;color:#2A7F7F;vertical-align:top;padding:3px 0;">•</td><td style="font-size:14px;color:#3a3330;line-height:1.7;padding:3px 0;">${txt}</td></tr>`;
-      }
-      else if (line.trim() === '') {
-        if (inList) { html += '</table>'; inList = false; }
-        html += '<div style="height:8px;"></div>';
-      }
-      else {
-        if (inList) { html += '</table>'; inList = false; }
-        html += `<p style="margin:0 0 8px;font-size:14px;line-height:1.8;color:#3a3330;">${line}</p>`;
-      }
-    }
-    if (inList) html += '</table>';
-    return html;
+    return text
+      .replace(/#{1,3}\s+/g, '')
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/\*(.+?)\*/g, '$1')
+      .replace(/\n+/g, ' ')
+      .trim()
+      .slice(0, 300) + (text.length > 300 ? '...' : '');
   }
 
-  function section(label, emoji, color, rawText) {
+  function sectionCard(label, emoji, rawText, sectionParam) {
     if (!rawText || !rawText.trim()) return '';
+    const sectionUrl = kitUrl + (sectionParam ? `#${sectionParam}` : '');
+    const previewText = preview(rawText);
+    const readMore = isEn ? 'Read full version →' : 'Lire la version complète →';
     return `
-    <table style="width:100%;margin-bottom:24px;border:1px solid #e8e0d8;border-radius:10px;border-collapse:separate;border-spacing:0;overflow:hidden;" cellpadding="0" cellspacing="0">
+    <table style="width:100%;margin-bottom:20px;border:1px solid #e8e0d8;border-radius:10px;border-collapse:separate;border-spacing:0;overflow:hidden;" cellpadding="0" cellspacing="0">
       <tr>
-        <td style="background:#f5f0eb;padding:12px 20px;border-bottom:1px solid #e8e0d8;">
-          <p style="margin:0;font-size:11px;font-weight:700;color:${color};letter-spacing:2px;text-transform:uppercase;">${emoji} ${label}</p>
+        <td style="background:#f5f0eb;padding:10px 20px;border-bottom:1px solid #e8e0d8;">
+          <p style="margin:0;font-size:11px;font-weight:700;color:#2A7F7F;letter-spacing:2px;text-transform:uppercase;">${emoji} ${label}</p>
         </td>
       </tr>
       <tr>
-        <td style="background:white;padding:20px 24px;">
-          ${mdToHtml(rawText)}
+        <td style="background:white;padding:16px 20px;">
+          <p style="margin:0 0 14px;font-size:14px;color:#3a3330;line-height:1.7;">${previewText}</p>
+          <a href="${kitUrl}" style="display:inline-block;border:1.5px solid #2A7F7F;color:#2A7F7F;text-decoration:none;padding:8px 18px;border-radius:6px;font-size:13px;font-weight:600;">${readMore}</a>
         </td>
       </tr>
     </table>`;
   }
 
   const sections = [
-    section(isEn ? 'Intervention Letter' : "Lettre d'intervention", '📄', '#2A7F7F', outputs.letter),
-    section(isEn ? 'Conversation Guide' : 'Guide de conversation', '📋', '#2A7F7F', outputs.guide),
-    section(isEn ? 'SMS Message' : 'Message SMS', '💬', '#2A7F7F', outputs.sms),
-    section(isEn ? 'Spoken Script' : 'Script parlé', '🎭', '#2A7F7F', outputs.script),
-    section('Plan B', '🔄', '#c4622d', outputs.planB),
+    sectionCard(isEn ? 'Intervention Letter' : "Lettre d'intervention", '📄', outputs.letter),
+    sectionCard(isEn ? 'Conversation Guide' : 'Guide de conversation', '📋', outputs.guide),
+    sectionCard(isEn ? 'SMS Message' : 'Message SMS', '💬', outputs.sms),
+    sectionCard(isEn ? 'Spoken Script' : 'Script parlé', '🎭', outputs.script),
+    sectionCard('Plan B', '🔄', outputs.planB),
   ].join('');
 
   // Unsubscribe footer — only if we have a subscriber ID
@@ -213,28 +198,28 @@ function buildKitEmail(outputs, recipientName, lang, subscriberId) {
     <p style="font-size:16px;color:#1a1a1a;margin:0 0 6px;font-family:Georgia,serif;">
       ${isEn ? `Hi${name ? ' ' + name : ''},` : `Bonjour${name ? ' ' + name : ''},`}
     </p>
-    <p style="font-size:14px;color:#3a3330;line-height:1.7;margin:0 0 28px;">
+    <p style="font-size:14px;color:#3a3330;line-height:1.7;margin:0 0 24px;">
       ${isEn
-        ? 'Your personalized intervention kit is ready. Everything below was written specifically for your situation. Take your time reading it — and trust that reaching out took courage.'
-        : "Votre kit d'intervention personnalisé est prêt. Tout ce qui suit a été rédigé spécifiquement pour votre situation. Prenez le temps de le lire — et faites confiance au fait que cette démarche demande du courage."
+        ? 'Your personalized intervention kit is ready. Below is a preview of each section.'
+        : "Votre kit d'intervention personnalisé est prêt. Voici un aperçu de chaque section."
       }
     </p>
 
-    ${sections}
-
-    <table style="width:100%;background:#f0f7f7;border-left:4px solid #2A7F7F;border-radius:0 8px 8px 0;margin-top:8px;" cellpadding="0" cellspacing="0">
+    <!-- BIG OPEN KIT BUTTON -->
+    <table style="width:100%;margin-bottom:28px;" cellpadding="0" cellspacing="0">
       <tr>
-        <td style="padding:16px 20px;">
-          <p style="margin:0 0 6px;font-size:13px;color:#2A7F7F;font-weight:700;">${isEn ? 'A reminder' : 'Un rappel'}</p>
-          <p style="margin:0;font-size:13px;color:#3a3330;line-height:1.6;">
-            ${isEn
-              ? "You don't have to say everything perfectly. What matters is that you show up. This kit is your foundation — use what feels right, adapt what doesn't."
-              : "Vous n'avez pas à tout dire parfaitement. Ce qui compte, c'est d'être présent(e). Ce kit est votre point de départ — utilisez ce qui vous convient, adaptez le reste."
-            }
+        <td style="text-align:center;background:#1C2B3A;border-radius:10px;padding:20px 24px;">
+          <a href="${kitUrl}" style="display:inline-block;background:#C4622D;color:white;text-decoration:none;padding:16px 36px;border-radius:8px;font-size:17px;font-weight:700;letter-spacing:0.3px;">
+            📖 ${isEn ? 'Open My Full Kit →' : 'Ouvrir mon kit complet →'}
+          </a>
+          <p style="margin:10px 0 0;font-size:12px;color:rgba(255,255,255,0.5);">
+            ${isEn ? 'All 5 sections available on the site — works on any device.' : 'Les 5 sections disponibles sur le site — fonctionne sur tous les appareils.'}
           </p>
         </td>
       </tr>
     </table>
+
+    ${sections}
 
     ${unsubFooter}
   `;
@@ -514,7 +499,7 @@ app.post("/api/send-email", async (req, res) => {
     }
 
     // 2. Send the kit email (with unsubscribe link if we have a subscriber ID)
-    const html = buildKitEmail(outputs, name, lang, subscriberId);
+    const html = buildKitEmail(outputs, name, lang, subscriberId, email);
     const subject = lang === 'fr'
       ? "Votre kit d'intervention personnalisé — TheFirstWord"
       : "Your personalized intervention kit — TheFirstWord";
