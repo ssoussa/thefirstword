@@ -858,6 +858,11 @@ Return ONLY the Plan B strategy.`;
     const isPlanB     = params.get('planb') === 'true';
     const isViewKit   = params.get('view') === 'kit';
 
+    // Apply language from URL param even for fresh visitors (e.g. from French homepage)
+    if (returnLang && (returnLang === 'en' || returnLang === 'fr') && returnLang !== lang) {
+      setLang(returnLang);
+    }
+
     if (isReturning && returnEmail) {
       if (returnLang && (returnLang === 'en' || returnLang === 'fr')) {
         lang = returnLang;
