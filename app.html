@@ -113,10 +113,17 @@
     .lock-sub { font-size: 15px; color: var(--text-light); margin-bottom: 32px; font-weight: 300; }
     .btn-unlock { background: var(--cta); color: white; border: none; border-radius: 10px; padding: 16px 36px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
     .btn-unlock:hover { background: var(--cta-hover); }
-    .planb-input-area { background: rgba(232,165,75,0.06); border: 1px solid rgba(232,165,75,0.3); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
-    .planb-label { font-size: 13px; font-weight: 600; color: #E8A54B; margin-bottom: 12px; display: block; }
-    .planb-textarea { width: 100%; padding: 14px; border: 1.5px solid var(--divider); border-radius: 10px; font-size: 14px; font-family: inherit; color: var(--text); background: white; outline: none; height: 100px; resize: vertical; }
-    .btn-planb { width: 100%; background: #E8A54B; color: white; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 12px; }
+    /* PLAN B TABS */
+    .planb-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .planb-tab { flex: 1; padding: 12px; border-radius: 10px; border: 1.5px solid var(--divider); background: white; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; color: var(--text-light); transition: all 0.15s; text-align: center; }
+    .planb-tab.active { background: var(--teal-light); border-color: var(--teal); color: var(--teal); }
+    .planb-input-area { background: rgba(196,98,45,0.04); border: 1px solid rgba(196,98,45,0.2); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+    .planb-label { font-size: 13px; font-weight: 600; color: var(--cta); margin-bottom: 10px; display: block; }
+    .planb-textarea { width: 100%; padding: 14px; border: 1.5px solid var(--divider); border-radius: 10px; font-size: 14px; font-family: inherit; color: var(--text); background: white; outline: none; resize: vertical; transition: border-color 0.2s; }
+    .planb-textarea:focus { border-color: var(--teal); }
+    .btn-planb { width: 100%; background: var(--cta); color: white; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 12px; transition: background 0.2s; }
+    .btn-planb:hover { background: var(--cta-hover); }
+    .btn-planb:disabled { background: var(--divider); color: var(--text-light); cursor: not-allowed; }
     .action-row { display: flex; gap: 10px; flex-wrap: wrap; }
     .btn-action { flex: 1; min-width: 100px; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; border: 1.5px solid var(--divider); background: white; color: var(--text); }
     .btn-action:hover { border-color: var(--teal); color: var(--teal); }
@@ -153,8 +160,8 @@
   <!-- QUESTIONNAIRE VIEW -->
   <div id="questionnaireView">
     <!-- INTRO BANNER -->
-    <div style="background:white;border:1px solid var(--divider);border-radius:12px;padding:16px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;">
-      <div style="font-size:28px;">⏱️</div>
+    <div style="background:white;border:1px solid var(--divider);border-radius:12px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:14px;">
+      <div style="font-size:26px;">⏱️</div>
       <div>
         <p style="font-size:13px;font-weight:600;color:var(--text);margin:0 0 2px;" class="en-text">7 questions. Under 2 minutes. Your kit is ready immediately after.</p>
         <p style="font-size:13px;font-weight:600;color:var(--text);margin:0 0 2px;" class="fr-text hidden">7 questions. Moins de 2 minutes. Votre kit est prêt immédiatement après.</p>
@@ -244,8 +251,8 @@
       <div class="loading-spinner"></div>
       <h2 class="loading-title en-text">Creating your personalized kit...</h2>
       <h2 class="loading-title fr-text hidden">Création de votre kit personnalisé...</h2>
-      <p class="loading-sub en-text">Our AI is writing your letter, guide and more based on your answers. This takes about 30–40 seconds.</p>
-      <p class="loading-sub fr-text hidden">Notre IA rédige votre lettre, guide et plus selon vos réponses. Cela prend environ 30 à 40 secondes.</p>
+      <p class="loading-sub en-text">Our AI is writing your letter, guide and more. About 30–40 seconds.</p>
+      <p class="loading-sub fr-text hidden">Notre IA rédige votre lettre, guide et plus. Environ 30 à 40 secondes.</p>
     </div>
   </div>
 
@@ -308,27 +315,58 @@
       <div class="output-disclaimer en-text">DISCLAIMER: TheFirstWord is a communication support tool. Not a substitute for professional advice.</div>
       <div class="output-disclaimer fr-text hidden">AVIS: TheFirstWord est un outil de soutien à la communication. Ne remplace pas un avis professionnel.</div>
     </div>
+
+    <!-- PLAN B TAB — improved with 3 questions -->
     <div id="tabPlanB" class="hidden">
-      <div class="planb-input-area">
-        <span class="planb-label en-text">🔄 What happened when you tried? Describe the reaction:</span>
-        <span class="planb-label fr-text hidden">🔄 Qu'est-ce qui s'est passé? Décrivez la réaction:</span>
-        <textarea class="planb-textarea en-text" id="planbInput" placeholder="Ex: He got very angry and left the room..."></textarea>
-        <textarea class="planb-textarea fr-text hidden" id="planbInputFr" placeholder="Ex: Il s'est mis en colère et a quitté la pièce..."></textarea>
-        <button class="btn-planb en-text" onclick="generatePlanB()">Generate Plan B Strategy →</button>
-        <button class="btn-planb fr-text hidden" onclick="generatePlanB()">Générer la stratégie Plan B →</button>
+      <div id="planbForm">
+        <div style="text-align:center;margin-bottom:24px;">
+          <div style="font-size:36px;margin-bottom:8px;">🔄</div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:6px;" class="en-text">Generate a Plan B Strategy</h3>
+          <h3 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:6px;" class="fr-text hidden">Générer une stratégie Plan B</h3>
+          <p style="font-size:13px;color:var(--text-light);" class="en-text">Tell us what happened — we'll build a completely different approach tailored to their reaction.</p>
+          <p style="font-size:13px;color:var(--text-light);" class="fr-text hidden">Dites-nous ce qui s'est passé — nous allons créer une approche entièrement différente adaptée à leur réaction.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="planb-input-area">
+            <span class="planb-label en-text">1. What happened when you tried? <span style="font-weight:400;color:var(--cta);">*</span></span>
+            <span class="planb-label fr-text hidden">1. Qu'est-ce qui s'est passé quand vous avez essayé? <span style="font-weight:400;color:var(--cta);">*</span></span>
+            <textarea class="planb-textarea" id="planbQ1" style="height:110px;" placeholder="Ex: He got angry and left the room. He said I was attacking him. He hasn't spoken to me in 3 days... / Ex: Il s'est mis en colère et est parti. Il a dit que je l'attaquais..."></textarea>
+          </div>
+          <div class="planb-input-area">
+            <span class="planb-label en-text">2. Was there anything that seemed to land — even a little?</span>
+            <span class="planb-label fr-text hidden">2. Y a-t-il eu quelque chose qui a semblé toucher juste — même un peu?</span>
+            <textarea class="planb-textarea" id="planbQ2" style="height:80px;" placeholder="Ex: He went quiet when I mentioned his kids. He didn't deny having a problem this time... / Ex: Il s'est tu quand j'ai mentionné ses enfants..."></textarea>
+          </div>
+          <div class="planb-input-area">
+            <span class="planb-label en-text">3. What do you want to do differently this time?</span>
+            <span class="planb-label fr-text hidden">3. Qu'est-ce que vous voulez faire différemment cette fois?</span>
+            <textarea class="planb-textarea" id="planbQ3" style="height:80px;" placeholder="Ex: I want a different tone. I want to involve his brother. I want to set a real deadline... / Ex: Je veux un ton différent. Je veux impliquer son frère..."></textarea>
+          </div>
+          <button class="btn-planb" id="planbBtn" onclick="generatePlanB()">
+            <span class="en-text">🔄 Generate My Plan B Strategy →</span>
+            <span class="fr-text hidden">🔄 Générer ma stratégie Plan B →</span>
+          </button>
+        </div>
       </div>
-      <div id="planbOutput" class="output-content hidden">
+      <div id="planbOutput" class="output-content hidden" style="margin-top:16px;">
         <div class="output-body" id="planbBody"></div>
         <div class="output-disclaimer en-text">DISCLAIMER: TheFirstWord is not responsible for the outcome of any conversation or intervention based on this content.</div>
         <div class="output-disclaimer fr-text hidden">AVIS: TheFirstWord n'est pas responsable des résultats de toute conversation ou intervention basée sur ce contenu.</div>
+        <button onclick="resetPlanB()" style="margin-top:16px;width:100%;background:transparent;border:1.5px solid var(--divider);border-radius:10px;padding:12px;font-size:13px;color:var(--text-light);cursor:pointer;font-family:inherit;">
+          <span class="en-text">↩ Try a different approach</span>
+          <span class="fr-text hidden">↩ Essayer une approche différente</span>
+        </button>
       </div>
     </div>
+
     <div class="action-row" id="actionRow" style="margin-top:16px;"></div>
+
+    <!-- EMAIL DELIVERY CARD -->
     <div class="checkin-card" id="checkinCard">
       <div class="checkin-title en-text">📬 Send your kit by email</div>
       <div class="checkin-title fr-text hidden">📬 Envoyer votre kit par courriel</div>
-      <p class="checkin-sub en-text">Enter your email and we'll send your full personalized kit directly to your inbox.</p>
-      <p class="checkin-sub fr-text hidden">Entrez votre courriel et nous vous enverrons votre kit personnalisé complet directement dans votre boîte de réception.</p>
+      <p class="checkin-sub en-text">Enter your email and we'll send your full kit — formatted and ready to read on any device.</p>
+      <p class="checkin-sub fr-text hidden">Entrez votre courriel et nous vous enverrons votre kit complet — formaté et prêt à lire sur n'importe quel appareil.</p>
       <div class="checkin-form">
         <input type="email" class="checkin-input" id="deliveryEmail" placeholder="your@email.com" />
         <button class="btn-checkin en-text" onclick="sendByEmail()">Send →</button>
@@ -337,8 +375,16 @@
       <p style="font-size:11px;color:var(--text-light);margin-top:10px;" class="en-text">🔒 Your email is private and never shared.</p>
       <p style="font-size:11px;color:var(--text-light);margin-top:10px;" class="fr-text hidden">🔒 Votre courriel est privé et jamais partagé.</p>
     </div>
+
     <button class="btn-restart en-text" onclick="restart()">← Start over for another person</button>
     <button class="btn-restart fr-text hidden" onclick="restart()">← Recommencer pour une autre personne</button>
+  </div>
+
+  <!-- RETURNING CLIENT PLAN B VIEW -->
+  <div id="returningPlanBView" class="hidden">
+    <div id="returningWelcome" style="background:white;border:1px solid var(--divider);border-radius:16px;padding:40px;box-shadow:0 2px 20px rgba(28,43,58,0.06);">
+      <!-- filled dynamically -->
+    </div>
   </div>
 
 </div>
@@ -351,7 +397,7 @@
   let outputs = {};
 
   const questions = [
-    { id:'relationship', eyebrow:{en:'About your loved one',fr:'À propos de votre proche'}, title:{en:'Who are you reaching out for?',fr:'Pour qui faites-vous cette démarche?'}, subtitle:{en:'This helps us write in the right voice and relationship dynamic.',fr:'Cela nous aide à écrire avec la bonne dynamique relationnelle.'}, type:'grid', options:[
+    { id:'relationship', eyebrow:{en:'About your loved one',fr:'À propos de votre proche'}, title:{en:'Who are you reaching out for?',fr:'Pour qui faites-vous cette démarche?'}, subtitle:{en:'This helps us write in the right voice.',fr:'Cela nous aide à écrire avec la bonne dynamique relationnelle.'}, type:'grid', options:[
       {value:'son',emoji:'👦',en:'My Son',fr:'Mon fils'},{value:'daughter',emoji:'👧',en:'My Daughter',fr:'Ma fille'},
       {value:'spouse',emoji:'💑',en:'My Spouse / Partner',fr:'Mon conjoint(e)'},{value:'sibling',emoji:'👫',en:'My Brother / Sister',fr:'Mon frère / Ma sœur'},
       {value:'parent',emoji:'👴',en:'My Parent',fr:'Mon parent'},{value:'friend',emoji:'🤝',en:'My Friend',fr:'Mon ami(e)'}
@@ -362,27 +408,27 @@
       {value:'cannabis',emoji:'🌿',en:'Cannabis',fr:'Cannabis'},{value:'meth',emoji:'🔥',en:'Meth',fr:'Méthamphétamine'},
       {value:'multiple',emoji:'⚠️',en:'Multiple substances',fr:'Plusieurs substances'},{value:'unknown',emoji:'❓',en:"I'm not sure",fr:"Je ne suis pas sûr(e)"}
     ]},
-    { id:'duration', eyebrow:{en:'How long',fr:'Depuis combien de temps'}, title:{en:'How long have they been struggling?',fr:'Depuis combien de temps luttent-ils?'}, subtitle:{en:'Duration shapes the urgency and approach of your message.',fr:"La durée influence l'urgence et l'approche de votre message."}, type:'grid', options:[
+    { id:'duration', eyebrow:{en:'How long',fr:'Depuis combien de temps'}, title:{en:'How long have they been struggling?',fr:'Depuis combien de temps luttent-ils?'}, subtitle:{en:'Duration shapes the urgency of your message.',fr:"La durée influence l'urgence de votre message."}, type:'grid', options:[
       {value:'less1',emoji:'📅',en:'Less than 1 year',fr:"Moins d'1 an"},{value:'1to3',emoji:'📆',en:'1 to 3 years',fr:'1 à 3 ans'},
       {value:'3to5',emoji:'🗓️',en:'3 to 5 years',fr:'3 à 5 ans'},{value:'over5',emoji:'⏳',en:'More than 5 years',fr:'Plus de 5 ans'}
     ]},
-    { id:'treatment', eyebrow:{en:'Treatment history',fr:'Historique de traitement'}, title:{en:'Have they tried treatment before?',fr:'Ont-ils déjà essayé un traitement?'}, subtitle:{en:'This shapes how we position recovery in your message.',fr:'Cela influence la façon dont nous positionnons la guérison dans votre message.'}, type:'grid', options:[
+    { id:'treatment', eyebrow:{en:'Treatment history',fr:'Historique de traitement'}, title:{en:'Have they tried treatment before?',fr:'Ont-ils déjà essayé un traitement?'}, subtitle:{en:'This shapes how we position recovery.',fr:'Cela influence la façon dont nous positionnons la guérison.'}, type:'grid', options:[
       {value:'never',emoji:'🆕',en:'Never tried',fr:'Jamais essayé'},{value:'once',emoji:'1️⃣',en:'Once before',fr:'Une fois avant'},
       {value:'multiple',emoji:'🔄',en:'Multiple times',fr:'Plusieurs fois'},{value:'unknown',emoji:'❓',en:"I don't know",fr:'Je ne sais pas'}
     ]},
-    { id:'attitude', eyebrow:{en:'Their mindset',fr:"Leur état d'esprit"}, title:{en:'How do they feel about getting help?',fr:"Comment se sentent-ils par rapport à obtenir de l'aide?"}, subtitle:{en:'This is the most important factor in choosing your approach.',fr:"C'est le facteur le plus important pour choisir votre approche."}, type:'grid', options:[
+    { id:'attitude', eyebrow:{en:'Their mindset',fr:"Leur état d'esprit"}, title:{en:'How do they feel about getting help?',fr:"Comment se sentent-ils par rapport à obtenir de l'aide?"}, subtitle:{en:'The most important factor in choosing your approach.',fr:"Le facteur le plus important pour choisir votre approche."}, type:'grid', options:[
       {value:'denial',emoji:'🚫',en:'Complete denial — "I don\'t have a problem"',fr:'Déni total — "Je n\'ai pas de problème"'},
       {value:'resistant',emoji:'😤',en:'Aware but resistant',fr:'Conscient(e) mais résistant(e)'},
       {value:'scared',emoji:'😰',en:'Open but scared',fr:'Ouvert(e) mais effrayé(e)'},
       {value:'ready',emoji:'🌱',en:'Almost ready — needs a push',fr:"Presque prêt(e) — a besoin d'une impulsion"}
     ]},
-    { id:'tone', eyebrow:{en:'Your approach',fr:'Votre approche'}, title:{en:'What tone feels right for you?',fr:'Quel ton vous convient le mieux?'}, subtitle:{en:'Choose the emotional register that matches your relationship and current situation.',fr:'Choisissez le registre émotionnel qui correspond à votre relation et situation actuelle.'}, type:'grid', options:[
+    { id:'tone', eyebrow:{en:'Your approach',fr:'Votre approche'}, title:{en:'What tone feels right for you?',fr:'Quel ton vous convient le mieux?'}, subtitle:{en:'Choose the emotional register that matches your relationship.',fr:'Choisissez le registre émotionnel qui correspond à votre relation.'}, type:'grid', options:[
       {value:'loving',emoji:'💛',en:'Loving & Compassionate',fr:'Aimant & Compatissant'},
       {value:'firm',emoji:'🛑',en:'Firm & Direct',fr:'Ferme & Direct'},
       {value:'hopeful',emoji:'🌱',en:'Hopeful & Forward-Looking',fr:"Plein d'espoir & Tourné vers l'avenir"},
       {value:'urgent',emoji:'⚡',en:'Urgent & Crisis-Aware',fr:'Urgent & Conscient de la crise'}
     ]},
-    { id:'situation', eyebrow:{en:'Your story',fr:'Votre histoire'}, title:{en:'Tell us about your situation',fr:'Parlez-nous de votre situation'}, subtitle:{en:'The more specific you are, the more personalized your outputs will be.',fr:'Plus vous êtes précis, plus vos résultats seront personnalisés.'}, type:'textarea' },
+    { id:'situation', eyebrow:{en:'Your story',fr:'Votre histoire'}, title:{en:'Tell us about your situation',fr:'Parlez-nous de votre situation'}, subtitle:{en:'What have you observed? What happened recently? What are you most worried about?',fr:'Qu\'avez-vous observé? Que s\'est-il passé récemment? Qu\'est-ce qui vous inquiète le plus?'}, type:'textarea' },
     { id:'names', eyebrow:{en:'Personalization',fr:'Personnalisation'}, title:{en:'Almost done — a few details',fr:'Presque terminé — quelques détails'}, subtitle:{en:'Your information is private and used only to personalize your outputs.',fr:'Vos informations sont privées et utilisées uniquement pour personnaliser vos résultats.'}, type:'names' }
   ];
 
@@ -411,6 +457,7 @@
     ready:"They are almost ready. This is the final push — make it count. Remove every last barrier and make calling for help the obvious, easy next step."
   };
 
+  // ─── LANGUAGE ─────────────────────────────────────────────────────────────
   function setLang(l) {
     lang = l;
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -420,14 +467,13 @@
     const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
     const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
     ['nav-logo-img','output-header-logo','letter-logo'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.src = l === 'fr' ? logoFr : logoEn;
+      const el = document.getElementById(id); if (el) el.src = l === 'fr' ? logoFr : logoEn;
     });
-    renderQuestion();
+    if (document.getElementById('questionCard')) renderQuestion();
   }
 
+  // ─── QUESTIONNAIRE ────────────────────────────────────────────────────────
   function renderQuestion() {
-    if (!document.getElementById('questionCard')) return;
     const q = questions[currentQ];
     const total = questions.length;
     const pct = Math.round(((currentQ + 1) / total) * 100);
@@ -448,22 +494,16 @@
       html += `<textarea class="text-input" style="height:160px;resize:vertical;line-height:1.6;" id="situationInput"
         placeholder="${lang === 'en' ? "Ex: My son has been drinking heavily for 3 years. He lost his job last month..." : "Ex: Mon fils boit beaucoup depuis 3 ans. Il a perdu son emploi le mois dernier..."}"
         oninput="answers.situation=this.value">${answers.situation || ''}</textarea>
-        <p style="font-size:11px;color:var(--text-light);margin-top:8px;">${lang === 'en' ? '💡 The more details you share, the more personalized your outputs will be.' : '💡 Plus vous partagez de détails, plus vos résultats seront personnalisés.'}</p>`;
+        <p style="font-size:11px;color:var(--text-light);margin-top:8px;">${lang === 'en' ? '💡 The more details, the more personalized your kit.' : '💡 Plus vous partagez de détails, plus votre kit sera personnalisé.'}</p>`;
     } else if (q.type === 'names') {
       html += `<div style="display:flex;flex-direction:column;gap:16px;">
-        <div>
-          <p style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:8px;">${lang === 'en' ? 'Your first name (sender)' : 'Votre prénom (expéditeur)'}</p>
-          <input type="text" class="text-input" id="senderNameInput" placeholder="${lang === 'en' ? 'e.g. Marie' : 'ex. Marie'}" value="${answers.senderName || ''}" oninput="answers.senderName=this.value" />
-        </div>
-        <div>
-          <p style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:8px;">${lang === 'en' ? 'Their first name (your loved one)' : 'Leur prénom (votre proche)'}</p>
-          <input type="text" class="text-input" id="patientNameInput" placeholder="${lang === 'en' ? 'e.g. Mathieu' : 'ex. Mathieu'}" value="${answers.patientName || ''}" oninput="answers.patientName=this.value" />
-        </div>
-        <div>
-          <p style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:8px;">${lang === 'en' ? 'Your email' : 'Votre courriel'} <span style="color:var(--cta);">*</span></p>
-          <input type="email" class="text-input" id="emailInput" placeholder="${lang === 'en' ? 'your@email.com' : 'votre@courriel.com'}" value="${answers.email || ''}" oninput="answers.email=this.value" />
-          <p style="font-size:11px;color:var(--text-light);margin-top:6px;">🔒 ${lang === 'en' ? 'Private and never shared.' : 'Privé et jamais partagé.'}</p>
-        </div>
+        <div><p style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:8px;">${lang === 'en' ? 'Your first name (sender)' : 'Votre prénom (expéditeur)'}</p>
+        <input type="text" class="text-input" id="senderNameInput" placeholder="${lang === 'en' ? 'e.g. Marie' : 'ex. Marie'}" value="${answers.senderName || ''}" oninput="answers.senderName=this.value" /></div>
+        <div><p style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:8px;">${lang === 'en' ? 'Their first name' : 'Leur prénom'}</p>
+        <input type="text" class="text-input" id="patientNameInput" placeholder="${lang === 'en' ? 'e.g. Mathieu' : 'ex. Mathieu'}" value="${answers.patientName || ''}" oninput="answers.patientName=this.value" /></div>
+        <div><p style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:8px;">${lang === 'en' ? 'Your email' : 'Votre courriel'} <span style="color:var(--cta);">*</span></p>
+        <input type="email" class="text-input" id="emailInput" placeholder="your@email.com" value="${answers.email || ''}" oninput="answers.email=this.value" />
+        <p style="font-size:11px;color:var(--text-light);margin-top:6px;">🔒 ${lang === 'en' ? 'Private and never shared.' : 'Privé et jamais partagé.'}</p></div>
         <div style="background:rgba(232,165,75,0.08);border:1px solid rgba(232,165,75,0.2);border-radius:10px;padding:14px;">
           <p style="font-size:12px;color:rgba(196,98,45,0.9);line-height:1.6;">${lang === 'en' ? '⚠️ TheFirstWord is designed for adults (18+) helping another adult.' : '⚠️ TheFirstWord est conçu pour les adultes (18+) aidant un autre adulte.'}</p>
         </div>
@@ -473,7 +513,6 @@
     const isFirst = currentQ === 0;
     const btnLabel = currentQ === questions.length - 1 ? (lang === 'en' ? 'Choose My Plan →' : 'Choisir mon plan →') : (lang === 'en' ? 'Continue →' : 'Continuer →');
     html += `<div class="nav-buttons">${!isFirst ? `<button class="btn-back-q" onclick="prevQuestion()">${lang === 'en' ? '← Back' : '← Retour'}</button>` : ''}<button class="btn-next" onclick="nextQuestion()">${btnLabel}</button></div>`;
-
     document.getElementById('questionCard').innerHTML = html;
   }
 
@@ -496,17 +535,18 @@
 
   function prevQuestion() { if (currentQ > 0) { currentQ--; renderQuestion(); } }
 
+  // ─── PRICING ──────────────────────────────────────────────────────────────
   function showPricing() {
     document.getElementById('questionnaireView').classList.add('hidden');
     document.getElementById('pricingView').classList.remove('hidden');
   }
-
   function selectPlan(el) {
     document.querySelectorAll('.price-card').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
     selectedPlan = el.dataset.plan;
   }
 
+  // ─── MARKDOWN → HTML ──────────────────────────────────────────────────────
   function markdownToHtml(text) {
     if (!text) return '';
     const lines = text.split('\n');
@@ -515,8 +555,8 @@
       line = line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
       if (/^#{1,3}\s+/.test(line)) {
         if (inList) { html += '</ul>'; inList = false; }
-        html += `<p style="font-weight:700;font-size:15px;color:var(--text);margin:16px 0 6px;">${line.replace(/^#{1,3}\s+/,'')}</p>`;
-      } else if (/^[-•*\d+\.]\s+/.test(line)) {
+        html += `<p style="font-weight:700;font-size:15px;color:var(--text);margin:16px 0 6px;border-bottom:1px solid var(--divider);padding-bottom:4px;">${line.replace(/^#{1,3}\s+/,'')}</p>`;
+      } else if (/^[-•*\d+.]\s+/.test(line)) {
         if (!inList) { html += '<ul style="margin:8px 0;padding-left:0;list-style:none;">'; inList = true; }
         html += `<li style="margin:4px 0;padding-left:16px;font-size:14px;line-height:1.7;color:var(--text);">• ${line.replace(/^[-•*]\s+/,'').replace(/^\d+\.\s+/,'')}</li>`;
       } else if (line.trim() === '') {
@@ -531,32 +571,34 @@
     return html;
   }
 
+  // ─── GENERATION ───────────────────────────────────────────────────────────
+  const CANADIAN_RESOURCES = `CANADIAN RESOURCES ONLY — never mention SAMHSA or any US resources:
+  * Quebec French: Drogue Aide et Référence — 1-800-265-2626
+  * Quebec English: Drug and Alcohol Helpline — 1-800-565-8603`;
+
   async function startGeneration() {
     document.getElementById('pricingView').classList.add('hidden');
     document.getElementById('loadingView').classList.remove('hidden');
-    const senderName = answers.senderName || (lang === 'en' ? 'the family' : 'la famille');
+    const senderName  = answers.senderName  || (lang === 'en' ? 'the family' : 'la famille');
     const patientName = answers.patientName || (lang === 'en' ? 'your loved one' : 'votre proche');
-    const outputLang = lang === 'en' ? 'Write entirely in English.' : 'Write entirely in natural, Québécois-friendly French.';
-    const canadianResources = `CANADIAN RESOURCES ONLY — never mention SAMHSA or US resources:
-  * Quebec French: Drogue Aide et Référence — 1-800-265-2626
-  * Quebec English: Drug and Alcohol Helpline — 1-800-565-8603`;
-    const context = `Relationship: ${profileContext[answers.relationship]||'Concerned family member'}
+    const outputLang  = lang === 'en' ? 'Write entirely in English.' : 'Write entirely in natural, Québécois-friendly French.';
+    const ctx = `Relationship: ${profileContext[answers.relationship]||'Concerned family member'}
 Substance: ${substanceContext[answers.substance]||'substance addiction'}
 Duration: ${answers.duration}
-Treatment history: ${answers.treatment}
-Their attitude: ${attitudeContext[answers.attitude]||answers.attitude}
+Treatment: ${answers.treatment}
+Attitude: ${attitudeContext[answers.attitude]||answers.attitude}
 Tone: ${answers.tone}
 Sender: ${senderName} | Patient: ${patientName}
-Situation: ${answers.situation||'No additional details'}
+Situation: ${answers.situation||'Not provided'}
 Language: ${outputLang}`;
 
     const prompts = {
-      letter: `You are a professional interventionist at TheFirstWord.\n\nWrite a powerful, personalized intervention letter from ${senderName} to ${patientName}.\n\nCONTEXT:\n${context}\n\nRULES:\n- Deeply personal, 3-5 paragraphs, proper salutation and closing\n- Voice matches the relationship type\n- References the substance and real dangers\n- Ends with a clear call to action to seek help immediately\n- Do NOT mention AI\n- ${canadianResources}\n\nReturn ONLY the letter.`,
-      guide: `You are a professional family coach at TheFirstWord.\n\nCreate a step-by-step conversation guide for ${senderName} on how to approach the conversation with ${patientName}.\n\nCONTEXT:\n${context}\n\nSections: 1. Before the conversation 2. How to open 3. Key points to address 4. If they resist 5. How to close 6. What to avoid\n\n- ${canadianResources}\n\nReturn ONLY the guide.`,
+      letter: `You are a professional interventionist at TheFirstWord.\n\nWrite a powerful, personalized intervention letter from ${senderName} to ${patientName}.\n\nCONTEXT:\n${ctx}\n\nRULES: Deeply personal, 3-5 paragraphs, proper salutation and closing. Voice matches the relationship. References the substance and real dangers. Ends with a clear call to seek help immediately. Do NOT mention AI.\n${CANADIAN_RESOURCES}\n\nReturn ONLY the letter.`,
+      guide:  `You are a professional family coach at TheFirstWord.\n\nCreate a step-by-step conversation guide for ${senderName} on how to approach the conversation with ${patientName}.\n\nCONTEXT:\n${ctx}\n\nSections: 1. Before the conversation 2. How to open 3. Key points 4. If they resist 5. How to close 6. What to avoid\n${CANADIAN_RESOURCES}\n\nReturn ONLY the guide.`,
     };
     if (selectedPlan !== 'starter') {
-      prompts.sms = `You are a professional interventionist at TheFirstWord.\n\nWrite a SHORT powerful SMS (max 300 characters) from ${senderName} to ${patientName}.\n\nCONTEXT:\n${context}\n\nRaw, human, direct. Ends with invitation to talk or get help. Do NOT mention AI.\n- ${canadianResources}\n\nReturn ONLY the SMS.`;
-      prompts.script = `You are a professional interventionist at TheFirstWord.\n\nWrite a word-for-word spoken script for ${senderName} to say to ${patientName}.\n\nCONTEXT:\n${context}\n\nFormat: Natural speech with "..." pauses. Stage directions in [brackets]. Structure: Opening → Observations → How it affects me → The ask. 4-6 paragraphs.\n- ${canadianResources}\n\nReturn ONLY the script.`;
+      prompts.sms    = `You are a professional interventionist at TheFirstWord.\n\nWrite a SHORT powerful SMS (max 300 characters) from ${senderName} to ${patientName}.\n\nCONTEXT:\n${ctx}\n\nRaw, human, direct. Ends with invitation to talk. Do NOT mention AI.\n${CANADIAN_RESOURCES}\n\nReturn ONLY the SMS.`;
+      prompts.script = `You are a professional interventionist at TheFirstWord.\n\nWrite a word-for-word spoken script for ${senderName} to say to ${patientName}.\n\nCONTEXT:\n${ctx}\n\nNatural speech with "..." pauses. Stage directions in [brackets]. Structure: Opening → Observations → How it affects me → The ask. 4-6 paragraphs.\n${CANADIAN_RESOURCES}\n\nReturn ONLY the script.`;
     }
 
     try {
@@ -580,78 +622,101 @@ Language: ${outputLang}`;
     document.getElementById('outputDate').textContent = date;
     document.getElementById('outputDate2').textContent = date;
     document.getElementById('outputMeta').textContent = lang === 'en' ? `For ${patientName} · ${selectedPlan.charAt(0).toUpperCase()+selectedPlan.slice(1)} plan` : `Pour ${patientName} · Plan ${selectedPlan}`;
-    document.getElementById('guideTitle').textContent = lang === 'en' ? `How to talk to ${patientName}` : `Comment parler à ${patientName}`;
+    document.getElementById('guideTitle').textContent  = lang === 'en' ? `How to talk to ${patientName}` : `Comment parler à ${patientName}`;
     document.getElementById('scriptTitle').textContent = lang === 'en' ? `What to say to ${patientName}` : `Ce que vous pouvez dire à ${patientName}`;
-    document.getElementById('smsName').textContent = patientName;
+    document.getElementById('smsName').textContent  = patientName;
     document.getElementById('smsAvatar').textContent = patientName.charAt(0).toUpperCase();
-    document.getElementById('smsTime').textContent = new Date().toLocaleTimeString(lang === 'fr' ? 'fr-CA' : 'en-CA', {hour:'2-digit',minute:'2-digit'});
-    document.getElementById('letterBody').innerHTML = markdownToHtml(outputs.letter || '');
-    document.getElementById('guideBody').innerHTML = markdownToHtml(outputs.guide || '');
-    document.getElementById('smsBody').textContent = outputs.sms || '';
-    document.getElementById('scriptBody').innerHTML = markdownToHtml(outputs.script || '');
+    document.getElementById('smsTime').textContent  = new Date().toLocaleTimeString(lang === 'fr' ? 'fr-CA' : 'en-CA', {hour:'2-digit',minute:'2-digit'});
+    document.getElementById('letterBody').innerHTML  = markdownToHtml(outputs.letter  || '');
+    document.getElementById('guideBody').innerHTML   = markdownToHtml(outputs.guide   || '');
+    document.getElementById('smsBody').textContent   = outputs.sms || '';
+    document.getElementById('scriptBody').innerHTML  = markdownToHtml(outputs.script  || '');
 
     const tabs = [
       {id:'Letter', label:lang==='en'?'✉️ Letter':'✉️ Lettre', available:true},
-      {id:'Guide', label:'📋 Guide', available:true},
-      {id:'SMS', label:'💬 SMS', available:selectedPlan !== 'starter'},
+      {id:'Guide',  label:'📋 Guide', available:true},
+      {id:'SMS',    label:'💬 SMS',   available:selectedPlan !== 'starter'},
       {id:'Script', label:lang==='en'?'🎭 Script':'🎭 Script', available:selectedPlan !== 'starter'},
-      {id:'PlanB', label:'🔄 Plan B', available:selectedPlan==='complete'||selectedPlan==='monthly'},
+      {id:'PlanB',  label:'🔄 Plan B', available:selectedPlan === 'complete' || selectedPlan === 'monthly'},
     ];
     document.getElementById('outputTabs').innerHTML = tabs.map(t =>
       `<button class="output-tab${!t.available?' locked':''}" onclick="showTab('${t.id}',this,${t.available})">${t.label}${!t.available?' 🔒':''}</button>`
     ).join('');
     showTab('Letter', document.querySelector('.output-tab'), true);
 
-    // Pre-fill email if entered in questionnaire
     const emailInput = document.getElementById('deliveryEmail');
     if (emailInput && answers.email) emailInput.value = answers.email;
   }
 
   function showTab(tabId, el, available) {
-    if (!available) { showLockedOverlay(tabId); return; }
+    if (!available) {
+      document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
+      if (el) el.classList.add('active');
+      ['tabLetter','tabGuide','tabSMS','tabScript','tabPlanB'].forEach(id => document.getElementById(id).classList.add('hidden'));
+      document.getElementById('tab'+tabId).classList.remove('hidden');
+      document.getElementById('tab'+tabId).innerHTML = `<div class="locked-overlay"><div class="lock-icon">🔒</div><h3 class="lock-title">${lang==='en'?'Unlock this feature':'Débloquer cette fonctionnalité'}</h3><p class="lock-sub">${lang==='en'?'Upgrade to the Complete plan ($29) to access this feature.':'Passez au plan Complet (29$) pour accéder à cette fonctionnalité.'}</p><button class="btn-unlock" onclick="restart()">${lang==='en'?'Upgrade My Plan':'Mettre à niveau mon plan'}</button></div>`;
+      document.getElementById('actionRow').innerHTML = '';
+      return;
+    }
     document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
     if (el) el.classList.add('active');
     ['tabLetter','tabGuide','tabSMS','tabScript','tabPlanB'].forEach(id => document.getElementById(id).classList.add('hidden'));
     document.getElementById('tab'+tabId).classList.remove('hidden');
-    buildActionRow(tabId, available);
+    buildActionRow(tabId);
   }
 
-  function showLockedOverlay(tabId) {
-    const upgradeTo = (tabId === 'SMS' || tabId === 'Script') ? 'essential' : 'complete';
-    const price = upgradeTo === 'essential' ? '$19' : '$29';
-    ['tabLetter','tabGuide','tabSMS','tabScript','tabPlanB'].forEach(id => document.getElementById(id).classList.add('hidden'));
-    const tab = document.getElementById('tab'+tabId);
-    tab.classList.remove('hidden');
-    tab.innerHTML = `<div class="locked-overlay"><div class="lock-icon">🔒</div><h3 class="lock-title">${lang==='en'?'Unlock this output':'Déverrouiller cet élément'}</h3><p class="lock-sub">${lang==='en'?`This output is included in the ${upgradeTo} plan (${price})`:`Cet élément est inclus dans le plan ${upgradeTo} (${price})`}</p><button class="btn-unlock" onclick="restart()">${lang==='en'?'Start again & upgrade →':'Recommencer et mettre à niveau →'}</button></div>`;
-  }
-
-  function buildActionRow(tabId, available) {
-    if (!available) { document.getElementById('actionRow').innerHTML = ''; return; }
+  function buildActionRow(tabId) {
     let btns = '';
-    if (tabId === 'Letter') btns += `<button class="btn-action btn-action-pdf" onclick="downloadPDF('Letter')">${lang==='en'?'📥 Download PDF':'📥 Télécharger PDF'}</button>`;
-    if (tabId === 'Guide') btns += `<button class="btn-action btn-action-pdf" onclick="downloadPDF('Guide')">${lang==='en'?'📥 Download PDF':'📥 Télécharger PDF'}</button>`;
-    if (tabId === 'Script') btns += `<button class="btn-action btn-action-pdf" onclick="downloadPDF('Script')">${lang==='en'?'📥 Download PDF':'📥 Télécharger PDF'}</button>`;
-    if (tabId === 'SMS') btns += `<button class="btn-action" onclick="navigator.clipboard.writeText(document.getElementById('smsBody').textContent).then(()=>alert('${lang==='en'?'Copied!':'Copié!'}')).catch(()=>{})">${lang==='en'?'📋 Copy SMS':'📋 Copier SMS'}</button>`;
+    if (['Letter','Guide','Script'].includes(tabId)) btns += `<button class="btn-action btn-action-pdf" onclick="downloadPDF('${tabId}')">${lang==='en'?'📥 Download PDF':'📥 Télécharger PDF'}</button>`;
+    if (tabId === 'SMS') btns += `<button class="btn-action" onclick="navigator.clipboard.writeText(document.getElementById('smsBody').textContent)">${lang==='en'?'📋 Copy SMS':'📋 Copier SMS'}</button>`;
+    if (tabId === 'PlanB' && outputs.planB) btns += `<button class="btn-action" onclick="navigator.clipboard.writeText(document.getElementById('planbBody').innerText)">${lang==='en'?'📋 Copy Plan B':'📋 Copier Plan B'}</button>`;
     document.getElementById('actionRow').innerHTML = btns;
   }
 
+  // ─── PLAN B (inside app) ──────────────────────────────────────────────────
   async function generatePlanB() {
-    const inputEl = lang === 'en' ? document.getElementById('planbInput') : document.getElementById('planbInputFr');
-    const reaction = (inputEl?.value || '').trim();
-    if (!reaction) { alert(lang === 'en' ? 'Please describe what happened.' : 'Veuillez décrire ce qui s\'est passé.'); return; }
-    const btn = document.querySelector('.btn-planb:not(.hidden)');
+    const q1 = document.getElementById('planbQ1')?.value?.trim();
+    const q2 = document.getElementById('planbQ2')?.value?.trim() || (lang === 'en' ? 'Nothing seemed to land.' : "Rien n'a semblé toucher juste.");
+    const q3 = document.getElementById('planbQ3')?.value?.trim() || (lang === 'en' ? 'Try a different approach.' : 'Essayer une approche différente.');
+    if (!q1 || q1.length < 20) { alert(lang === 'en' ? 'Please describe what happened (at least a sentence).' : "Veuillez décrire ce qui s'est passé (au moins une phrase)."); return; }
+
+    const btn = document.getElementById('planbBtn');
     btn.disabled = true;
-    btn.textContent = lang === 'en' ? 'Generating...' : 'Génération...';
-    const senderName = answers.senderName || 'the family';
-    const patientName = answers.patientName || 'your loved one';
+    btn.innerHTML = lang === 'en' ? 'Generating...' : 'Génération...';
+
+    const senderName  = answers.senderName  || (lang === 'en' ? 'the family' : 'la famille');
+    const patientName = answers.patientName || (lang === 'en' ? 'your loved one' : 'votre proche');
     const prompt = `You are a professional interventionist at TheFirstWord.
-The first intervention attempt did not go as planned. Generate a completely new Plan B strategy.
-Original context: Relationship: ${answers.relationship}, Substance: ${answers.substance}, Tone: ${answers.tone}
-Sender: ${senderName} | Patient: ${patientName}
-What happened: ${reaction}
-Language: ${lang === 'en' ? 'Write entirely in English.' : 'Write entirely in Québécois-friendly French.'}
-Provide: 1. Analysis of what happened 2. New recommended approach 3. New opening message 4. What to do if they resist again 5. When and how to escalate
-CANADIAN RESOURCES ONLY: Quebec French: Drogue Aide et Référence — 1-800-265-2626 / Quebec English: Drug and Alcohol Helpline — 1-800-565-8603
+
+The first intervention attempt failed. Generate a completely new, highly specific Plan B strategy.
+
+ORIGINAL CONTEXT:
+- Relationship: ${answers.relationship||'family member'} | Substance: ${answers.substance||'unknown'}
+- Duration: ${answers.duration||'unknown'} | Treatment history: ${answers.treatment||'unknown'}
+- Their attitude: ${answers.attitude||'unknown'} | Original tone: ${answers.tone||'unknown'}
+- Sender: ${senderName} | Patient: ${patientName}
+- Original situation: ${answers.situation||'Not provided'}
+
+WHAT HAPPENED IN THE FIRST ATTEMPT:
+${q1}
+
+WHAT SEEMED TO LAND (if anything):
+${q2}
+
+WHAT THEY WANT TO DO DIFFERENTLY:
+${q3}
+
+Generate a Plan B that is completely different. Include:
+1. Analysis — what the reaction tells us about where ${patientName} is right now
+2. New recommended approach — different angle, different tone
+3. New opening message — exact words, tailored to what partially worked
+4. How to handle their specific resistance — based on what happened last time
+5. Escalation option — if this Plan B also fails, the next concrete step
+6. Encouragement for ${senderName}
+
+Language: ${lang === 'en' ? 'Write entirely in English.' : 'Write entirely in natural, Québécois-friendly French.'}
+${CANADIAN_RESOURCES}
+
 Return ONLY the Plan B strategy.`;
 
     try {
@@ -660,66 +725,52 @@ Return ONLY the Plan B strategy.`;
       outputs.planB = data.output || '';
       document.getElementById('planbBody').innerHTML = markdownToHtml(outputs.planB);
       document.getElementById('planbOutput').classList.remove('hidden');
-      btn.disabled = false;
-      btn.textContent = lang === 'en' ? 'Generate New Plan B →' : 'Générer un nouveau Plan B →';
+      document.getElementById('planbForm').style.display = 'none';
+      buildActionRow('PlanB');
     } catch(e) {
-      alert(lang === 'en' ? 'Error generating Plan B.' : 'Erreur lors de la génération du Plan B.');
-      btn.disabled = false;
-      btn.textContent = lang === 'en' ? 'Generate Plan B Strategy →' : 'Générer la stratégie Plan B →';
+      alert(lang === 'en' ? 'Error. Please try again.' : 'Erreur. Veuillez réessayer.');
     }
+    btn.disabled = false;
+    btn.innerHTML = lang === 'en' ? '🔄 Generate My Plan B Strategy →' : '🔄 Générer ma stratégie Plan B →';
   }
 
+  function resetPlanB() {
+    document.getElementById('planbOutput').classList.add('hidden');
+    document.getElementById('planbForm').style.display = 'block';
+    document.getElementById('planbQ1').value = '';
+    document.getElementById('planbQ2').value = '';
+    document.getElementById('planbQ3').value = '';
+    outputs.planB = '';
+    buildActionRow('PlanB');
+  }
+
+  // ─── EMAIL SEND ───────────────────────────────────────────────────────────
   async function sendByEmail() {
     const emailInput = document.getElementById('deliveryEmail');
     const email = (emailInput?.value || '').trim();
-    if (!email || !email.includes('@')) {
-      emailInput.style.borderColor = 'var(--cta)';
-      emailInput.placeholder = lang === 'en' ? 'Please enter a valid email' : 'Veuillez entrer un courriel valide';
-      return;
-    }
+    if (!email || !email.includes('@')) { emailInput.style.borderColor = 'var(--cta)'; emailInput.placeholder = lang === 'en' ? 'Please enter a valid email' : 'Veuillez entrer un courriel valide'; return; }
     const btn = document.querySelector('.btn-checkin:not(.hidden)');
     btn.disabled = true;
     btn.textContent = lang === 'en' ? 'Sending...' : 'Envoi...';
-
     try {
       const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email,
-          name: (answers.senderName || '').charAt(0).toUpperCase() + (answers.senderName || '').slice(1),
-          lang,
-          plan: selectedPlan,
-          outputs: {
-            letter: outputs.letter || '',
-            guide: outputs.guide || '',
-            sms: outputs.sms || '',
-            script: outputs.script || '',
-            planB: outputs.planB || ''
-          },
-          answers: {
-            relationship: answers.relationship || '',
-            substance: answers.substance || '',
-            duration: answers.duration || '',
-            treatment: answers.treatment || '',
-            attitude: answers.attitude || '',
-            tone: answers.tone || '',
-            situation: answers.situation || '',
-            patientName: answers.patientName || ''
-          }
+          email, name: (answers.senderName||'').charAt(0).toUpperCase()+(answers.senderName||'').slice(1),
+          lang, plan: selectedPlan,
+          outputs: { letter:outputs.letter||'', guide:outputs.guide||'', sms:outputs.sms||'', script:outputs.script||'', planB:outputs.planB||'' },
+          answers: { relationship:answers.relationship||'', substance:answers.substance||'', duration:answers.duration||'', treatment:answers.treatment||'', attitude:answers.attitude||'', tone:answers.tone||'', situation:answers.situation||'', patientName:answers.patientName||'' }
         })
       });
-
       const data = await response.json();
       if (data.success) {
         document.getElementById('checkinCard').innerHTML = `
           <div class="checkin-title" style="color:var(--teal);">✅ ${lang === 'en' ? 'On its way!' : 'En route!'}</div>
-          <p class="checkin-sub">${lang === 'en' ? 'Your personalized kit has been sent to <strong>' + email + '</strong>. Check your inbox.' : 'Votre kit personnalisé a été envoyé à <strong>' + email + '</strong>. Vérifiez votre boîte de réception.'}</p>
-          ${selectedPlan === 'starter' || selectedPlan === 'essential' ? `<p style="font-size:12px;color:var(--text-light);margin-top:8px;">${lang === 'en' ? 'Want Plan B + weekly support? <a href="#" onclick="restart()" style="color:var(--teal);font-weight:600;">Upgrade your plan →</a>' : 'Vous voulez Plan B + suivi hebdomadaire? <a href="#" onclick="restart()" style="color:var(--teal);font-weight:600;">Passez à un plan supérieur →</a>'}</p>` : ''}
+          <p class="checkin-sub">${lang === 'en' ? 'Your kit preview has been sent to <strong>' + email + '</strong>. Tap the button in the email to open your full kit.' : 'Un aperçu de votre kit a été envoyé à <strong>' + email + '</strong>. Appuyez sur le bouton dans le courriel pour ouvrir votre kit complet.'}</p>
+          ${selectedPlan === 'starter' || selectedPlan === 'essential' ? `<p style="font-size:12px;color:var(--text-light);margin-top:8px;">${lang === 'en' ? 'Want Plan B + weekly support? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Upgrade your plan →</a>' : 'Vous voulez Plan B + suivi hebdomadaire? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Passez à un plan supérieur →</a>'}</p>` : ''}
         `;
         // Testimonial prompt
         const tCard = document.createElement('div');
-        tCard.id = 'testimonialCard';
         tCard.style.cssText = 'background:white;border:1px solid var(--divider);border-radius:12px;padding:24px;margin-top:16px;';
         tCard.innerHTML = `
           <p style="font-size:15px;font-weight:600;color:var(--text);margin:0 0 6px;">${lang === 'en' ? '💬 Would you share your experience?' : '💬 Voudriez-vous partager votre expérience?'}</p>
@@ -729,17 +780,15 @@ Return ONLY the Plan B strategy.`;
             <input type="text" id="testimonialName" style="flex:1;padding:10px 14px;border:1.5px solid var(--divider);border-radius:8px;font-size:13px;font-family:inherit;outline:none;" placeholder="${lang === 'en' ? 'First name (optional)' : 'Prénom (facultatif)'}" />
             <button onclick="submitTestimonial()" style="background:var(--teal);color:white;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">${lang === 'en' ? 'Submit →' : 'Soumettre →'}</button>
           </div>
-          <p style="font-size:11px;color:var(--text-light);margin-top:8px;">${lang === 'en' ? 'Reviews are approved before publishing. Your privacy is protected.' : 'Les avis sont approuvés avant publication. Votre vie privée est protégée.'}</p>
+          <p style="font-size:11px;color:var(--text-light);margin-top:8px;">${lang === 'en' ? 'Approved before publishing. Your privacy is protected.' : 'Approuvé avant publication. Votre vie privée est protégée.'}</p>
         `;
         document.getElementById('checkinCard').after(tCard);
       } else {
-        btn.disabled = false;
-        btn.textContent = lang === 'en' ? 'Send →' : 'Envoyer →';
+        btn.disabled = false; btn.textContent = lang === 'en' ? 'Send →' : 'Envoyer →';
         alert(lang === 'en' ? 'Failed to send. Please try again.' : "Échec de l'envoi. Veuillez réessayer.");
       }
     } catch(err) {
-      btn.disabled = false;
-      btn.textContent = lang === 'en' ? 'Send →' : 'Envoyer →';
+      btn.disabled = false; btn.textContent = lang === 'en' ? 'Send →' : 'Envoyer →';
       alert(lang === 'en' ? 'Failed to send. Please try again.' : "Échec de l'envoi. Veuillez réessayer.");
     }
   }
@@ -747,112 +796,187 @@ Return ONLY the Plan B strategy.`;
   async function submitTestimonial() {
     const message = document.getElementById('testimonialMsg')?.value?.trim();
     const name = document.getElementById('testimonialName')?.value?.trim();
-    if (!message || message.length < 20) {
-      alert(lang === 'en' ? 'Please write at least a sentence.' : 'Veuillez écrire au moins une phrase.');
-      return;
-    }
+    if (!message || message.length < 20) { alert(lang === 'en' ? 'Please write at least a sentence.' : 'Veuillez écrire au moins une phrase.'); return; }
     try {
-      await fetch('/api/testimonial', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name || '', relationship: answers.relationship || '', message, lang, rating: 5 })
-      });
-      document.getElementById('testimonialCard').innerHTML = `<p style="text-align:center;font-size:15px;color:var(--teal);font-weight:600;padding:16px 0;">${lang === 'en' ? '💚 Thank you. Your words will help another family.' : '💚 Merci. Vos mots aideront une autre famille.'}</p>`;
+      await fetch('/api/testimonial', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ name:name||'', relationship:answers.relationship||'', message, lang, rating:5 }) });
+      document.getElementById('testimonialMsg').closest('div[style]').innerHTML = `<p style="text-align:center;font-size:15px;color:var(--teal);font-weight:600;padding:16px 0;">${lang === 'en' ? '💚 Thank you. Your words will help another family.' : '💚 Merci. Vos mots aideront une autre famille.'}</p>`;
     } catch(e) { console.error(e); }
   }
 
+  // ─── PDF ──────────────────────────────────────────────────────────────────
   function downloadPDF(tabId) {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const doc = new jsPDF({ unit:'mm', format:'a4' });
     const map = {
-      Letter: { el: 'letterBody', title: lang === 'en' ? 'Intervention Letter' : "Lettre d'intervention", file: 'letter-' + (answers.patientName || 'loved-one') + '.pdf' },
-      Guide:  { el: 'guideBody',  title: lang === 'en' ? 'Conversation Guide' : 'Guide de conversation', file: 'guide-' + (answers.senderName || 'family') + '.pdf' },
-      Script: { el: 'scriptBody', title: lang === 'en' ? 'Spoken Script' : 'Script parlé', file: 'script-' + (answers.senderName || 'family') + '.pdf' },
+      Letter: { raw: outputs.letter,  title: lang==='en'?'Intervention Letter':"Lettre d'intervention", file:'letter-'+(answers.patientName||'loved-one')+'.pdf' },
+      Guide:  { raw: outputs.guide,   title: lang==='en'?'Conversation Guide':'Guide de conversation',  file:'guide-'+(answers.senderName||'family')+'.pdf' },
+      Script: { raw: outputs.script,  title: lang==='en'?'Spoken Script':'Script parlé',                file:'script-'+(answers.senderName||'family')+'.pdf' },
     };
-    const cfg = map[tabId];
-    if (!cfg) return;
-    const rawText = document.getElementById(cfg.el)?.innerText || '';
-    const date = new Date().toLocaleDateString(lang === 'fr' ? 'fr-CA' : 'en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
-    const margin = 22, pw = 210, uw = pw - margin * 2, ph = 297, bm = 22;
-
+    const cfg = map[tabId]; if (!cfg) return;
+    const rawText = cfg.raw || '';
+    const date = new Date().toLocaleDateString(lang==='fr'?'fr-CA':'en-CA',{year:'numeric',month:'long',day:'numeric'});
+    const margin=22, pw=210, uw=pw-margin*2, ph=297, bm=22;
     function addHeader() {
       doc.setFillColor(28,43,58); doc.rect(0,0,210,28,'F');
-      doc.setTextColor(42,127,127); doc.setFontSize(7); doc.setFont('helvetica','bold');
-      doc.text('THEFIRSTWORD', margin, 10);
-      doc.setTextColor(248,245,240); doc.setFontSize(15); doc.text(cfg.title, margin, 21);
-      doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(180,180,180);
-      doc.text(date, pw - margin, 21, { align: 'right' });
+      doc.setTextColor(42,127,127); doc.setFontSize(7); doc.setFont('helvetica','bold'); doc.text('THEFIRSTWORD',margin,10);
+      doc.setTextColor(248,245,240); doc.setFontSize(15); doc.text(cfg.title,margin,21);
+      doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(180,180,180); doc.text(date,pw-margin,21,{align:'right'});
       doc.setDrawColor(42,127,127); doc.setLineWidth(0.5); doc.line(margin,32,pw-margin,32);
     }
     function addFooter() {
       doc.setFontSize(7.5); doc.setFont('helvetica','italic'); doc.setTextColor(140,140,140);
-      const disc = lang === 'en' ? 'TheFirstWord is a communication support tool. Not a substitute for professional medical or psychological advice.' : "TheFirstWord est un outil de soutien à la communication. Ne remplace pas un avis médical ou psychologique professionnel.";
-      doc.splitTextToSize(disc, uw).forEach((l, i) => { doc.text(l, margin, ph - 18 + (i * 4)); });
+      const disc = lang==='en'?'TheFirstWord is a communication support tool. Not a substitute for professional medical or psychological advice.':'TheFirstWord est un outil de soutien à la communication. Ne remplace pas un avis médical ou psychologique professionnel.';
+      doc.splitTextToSize(disc,uw).forEach((l,i)=>{ doc.text(l,margin,ph-18+(i*4)); });
     }
-    function checkPage(y, n) { if (y + n > ph - bm) { addFooter(); doc.addPage(); addHeader(); return 40; } return y; }
-
-    addHeader();
-    let y = 40;
+    function checkPage(y,n) { if(y+n>ph-bm){addFooter();doc.addPage();addHeader();return 40;} return y; }
+    addHeader(); let y=40;
     rawText.split('\n').forEach(line => {
-      if (line.trim() === '') { y += 3; return; }
-      y = checkPage(y, 7);
-      doc.setFontSize(10.5); doc.setFont('helvetica','normal'); doc.setTextColor(50,50,50);
-      doc.splitTextToSize(line, uw).forEach(l => { doc.text(l, margin, y); y += 5.5; });
+      line = line.replace(/\*\*(.+?)\*\*/g,'$1').replace(/\*(.+?)\*/g,'$1');
+      if (/^#{1,3}\s+/.test(line)) { y=checkPage(y,12); doc.setFontSize(13);doc.setFont('helvetica','bold');doc.setTextColor(28,43,58); doc.splitTextToSize(line.replace(/^#{1,3}\s+/,''),uw).forEach(l=>{doc.text(l,margin,y);y+=7;}); y+=2; }
+      else if (/^[-•]\s+/.test(line)) { y=checkPage(y,7); doc.setFontSize(10.5);doc.setFont('helvetica','normal');doc.setTextColor(50,50,50); doc.setFillColor(42,127,127);doc.circle(margin+1.5,y-1.5,1,'F'); const bl=doc.splitTextToSize(line.replace(/^[-•]\s+/,''),uw-8); bl.forEach((l,i)=>{doc.text(l,margin+6,y+(i*5.5));}); y+=bl.length*5.5+1; }
+      else if (line.trim()==='') { y+=3; }
+      else { y=checkPage(y,7); doc.setFontSize(10.5);doc.setFont('helvetica','normal');doc.setTextColor(50,50,50); doc.splitTextToSize(line,uw).forEach(l=>{doc.text(l,margin,y);y+=5.5;}); }
     });
-    addFooter();
-    doc.save(cfg.file);
+    addFooter(); doc.save(cfg.file);
   }
 
+  // ─── RESTART ──────────────────────────────────────────────────────────────
   function restart() {
-    currentQ = 0; answers = {}; outputs = {}; selectedPlan = 'essential';
-    document.getElementById('outputView').classList.add('hidden');
-    document.getElementById('pricingView').classList.add('hidden');
-    document.getElementById('loadingView').classList.add('hidden');
+    currentQ=0; answers={}; outputs={}; selectedPlan='essential';
+    ['outputView','pricingView','loadingView','returningPlanBView'].forEach(id=>document.getElementById(id).classList.add('hidden'));
     document.getElementById('questionnaireView').classList.remove('hidden');
     renderQuestion();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({top:0,behavior:'smooth'});
   }
 
-  // Check for returning client via URL params
-  (async function checkReturning() {
+  // ─── RETURNING CLIENT PLAN B FLOW ────────────────────────────────────────
+  async function init() {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('returning') !== 'true') { renderQuestion(); return; }
-    const email = params.get('email');
-    const urlLang = params.get('lang');
-    if (urlLang && (urlLang === 'en' || urlLang === 'fr')) setLang(urlLang);
-    if (!email) { renderQuestion(); return; }
-    try {
-      const res = await fetch('/api/returning-client?email=' + encodeURIComponent(email));
-      const data = await res.json();
-      if (data.found) {
-        answers = { ...data.answers, email };
-        const name = data.name ? data.name.charAt(0).toUpperCase() + data.name.slice(1) : '';
-        document.getElementById('questionnaireView').innerHTML = `
-          <div style="background:white;border:1px solid var(--divider);border-radius:16px;padding:40px;text-align:center;box-shadow:0 2px 20px rgba(28,43,58,0.06);">
-            <div style="font-size:48px;margin-bottom:16px;">👋</div>
-            <h2 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px;">Welcome back${name ? ', ' + name : ''}.</h2>
-            <p style="font-size:15px;color:var(--text-light);margin-bottom:28px;line-height:1.7;">${lang === 'en' ? 'We found your profile. We\'ll generate a new Plan B strategy using your original context.' : "Nous avons trouvé votre profil. Nous allons générer une nouvelle stratégie Plan B en utilisant votre contexte original."}</p>
-            <button onclick="generateReturningPlanB()" style="background:var(--teal);color:white;border:none;border-radius:10px;padding:16px 36px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;">${lang === 'en' ? 'Generate My New Plan B →' : 'Générer mon nouveau Plan B →'}</button>
-          </div>`;
-      } else {
-        renderQuestion();
+    const isReturning = params.get('returning') === 'true';
+    const returnEmail = params.get('email');
+    const returnLang  = params.get('lang');
+    const isPlanB     = params.get('planb') === 'true';
+
+    if (isReturning && returnEmail) {
+      if (returnLang && (returnLang === 'en' || returnLang === 'fr')) {
+        lang = returnLang;
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        const btn = document.querySelector(`.lang-btn[onclick="setLang('${returnLang}')"]`);
+        if (btn) btn.classList.add('active');
+        document.querySelectorAll('.en-text').forEach(el => el.classList.toggle('hidden', returnLang !== 'en'));
+        document.querySelectorAll('.fr-text').forEach(el => el.classList.toggle('hidden', returnLang !== 'fr'));
       }
-    } catch(e) { renderQuestion(); }
-  })();
+
+      try {
+        const res  = await fetch(`/api/returning-client?email=${encodeURIComponent(returnEmail)}`);
+        const data = await res.json();
+
+        if (data.found) {
+          answers.email       = returnEmail;
+          answers.senderName  = data.name || '';
+          if (data.answers) Object.assign(answers, data.answers);
+
+          const name        = data.name ? data.name.charAt(0).toUpperCase() + data.name.slice(1) : '';
+          const patientCap  = answers.patientName ? answers.patientName.charAt(0).toUpperCase() + answers.patientName.slice(1) : '';
+
+          document.getElementById('questionnaireView').classList.add('hidden');
+          document.getElementById('returningPlanBView').classList.remove('hidden');
+
+          document.getElementById('returningWelcome').innerHTML = `
+            <div style="text-align:center;margin-bottom:28px;">
+              <div style="font-size:40px;margin-bottom:12px;">🔄</div>
+              <h2 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px;">
+                ${lang === 'en' ? (name ? `Welcome back, ${name}.` : 'Welcome back.') : (name ? `Bon retour, ${name}.` : 'Bon retour.')}
+              </h2>
+              <p style="font-size:14px;color:var(--text-light);line-height:1.7;max-width:480px;margin:0 auto;">
+                ${lang === 'en'
+                  ? `You haven't given up${patientCap ? ' on ' + patientCap : ''}. That says everything. Tell us what happened and we'll build a completely new strategy.`
+                  : `Vous n'avez pas abandonné${patientCap ? ' ' + patientCap : ''}. Cela dit tout. Dites-nous ce qui s'est passé et nous allons créer une stratégie entièrement nouvelle.`
+                }
+              </p>
+            </div>
+            <div style="background:var(--teal-light);border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:12px;color:var(--teal);">
+              ${lang === 'en'
+                ? `💡 Using your original profile: <strong>${answers.relationship||'family member'}</strong>, <strong>${answers.substance||'substance'}</strong>, <strong>${answers.tone||''} tone</strong>. Plan B will be completely different from your first approach.`
+                : `💡 Utilisation de votre profil original: <strong>${answers.relationship||'proche'}</strong>, <strong>${answers.substance||'substance'}</strong>, <strong>ton ${answers.tone||''}</strong>. Le Plan B sera complètement différent de votre première approche.`
+              }
+            </div>
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div class="planb-input-area">
+                <span class="planb-label">${lang === 'en' ? '1. What happened when you tried?' : "1. Qu'est-ce qui s'est passé quand vous avez essayé?"} <span style="font-weight:400;color:var(--cta);">*</span></span>
+                <textarea class="planb-textarea" id="retQ1" style="height:110px;" placeholder="${lang === 'en' ? "e.g. He got very angry and walked out. Said I was attacking him. Hasn't spoken to me since..." : "ex. Il s'est mis en colère et est parti. A dit que je l'attaquais. Ne m'a plus parlé depuis..."}"></textarea>
+              </div>
+              <div class="planb-input-area">
+                <span class="planb-label">${lang === 'en' ? '2. Was there anything that seemed to land — even a little?' : '2. Y a-t-il eu quelque chose qui a semblé toucher juste — même un peu?'}</span>
+                <textarea class="planb-textarea" id="retQ2" style="height:80px;" placeholder="${lang === 'en' ? "e.g. He went quiet when I mentioned his kids. He didn't deny it this time..." : "ex. Il s'est tu quand j'ai mentionné ses enfants. Il n'a pas nié cette fois..."}"></textarea>
+              </div>
+              <div class="planb-input-area">
+                <span class="planb-label">${lang === 'en' ? '3. What do you want to do differently this time?' : '3. Qu\'est-ce que vous voulez faire différemment?'}</span>
+                <textarea class="planb-textarea" id="retQ3" style="height:80px;" placeholder="${lang === 'en' ? "e.g. Different tone. Involve his sister. Set a real deadline..." : "ex. Ton différent. Impliquer sa sœur. Fixer une vraie échéance..."}"></textarea>
+              </div>
+              <button onclick="generateReturningPlanB()" id="retBtn" style="background:var(--teal);color:white;border:none;border-radius:12px;padding:18px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;transition:background 0.2s;">
+                ${lang === 'en' ? '🔄 Generate My New Plan B →' : '🔄 Générer mon nouveau Plan B →'}
+              </button>
+              <p style="font-size:11px;color:var(--text-light);text-align:center;">${lang === 'en' ? 'Takes about 30 seconds.' : 'Prend environ 30 secondes.'}</p>
+            </div>
+            <div id="retResult" style="display:none;margin-top:24px;"></div>
+          `;
+          return;
+        }
+      } catch(e) { console.error('Returning client lookup failed:', e); }
+    }
+
+    renderQuestion();
+  }
 
   async function generateReturningPlanB() {
-    document.getElementById('questionnaireView').classList.add('hidden');
+    const q1 = document.getElementById('retQ1')?.value?.trim();
+    const q2 = document.getElementById('retQ2')?.value?.trim() || (lang === 'en' ? 'Nothing seemed to land.' : "Rien n'a semblé toucher juste.");
+    const q3 = document.getElementById('retQ3')?.value?.trim() || (lang === 'en' ? 'Try a completely different approach.' : 'Essayer une approche complètement différente.');
+
+    if (!q1 || q1.length < 20) { alert(lang === 'en' ? 'Please describe what happened (at least a sentence).' : "Veuillez décrire ce qui s'est passé (au moins une phrase)."); return; }
+
+    const btn = document.getElementById('retBtn');
+    btn.disabled = true;
+    btn.textContent = lang === 'en' ? 'Generating...' : 'Génération...';
+
     document.getElementById('loadingView').classList.remove('hidden');
-    const senderName = answers.senderName || answers.name || 'the family';
-    const patientName = answers.patientName || 'your loved one';
+    document.getElementById('returningPlanBView').classList.add('hidden');
+
+    const senderName  = answers.senderName  || (lang === 'en' ? 'the family' : 'la famille');
+    const patientName = answers.patientName || (lang === 'en' ? 'your loved one' : 'votre proche');
+
     const prompt = `You are a professional interventionist at TheFirstWord.
-Generate a new Plan B intervention strategy. The first approach did not work.
-Context: Relationship: ${answers.relationship}, Substance: ${answers.substance}, Duration: ${answers.duration}, Attitude: ${answers.attitude}, Tone: ${answers.tone}
-Sender: ${senderName} | Patient: ${patientName}
-Situation: ${answers.situation || 'No details provided'}
-Language: ${lang === 'en' ? 'Write entirely in English.' : 'Write entirely in Québécois-friendly French.'}
-Provide: 1. New recommended approach 2. New opening message 3. How to handle resistance 4. Escalation options
-CANADIAN RESOURCES ONLY: Quebec French: Drogue Aide et Référence — 1-800-265-2626 / Quebec English: Drug and Alcohol Helpline — 1-800-565-8603
+
+The first intervention attempt failed. Generate a completely new, highly specific Plan B strategy.
+
+ORIGINAL CONTEXT:
+- Relationship: ${answers.relationship||'family member'} | Substance: ${answers.substance||'unknown'}
+- Duration: ${answers.duration||'unknown'} | Treatment history: ${answers.treatment||'unknown'}
+- Their attitude: ${answers.attitude||'unknown'} | Original tone: ${answers.tone||'unknown'}
+- Sender: ${senderName} | Patient: ${patientName}
+- Original situation: ${answers.situation||'Not provided'}
+
+WHAT HAPPENED IN THE FIRST ATTEMPT:
+${q1}
+
+WHAT SEEMED TO LAND (if anything):
+${q2}
+
+WHAT THEY WANT TO DO DIFFERENTLY:
+${q3}
+
+Generate a Plan B that is completely different from the first approach. Include:
+1. Analysis — what the reaction tells us about where ${patientName} is right now
+2. New recommended approach — different angle, different tone, different strategy
+3. New opening message — exact words tailored to what partially worked
+4. How to handle their specific resistance — based on what happened
+5. Escalation option — if this Plan B also fails, the next concrete step
+6. Encouragement for ${senderName}
+
+Language: ${lang === 'en' ? 'Write entirely in English.' : 'Write entirely in natural, Québécois-friendly French.'}
+${CANADIAN_RESOURCES}
+
 Return ONLY the Plan B strategy.`;
 
     try {
@@ -861,13 +985,24 @@ Return ONLY the Plan B strategy.`;
       outputs.planB = data.output || '';
       selectedPlan = 'complete';
       showOutputs(senderName, patientName);
-      setTimeout(() => showTab('PlanB', document.querySelectorAll('.output-tab')[4], true), 100);
+      // Auto-open Plan B tab
+      setTimeout(() => {
+        const tabs = document.querySelectorAll('.output-tab');
+        tabs.forEach(t => { if (t.textContent.includes('Plan B')) { showTab('PlanB', t, true); } });
+        // Pre-fill the output since we already have it
+        document.getElementById('planbBody').innerHTML = markdownToHtml(outputs.planB);
+        document.getElementById('planbOutput').classList.remove('hidden');
+        document.getElementById('planbForm').style.display = 'none';
+        buildActionRow('PlanB');
+      }, 200);
     } catch(e) {
-      alert(lang === 'en' ? 'Error. Please try again.' : 'Erreur. Veuillez réessayer.');
+      alert(lang === 'en' ? 'Error generating Plan B. Please try again.' : 'Erreur lors de la génération du Plan B. Veuillez réessayer.');
       document.getElementById('loadingView').classList.add('hidden');
-      document.getElementById('questionnaireView').classList.remove('hidden');
+      document.getElementById('returningPlanBView').classList.remove('hidden');
     }
   }
+
+  init();
 </script>
 </body>
 </html>
