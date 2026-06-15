@@ -515,7 +515,8 @@
 
     const isFirst = currentQ === 0;
     const btnLabel = currentQ === questions.length - 1 ? (lang === 'en' ? 'Choose My Plan →' : 'Choisir mon plan →') : (lang === 'en' ? 'Continue →' : 'Continuer →');
-    html += `<div class="nav-buttons">${!isFirst ? `<button class="btn-back-q" onclick="prevQuestion()">${lang === 'en' ? '← Back' : '← Retour'}</button>` : ''}<button class="btn-next" onclick="nextQuestion()">${btnLabel}</button></div>`;
+    const backBtn = isFirst ? '' : '<button class="btn-back-q" onclick="prevQuestion()">' + (lang === 'en' ? '← Back' : '← Retour') + '</button>';
+    html += '<div class="nav-buttons">' + backBtn + '<button class="btn-next" onclick="nextQuestion()">' + btnLabel + '</button></div>';
     document.getElementById('questionCard').innerHTML = html;
   }
 
@@ -767,11 +768,15 @@ Return ONLY the Plan B strategy.`;
       });
       const data = await response.json();
       if (data.success) {
-        document.getElementById('checkinCard').innerHTML = `
-          <div class="checkin-title" style="color:var(--teal);">✅ ${lang === 'en' ? 'On its way!' : 'En route!'}</div>
-          <p class="checkin-sub">${lang === 'en' ? 'Your kit preview has been sent to <strong>' + email + '</strong>. Tap the button in the email to open your full kit.' : 'Un aperçu de votre kit a été envoyé à <strong>' + email + '</strong>. Appuyez sur le bouton dans le courriel pour ouvrir votre kit complet.'}</p>
-          ${selectedPlan === 'starter' || selectedPlan === 'essential' ? `<p style="font-size:12px;color:var(--text-light);margin-top:8px;">${lang === 'en' ? 'Want Plan B + weekly support? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Upgrade your plan →</a>' : 'Vous voulez Plan B + suivi hebdomadaire? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Passez à un plan supérieur →</a>'}</p>` : ''}
-        `;
+        const sentMsg = lang === 'en'
+          ? 'Your kit preview has been sent to <strong>' + email + '</strong>. Tap the button in the email to open your full kit.'
+          : 'Un aperçu de votre kit a été envoyé à <strong>' + email + '</strong>. Appuyez sur le bouton dans le courriel pour ouvrir votre kit complet.';
+        const upgradeMsg = (selectedPlan === 'starter' || selectedPlan === 'essential')
+          ? '<p style="font-size:12px;color:var(--text-light);margin-top:8px;">' + (lang === 'en' ? 'Want Plan B + weekly support? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Upgrade your plan →</a>' : 'Vous voulez Plan B + suivi hebdomadaire? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Passez à un plan supérieur →</a>') + '</p>'
+          : '';
+        document.getElementById('checkinCard').innerHTML =
+          '<div class="checkin-title" style="color:var(--teal);">✅ ' + (lang === 'en' ? 'On its way!' : 'En route!') + '</div>' +
+          '<p class="checkin-sub">' + sentMsg + '</p>' + upgradeMsg;
         // Testimonial prompt
         const tCard = document.createElement('div');
         tCard.style.cssText = 'background:white;border:1px solid var(--divider);border-radius:12px;padding:24px;margin-top:16px;';
@@ -929,45 +934,42 @@ Return ONLY the Plan B strategy.`;
             return;
           }
 
-          document.getElementById('returningWelcome').innerHTML = `
-            <div style="text-align:center;margin-bottom:28px;">
-              <div style="font-size:40px;margin-bottom:12px;">🔄</div>
-              <h2 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px;">
-                ${lang === 'en' ? (name ? `Welcome back, ${name}.` : 'Welcome back.') : (name ? `Bon retour, ${name}.` : 'Bon retour.')}
-              </h2>
-              <p style="font-size:14px;color:var(--text-light);line-height:1.7;max-width:480px;margin:0 auto;">
-                ${lang === 'en'
-                  ? `You haven't given up${patientCap ? ' on ' + patientCap : ''}. That says everything. Tell us what happened and we'll build a completely new strategy.`
-                  : `Vous n'avez pas abandonné${patientCap ? ' ' + patientCap : ''}. Cela dit tout. Dites-nous ce qui s'est passé et nous allons créer une stratégie entièrement nouvelle.`
-                }
-              </p>
-            </div>
-            <div style="background:var(--teal-light);border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:12px;color:var(--teal);">
-              ${lang === 'en'
-                ? `💡 Using your original profile: <strong>${answers.relationship||'family member'}</strong>, <strong>${answers.substance||'substance'}</strong>, <strong>${answers.tone||''} tone</strong>. Plan B will be completely different from your first approach.`
-                : `💡 Utilisation de votre profil original: <strong>${answers.relationship||'proche'}</strong>, <strong>${answers.substance||'substance'}</strong>, <strong>ton ${answers.tone||''}</strong>. Le Plan B sera complètement différent de votre première approche.`
-              }
-            </div>
-            <div style="display:flex;flex-direction:column;gap:16px;">
-              <div class="planb-input-area">
-                <span class="planb-label">${lang === 'en' ? '1. What happened when you tried?' : "1. Qu'est-ce qui s'est passé quand vous avez essayé?"} <span style="font-weight:400;color:var(--cta);">*</span></span>
-                <textarea class="planb-textarea" id="retQ1" style="height:110px;" placeholder="${lang === 'en' ? "e.g. He got very angry and walked out. Said I was attacking him. Hasn't spoken to me since..." : "ex. Il s'est mis en colère et est parti. A dit que je l'attaquais. Ne m'a plus parlé depuis..."}"></textarea>
-              </div>
-              <div class="planb-input-area">
-                <span class="planb-label">${lang === 'en' ? '2. Was there anything that seemed to land — even a little?' : '2. Y a-t-il eu quelque chose qui a semblé toucher juste — même un peu?'}</span>
-                <textarea class="planb-textarea" id="retQ2" style="height:80px;" placeholder="${lang === 'en' ? "e.g. He went quiet when I mentioned his kids. He didn't deny it this time..." : "ex. Il s'est tu quand j'ai mentionné ses enfants. Il n'a pas nié cette fois..."}"></textarea>
-              </div>
-              <div class="planb-input-area">
-                <span class="planb-label">${lang === 'en' ? '3. What do you want to do differently this time?' : '3. Qu\'est-ce que vous voulez faire différemment?'}</span>
-                <textarea class="planb-textarea" id="retQ3" style="height:80px;" placeholder="${lang === 'en' ? "e.g. Different tone. Involve his sister. Set a real deadline..." : "ex. Ton différent. Impliquer sa sœur. Fixer une vraie échéance..."}"></textarea>
-              </div>
-              <button onclick="generateReturningPlanB()" id="retBtn" style="background:var(--teal);color:white;border:none;border-radius:12px;padding:18px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;transition:background 0.2s;">
-                ${lang === 'en' ? '🔄 Generate My New Plan B →' : '🔄 Générer mon nouveau Plan B →'}
-              </button>
-              <p style="font-size:11px;color:var(--text-light);text-align:center;">${lang === 'en' ? 'Takes about 30 seconds.' : 'Prend environ 30 secondes.'}</p>
-            </div>
-            <div id="retResult" style="display:none;margin-top:24px;"></div>
-          `;
+          const welcomeMsg = lang === 'en'
+            ? (name ? 'Welcome back, ' + name + '.' : 'Welcome back.')
+            : (name ? 'Bon retour, ' + name + '.' : 'Bon retour.');
+          const haventGivenUp = lang === 'en'
+            ? "You haven't given up" + (patientCap ? ' on ' + patientCap : '') + ". That says everything. Tell us what happened and we'll build a completely new strategy."
+            : "Vous n'avez pas abandonné" + (patientCap ? ' ' + patientCap : '') + ". Cela dit tout. Dites-nous ce qui s'est passé et nous allons créer une stratégie entièrement nouvelle.";
+          const profileHint = lang === 'en'
+            ? '💡 Using your original profile: <strong>' + (answers.relationship||'family member') + '</strong>, <strong>' + (answers.substance||'substance') + '</strong>, <strong>' + (answers.tone||'') + ' tone</strong>. Plan B will be completely different from your first approach.'
+            : '💡 Profil original: <strong>' + (answers.relationship||'proche') + '</strong>, <strong>' + (answers.substance||'substance') + '</strong>, <strong>ton ' + (answers.tone||'') + '</strong>. Le Plan B sera complètement différent de votre première approche.';
+          const q1Label = lang === 'en' ? '1. What happened when you tried?' : "1. Qu'est-ce qui s'est passé quand vous avez essayé?";
+          const q1Ph    = lang === 'en' ? "e.g. He got very angry and walked out. Said I was attacking him. Hasn't spoken to me since..." : "ex. Il s'est mis en colère et est parti. A dit que je l'attaquais. Ne m'a plus parlé depuis...";
+          const q2Label = lang === 'en' ? '2. Was there anything that seemed to land — even a little?' : '2. Y a-t-il eu quelque chose qui a semblé toucher juste — même un peu?';
+          const q2Ph    = lang === 'en' ? "e.g. He went quiet when I mentioned his kids. He didn't deny it this time..." : "ex. Il s'est tu quand j'ai mentionné ses enfants. Il n'a pas nié cette fois...";
+          const q3Label = lang === 'en' ? '3. What do you want to do differently this time?' : '3. Qu\'est-ce que vous voulez faire différemment?';
+          const q3Ph    = lang === 'en' ? "e.g. Different tone. Involve his sister. Set a real deadline..." : "ex. Ton différent. Impliquer sa soeur. Fixer une vraie echeance...";
+          const genBtn  = lang === 'en' ? '🔄 Generate My New Plan B →' : '🔄 Générer mon nouveau Plan B →';
+          const takesMsg = lang === 'en' ? 'Takes about 30 seconds.' : 'Prend environ 30 secondes.';
+
+          document.getElementById('returningWelcome').innerHTML =
+            '<div style="text-align:center;margin-bottom:28px;">' +
+            '<div style="font-size:40px;margin-bottom:12px;">🔄</div>' +
+            '<h2 style="font-family:\'Playfair Display\',serif;font-size:24px;font-weight:700;margin-bottom:8px;">' + welcomeMsg + '</h2>' +
+            '<p style="font-size:14px;color:var(--text-light);line-height:1.7;max-width:480px;margin:0 auto;">' + haventGivenUp + '</p>' +
+            '</div>' +
+            '<div style="background:var(--teal-light);border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:12px;color:var(--teal);">' + profileHint + '</div>' +
+            '<div style="display:flex;flex-direction:column;gap:16px;">' +
+            '<div class="planb-input-area"><span class="planb-label">' + q1Label + ' <span style="font-weight:400;color:var(--cta);">*</span></span>' +
+            '<textarea class="planb-textarea" id="retQ1" style="height:110px;" placeholder="' + q1Ph + '"></textarea></div>' +
+            '<div class="planb-input-area"><span class="planb-label">' + q2Label + '</span>' +
+            '<textarea class="planb-textarea" id="retQ2" style="height:80px;" placeholder="' + q2Ph + '"></textarea></div>' +
+            '<div class="planb-input-area"><span class="planb-label">' + q3Label + '</span>' +
+            '<textarea class="planb-textarea" id="retQ3" style="height:80px;" placeholder="' + q3Ph + '"></textarea></div>' +
+            '<button onclick="generateReturningPlanB()" id="retBtn" style="background:var(--teal);color:white;border:none;border-radius:12px;padding:18px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;">' + genBtn + '</button>' +
+            '<p style="font-size:11px;color:var(--text-light);text-align:center;">' + takesMsg + '</p>' +
+            '</div>' +
+            '<div id="retResult" style="display:none;margin-top:24px;"></div>';
           return;
         }
       } catch(e) { console.error('Returning client lookup failed:', e); }
