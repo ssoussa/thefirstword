@@ -764,6 +764,144 @@ app.post("/api/testimonial", async (req, res) => {
   }
 });
 
+// ─── API: SEND PLAN B EMAIL ───────────────────────────────────────────────────
+
+app.post("/api/send-planb-email", async (req, res) => {
+  const { email, name, lang, outputs, answers, plan } = req.body;
+  if (!email || !outputs?.planB) return res.status(400).json({ error: "Missing email or Plan B content." });
+
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!resendKey) return res.status(500).json({ error: "Email service not configured." });
+
+  try {
+    const isEn = lang !== 'fr';
+    const senderName = name || '';
+    const patientName = answers?.patientName || '';
+
+    // Fetch subscriber ID for unsubscribe link
+    let subscriberId = null;
+    if (SUPABASE_KEY) {
+      try {
+        const rows = await supabaseQuery('subscribers', `email=eq.${encodeURIComponent(email)}&select=id&limit=1`);
+        if (Array.isArray(rows) && rows[0]?.id) subscriberId = rows[0].id;
+      } catch(e) { /* non-blocking */ }
+    }
+
+    function mdToHtml(text) {
+      if (!text) return '';
+      text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+      const lines = text.split('\n');
+      let html = '';
+      let inList = false;
+      for (let line of lines) {
+        line = line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        line = line.replace(/\*(.+?)\*/g, '<em>$1</em>');
+        if (/^#{1,3}\s+/.test(line)) {
+          if (inList) { html += '</table>'; inList = false; }
+          const txt = line.replace(/^#{1,3}\s+/, '');
+          html += `<p style="margin:18px 0 6px;font-size:15px;font-weight:700;color:#1a1a1a;border-bottom:1px solid #e8e0d8;padding-bottom:4px;">${txt}</p>`;
+        } else if (/^(\d+\.|-|•|\*)\s+/.test(line)) {
+          if (!inList) { html += '<table style="width:100%;margin:6px 0;" cellpadding="0" cellspacing="0">'; inList = true; }
+          const txt = line.replace(/^(\d+\.|-|•|\*)\s+/, '');
+          html += `<tr><td style="width:16px;font-size:14px;color:#c4622d;vertical-align:top;padding:3px 0;">•</td><td style="font-size:14px;color:#3a3330;line-height:1.7;padding:3px 0;">${txt}</td></tr>`;
+        } else if (line.trim() === '') {
+          if (inList) { html += '</table>'; inList = false; }
+          html += '<div style="height:8px;"></div>';
+        } else {
+          if (inList) { html += '</table>'; inList = false; }
+          html += `<p style="margin:0 0 8px;font-size:14px;line-height:1.8;color:#3a3330;">${line}</p>`;
+        }
+      }
+      if (inList) html += '</table>';
+      return html;
+    }
+
+    const unsubFooter = subscriberId
+      ? `<p style="font-size:11px;color:#c0b8b0;text-align:center;margin-top:24px;"><a href="https://thefirstword.ca/api/unsubscribe?id=${subscriberId}" style="color:#c0b8b0;text-decoration:underline;">${isEn ? 'Unsubscribe from all emails' : 'Se désabonner de tous les courriels'}</a></p>`
+      : '';
+
+    // Context summary for the email
+    const contextLine = [
+      answers?.relationship ? (isEn ? `Relationship: ${answers.relationship}` : `Relation: ${answers.relationship}`) : '',
+      answers?.substance ? (isEn ? `Substance: ${answers.substance}` : `Substance: ${answers.substance}`) : '',
+      patientName ? (isEn ? `For: ${patientName}` : `Pour: ${patientName}`) : '',
+    ].filter(Boolean).join(' · ');
+
+    const content = `
+      <p style="font-size:16px;color:#1a1a1a;margin:0 0 6px;font-family:Georgia,serif;">
+        ${isEn ? `Hi${senderName ? ' ' + senderName : ''},` : `Bonjour${senderName ? ' ' + senderName : ''},`}
+      </p>
+      <p style="font-size:14px;color:#3a3330;line-height:1.7;margin:0 0 20px;">
+        ${isEn
+          ? `The first attempt didn't land the way you hoped. That's not failure — that's information. Here is your Plan B strategy${patientName ? ' for ' + patientName : ''}, built on what happened and what comes next.`
+          : `La première tentative ne s'est pas passée comme vous l'espériez. Ce n'est pas un échec — c'est une information. Voici votre stratégie Plan B${patientName ? ' pour ' + patientName : ''}, construite sur ce qui s'est passé et ce qui vient ensuite.`
+        }
+      </p>
+
+      ${contextLine ? `<p style="font-size:11px;color:#9b9390;margin:0 0 24px;letter-spacing:1px;text-transform:uppercase;">${contextLine}</p>` : ''}
+
+      <table style="width:100%;margin-bottom:24px;border:1px solid #f0d4b0;border-radius:10px;border-collapse:separate;border-spacing:0;overflow:hidden;" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="background:#fff8f0;padding:12px 20px;border-bottom:1px solid #f0d4b0;">
+            <p style="margin:0;font-size:11px;font-weight:700;color:#c4622d;letter-spacing:2px;text-transform:uppercase;">🔄 ${isEn ? 'Plan B Strategy' : 'Stratégie Plan B'}</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="background:white;padding:20px 24px;">
+            ${mdToHtml(outputs.planB)}
+          </td>
+        </tr>
+      </table>
+
+      <table style="width:100%;background:#f0f7f7;border-left:4px solid #2A7F7F;border-radius:0 8px 8px 0;margin-bottom:8px;" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="padding:16px 20px;">
+            <p style="margin:0 0 4px;font-size:13px;color:#2A7F7F;font-weight:700;">${isEn ? 'Keep going.' : 'Continuez.'}</p>
+            <p style="margin:0;font-size:13px;color:#3a3330;line-height:1.6;">
+              ${isEn
+                ? 'Intervention is rarely a single conversation. The fact that you\'re here, trying again, is what matters most.'
+                : 'Une intervention est rarement une seule conversation. Le fait que vous soyez là, qui essayez encore, est ce qui compte le plus.'
+              }
+            </p>
+          </td>
+        </tr>
+      </table>
+
+      ${unsubFooter}
+    `;
+
+    const subject = isEn
+      ? `Your Plan B strategy${patientName ? ' for ' + patientName : ''} — TheFirstWord`
+      : `Votre stratégie Plan B${patientName ? ' pour ' + patientName : ''} — TheFirstWord`;
+
+    const html = emailWrapper(content, lang);
+    const emailResult = await sendEmail(email, subject, html);
+
+    if (!emailResult.id) {
+      console.error("Resend error:", emailResult);
+      return res.status(500).json({ error: "Failed to send email." });
+    }
+
+    // Update kit_outputs in Supabase to include the new Plan B
+    if (SUPABASE_KEY && subscriberId) {
+      try {
+        const rows = await supabaseQuery('subscribers', `email=eq.${encodeURIComponent(email)}&select=kit_outputs&limit=1`);
+        if (Array.isArray(rows) && rows[0]) {
+          const existing = rows[0].kit_outputs || {};
+          existing.planB = outputs.planB;
+          await supabaseUpdate('subscribers', subscriberId, { kit_outputs: existing });
+        }
+      } catch(e) { /* non-blocking */ }
+    }
+
+    res.json({ success: true, id: emailResult.id });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to send Plan B email." });
+  }
+});
+
 // ─── CATCH ALL ────────────────────────────────────────────────────────────────
 
 app.get("*", (req, res) => {
