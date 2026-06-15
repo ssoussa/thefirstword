@@ -25,12 +25,12 @@
     html { scroll-behavior: smooth; }
     body { background: var(--bg); font-family: 'Inter', sans-serif; color: var(--text); line-height: 1.6; min-height: 100vh; }
 
-    /* NAV — FIX: logo is now 44px, not 90px */
+    /* NAV */
     nav {
       background: rgba(247,244,239,0.95);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--divider);
-      padding: 12px 40px;
+      padding: 8px 40px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -44,25 +44,42 @@
     .lang-btn { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 4px; border: none; cursor: pointer; background: transparent; color: var(--text-light); font-family: inherit; transition: all 0.15s; }
     .lang-btn.active { background: white; color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
 
+    /* NAV LOGO SIZE */
+    #nav-logo-img {
+      height: 52px;
+      width: auto;
+    }
+    @media (max-width: 600px) {
+      nav { padding: 8px 20px; }
+      #nav-logo-img { height: 44px; }
+    }
+
     /* MAIN LAYOUT */
     .app-container { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+    @media (max-width: 600px) {
+      .app-container { padding: 24px 16px 60px; }
+    }
 
     /* PROGRESS */
     .progress-header { margin-bottom: 40px; }
     .progress-label { font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; }
     .progress-bar-track { height: 3px; background: var(--divider); border-radius: 2px; }
     .progress-bar-fill { height: 100%; background: var(--teal); border-radius: 2px; transition: width 0.4s ease; }
+    .progress-steps { display: flex; justify-content: space-between; margin-top: 8px; }
+    .progress-step-label { font-size: 11px; color: var(--text-light); }
 
     /* QUESTION CARD */
     .question-card { background: white; border-radius: 16px; padding: 48px; border: 1px solid var(--divider); box-shadow: 0 2px 20px rgba(28,43,58,0.06); }
+    @media (max-width: 500px) { .question-card { padding: 28px 20px; } }
     .question-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; }
     .question-title { font-family: 'Playfair Display', serif; font-size: clamp(22px, 4vw, 32px); font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
     .question-subtitle { font-size: 15px; color: var(--text-light); margin-bottom: 36px; font-weight: 300; }
 
     /* OPTIONS GRID */
     .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .options-grid.col-3 { grid-template-columns: repeat(3, 1fr); }
     .options-grid.col-1 { grid-template-columns: 1fr; }
-    @media (max-width: 500px) { .options-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 500px) { .options-grid, .options-grid.col-3 { grid-template-columns: 1fr 1fr; } }
 
     .option-btn {
       padding: 16px 12px;
@@ -107,22 +124,7 @@
     /* PRICING SECTION */
     .pricing-section { text-align: center; margin-bottom: 40px; }
     .pricing-title { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 40px); font-weight: 700; margin-bottom: 12px; }
-    .pricing-subtitle { font-size: 16px; color: var(--text-light); margin-bottom: 16px; font-weight: 300; }
-
-    /* Personalized recommendation banner */
-    .plan-rec-banner {
-      background: var(--teal-light);
-      border: 1px solid rgba(42,127,127,0.25);
-      border-radius: 10px;
-      padding: 14px 20px;
-      margin-bottom: 28px;
-      font-size: 14px;
-      color: var(--teal);
-      font-weight: 500;
-      text-align: left;
-    }
-    .plan-rec-banner span { font-weight: 700; }
-
+    .pricing-subtitle { font-size: 16px; color: var(--text-light); margin-bottom: 40px; font-weight: 300; }
     .pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
     @media (max-width: 800px) { .pricing-grid { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 480px) { .pricing-grid { grid-template-columns: 1fr; } }
@@ -139,6 +141,8 @@
     }
     .price-card:hover { border-color: var(--teal); transform: translateY(-2px); }
     .price-card.selected { border-color: var(--teal); box-shadow: 0 0 0 4px rgba(42,127,127,0.1); }
+    .price-card.popular { border-color: var(--divider); }
+    .price-card.popular.selected { border-color: var(--teal); box-shadow: 0 0 0 4px rgba(42,127,127,0.1); }
     .popular-badge {
       position: absolute;
       top: -12px;
@@ -201,7 +205,6 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
     .loading-sub { font-size: 15px; color: var(--text-light); font-weight: 300; }
-    .loading-slow-note { font-size: 13px; color: var(--text-light); margin-top: 20px; padding: 12px 16px; background: rgba(232,165,75,0.08); border: 1px solid rgba(232,165,75,0.2); border-radius: 8px; display: none; }
 
     /* OUTPUT SECTION */
     .output-header { margin-bottom: 32px; }
@@ -213,6 +216,7 @@
     .output-tab.locked { cursor: not-allowed; opacity: 0.5; }
 
     .output-content { background: white; border-radius: 16px; padding: 48px; border: 1px solid var(--divider); margin-bottom: 16px; }
+    @media (max-width: 500px) { .output-content { padding: 24px 16px; } }
     .output-letterhead { border-bottom: 2px solid var(--bg-dark); padding-bottom: 16px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-end; }
     .output-brand-label { font-size: 10px; letter-spacing: 2px; color: var(--teal); text-transform: uppercase; font-weight: 700; }
     .output-brand-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 800; color: var(--bg-dark); margin-top: 2px; }
@@ -237,21 +241,14 @@
     .lock-icon { font-size: 48px; margin-bottom: 16px; }
     .lock-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
     .lock-sub { font-size: 15px; color: var(--text-light); margin-bottom: 32px; font-weight: 300; }
-    /* FIX: Upgrade button goes back to pricing, preserving answers — NOT restart() */
     .btn-unlock { background: var(--cta); color: white; border: none; border-radius: 10px; padding: 16px 36px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
     .btn-unlock:hover { background: var(--cta-hover); }
 
-    /* PLAN B — 3 questions */
+    /* PLAN B */
     .planb-input-area { background: rgba(232,165,75,0.06); border: 1px solid rgba(232,165,75,0.3); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
-    .planb-label { font-size: 13px; font-weight: 600; color: #E8A54B; margin-bottom: 8px; display: block; }
-    .planb-sublabel { font-size: 12px; color: var(--text-light); margin-bottom: 10px; display: block; }
-    .planb-textarea { width: 100%; padding: 14px; border: 1.5px solid var(--divider); border-radius: 10px; font-size: 14px; font-family: inherit; color: var(--text); background: white; outline: none; height: 90px; resize: vertical; margin-bottom: 16px; }
-    .planb-textarea:focus { border-color: var(--teal); }
-    .btn-planb { width: 100%; background: #E8A54B; color: white; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 4px; transition: background 0.2s; }
-    .btn-planb:hover { background: #d4943a; }
-    .btn-planb:disabled { background: var(--divider); color: var(--text-light); cursor: not-allowed; }
-
-    .output-content-planb { background: white; border-radius: 16px; padding: 40px; border: 1px solid var(--divider); margin-bottom: 16px; }
+    .planb-label { font-size: 13px; font-weight: 600; color: #E8A54B; margin-bottom: 12px; display: block; }
+    .planb-textarea { width: 100%; padding: 14px; border: 1.5px solid var(--divider); border-radius: 10px; font-size: 14px; font-family: inherit; color: var(--text); background: white; outline: none; height: 100px; resize: vertical; }
+    .btn-planb { width: 100%; background: #E8A54B; color: white; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 12px; }
 
     /* ACTION BUTTONS */
     .action-row { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -282,8 +279,7 @@
 
 <nav>
   <a href="index.html" style="display:flex;align-items:center;text-decoration:none;line-height:0;">
-    <!-- FIX: logo height reduced from 90px to 44px -->
-    <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:52px;width:auto;" />
+    <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" />
   </a>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -314,10 +310,6 @@
       <p class="pricing-subtitle en-text">One-time payment or monthly plan. No hidden fees. 100% money-back guarantee.</p>
       <p class="pricing-subtitle fr-text hidden">Paiement unique ou plan mensuel. Pas de frais cachés. Garantie de remboursement 100%.</p>
 
-      <!-- Personalized recommendation banner -->
-      <div class="plan-rec-banner en-text" id="recBannerEn"></div>
-      <div class="plan-rec-banner fr-text hidden" id="recBannerFr"></div>
-
       <div class="pricing-grid">
         <!-- STARTER -->
         <div class="price-card" data-plan="starter" onclick="selectPlan(this)">
@@ -336,7 +328,7 @@
         </div>
 
         <!-- ESSENTIAL -->
-        <div class="price-card popular" data-plan="essential" onclick="selectPlan(this)">
+        <div class="price-card popular selected" data-plan="essential" onclick="selectPlan(this)">
           <div class="popular-badge en-text">⭐ Most Popular</div>
           <div class="popular-badge fr-text hidden">⭐ Le plus populaire</div>
           <div class="price-tier en-text">Essential</div>
@@ -402,19 +394,14 @@
       <h2 class="loading-title fr-text hidden">Création de votre kit personnalisé...</h2>
       <p class="loading-sub en-text">Our AI is writing your letter, guide and more based on your answers. This takes about 30–40 seconds.</p>
       <p class="loading-sub fr-text hidden">Notre IA rédige votre lettre, guide et plus selon vos réponses. Cela prend environ 30 à 40 secondes.</p>
-      <!-- Cold start note — shown after 20 seconds -->
-      <div class="loading-slow-note en-text" id="coldStartNote">
-        ⏳ Taking a little longer than usual? Our server may be waking up from sleep. Hang tight — your kit is on its way.
-      </div>
-      <div class="loading-slow-note fr-text hidden" id="coldStartNoteFr">
-        ⏳ Ça prend un peu plus de temps? Notre serveur se réveille peut-être. Votre kit arrive bientôt.
-      </div>
     </div>
   </div>
 
   <!-- OUTPUT VIEW -->
   <div id="outputView" class="hidden">
-      <img id="output-header-logo" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:52px;width:auto;display:block;margin:0 auto 8px;" />
+    <div style="text-align:center;margin-bottom:24px;padding-top:8px;">
+      <img id="output-header-logo" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:56px;width:auto;" />
+    </div>
     <div class="output-header">
       <h2 class="output-title en-text">Your kit is ready ✅</h2>
       <h2 class="output-title fr-text hidden">Votre kit est prêt ✅</h2>
@@ -440,8 +427,7 @@
     <div id="tabGuide" class="output-content hidden">
       <div class="output-letterhead">
         <div>
-          <img id="guide-logo-en" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:44px;width:auto;" />
-          <img id="guide-logo-fr" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png" alt="TheFirstWord" style="height:44px;width:auto;display:none;" />
+          <img src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:44px;width:auto;" class="en-text" /><img src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png" alt="TheFirstWord" style="height:44px;width:auto;" class="fr-text hidden" />
           <div class="output-brand-name" id="guideTitle"></div>
         </div>
         <div class="output-date" id="outputDate2"></div>
@@ -481,37 +467,20 @@
       <div class="output-disclaimer fr-text hidden">AVIS: TheFirstWord est un outil de soutien à la communication. Ne remplace pas un avis professionnel.</div>
     </div>
 
-    <!-- PLAN B — 3 question form -->
+    <!-- PLAN B -->
     <div id="tabPlanB" class="hidden">
-      <div class="planb-input-area" id="planbForm">
-        <p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:20px;" class="en-text">Tell us what happened so we can build a different strategy.</p>
-        <p style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:20px;" class="fr-text hidden">Dites-nous ce qui s'est passé pour qu'on puisse bâtir une stratégie différente.</p>
-
-        <span class="planb-label en-text">1. What happened when you tried?</span>
-        <span class="planb-label fr-text hidden">1. Qu'est-ce qui s'est passé quand vous avez essayé?</span>
-        <span class="planb-sublabel en-text">Describe their reaction, what was said, how it ended.</span>
-        <span class="planb-sublabel fr-text hidden">Décrivez leur réaction, ce qui a été dit, comment ça s'est terminé.</span>
-        <textarea class="planb-textarea" id="planbQ1" placeholder="e.g. He got very angry and left the room. He said I was exaggerating and hasn't responded to messages since..."></textarea>
-
-        <span class="planb-label en-text">2. What seemed to land or resonate, even a little?</span>
-        <span class="planb-label fr-text hidden">2. Qu'est-ce qui a semblé résonner, même un peu?</span>
-        <span class="planb-sublabel en-text">Did any part of what you said seem to reach them, even briefly?</span>
-        <span class="planb-sublabel fr-text hidden">Une partie de ce que vous avez dit a-t-elle semblé les atteindre, même brièvement?</span>
-        <textarea class="planb-textarea" id="planbQ2" placeholder="e.g. When I mentioned his kids he went quiet for a moment. Or: nothing seemed to land at all."></textarea>
-
-        <span class="planb-label en-text">3. What do you want to do differently this time?</span>
-        <span class="planb-label fr-text hidden">3. Qu'est-ce que vous voulez faire différemment cette fois?</span>
-        <span class="planb-sublabel en-text">Different tone, different timing, different person involved, different approach?</span>
-        <span class="planb-sublabel fr-text hidden">Ton différent, moment différent, autre personne impliquée, approche différente?</span>
-        <textarea class="planb-textarea" id="planbQ3" placeholder="e.g. I want to involve his brother this time. Or: I want to be firmer about consequences."></textarea>
-
+      <div class="planb-input-area">
+        <span class="planb-label en-text">🔄 What happened when you tried? Describe the reaction:</span>
+        <span class="planb-label fr-text hidden">🔄 Qu'est-ce qui s'est passé? Décrivez la réaction:</span>
+        <textarea class="planb-textarea en-text" id="planbInput" placeholder="Ex: He got very angry and left the room. He hasn't responded to messages since..."></textarea>
+        <textarea class="planb-textarea fr-text hidden" id="planbInputFr" placeholder="Ex: Il s'est mis en colère et a quitté la pièce. Il ne répond plus aux messages..."></textarea>
         <button class="btn-planb en-text" onclick="generatePlanB()">Generate Plan B Strategy →</button>
         <button class="btn-planb fr-text hidden" onclick="generatePlanB()">Générer la stratégie Plan B →</button>
       </div>
-      <div id="planbOutput" class="output-content-planb hidden">
+      <div id="planbOutput" class="output-content hidden">
         <div class="output-body" id="planbBody"></div>
-        <div class="output-disclaimer en-text" style="margin-top:24px;padding-top:12px;border-top:1px solid var(--divider);font-size:10px;color:#999;">DISCLAIMER: TheFirstWord is not responsible for the outcome of any conversation or intervention based on this content.</div>
-        <div class="output-disclaimer fr-text hidden" style="margin-top:24px;padding-top:12px;border-top:1px solid var(--divider);font-size:10px;color:#999;">AVIS: TheFirstWord n'est pas responsable des résultats de toute conversation ou intervention basée sur ce contenu.</div>
+        <div class="output-disclaimer en-text">DISCLAIMER: TheFirstWord is not responsible for the outcome of any conversation or intervention based on this content.</div>
+        <div class="output-disclaimer fr-text hidden">AVIS: TheFirstWord n'est pas responsable des résultats de toute conversation ou intervention basée sur ce contenu.</div>
       </div>
     </div>
 
@@ -535,22 +504,17 @@
 
     <button class="btn-restart en-text" onclick="restart()">← Start over for another person</button>
     <button class="btn-restart fr-text hidden" onclick="restart()">← Recommencer pour une autre personne</button>
-    <div style="text-align:center;margin-top:12px;">
-      <a href="index.html" style="font-size:13px;color:var(--text-light);text-decoration:none;" class="en-text">← Back to homepage</a>
-      <a href="index.html" style="font-size:13px;color:var(--text-light);text-decoration:none;" class="fr-text hidden">← Retour à l'accueil</a>
-    </div>
   </div>
 
 </div>
 
 <script>
   // ─── STATE ────────────────────────────────────────────────────────────────
-  let lang = sessionStorage.getItem('tfw_lang') || 'en';
+  let lang = 'en';
   let currentQ = 0;
   let answers = {};
   let selectedPlan = 'essential';
   let outputs = {};
-  let coldStartTimer = null;
 
   // ─── QUESTIONS ────────────────────────────────────────────────────────────
   const questions = [
@@ -616,7 +580,7 @@
       id: 'attitude',
       eyebrow: { en: 'Their mindset', fr: 'Leur état d\'esprit' },
       title: { en: 'How do they feel about getting help?', fr: 'Comment se sentent-ils par rapport à obtenir de l\'aide?' },
-      subtitle: { en: "This is the most important factor in choosing your approach.", fr: "C'est le facteur le plus important pour choisir votre approche." },
+      subtitle: { en: "This is the most important factor in choosing your approach.", fr: "C\'est le facteur le plus important pour choisir votre approche." },
       type: 'grid',
       options: [
         { value: 'denial', emoji: '🚫', en: 'Complete denial — "I don\'t have a problem"', fr: 'Déni total — "Je n\'ai pas de problème"' },
@@ -642,14 +606,14 @@
       id: 'situation',
       eyebrow: { en: 'Your story', fr: 'Votre histoire' },
       title: { en: 'Tell us about your situation', fr: 'Parlez-nous de votre situation' },
-      subtitle: { en: 'The more specific you are, the more personalized your kit will be. What have you observed? What happened recently? What worries you most?', fr: 'Plus vous êtes précis, plus votre kit sera personnalisé. Qu\'avez-vous observé? Que s\'est-il passé récemment? Qu\'est-ce qui vous inquiète le plus?' },
+      subtitle: { en: 'The more specific you are, the more personalized your outputs will be. What have you observed? What has happened recently? What are you most worried about?', fr: 'Plus vous êtes précis, plus vos résultats seront personnalisés. Qu\'avez-vous observé? Que s\'est-il passé récemment? Qu\'est-ce qui vous inquiète le plus?' },
       type: 'textarea',
     },
     {
       id: 'names',
       eyebrow: { en: 'Personalization', fr: 'Personnalisation' },
       title: { en: 'Almost done — a few details', fr: 'Presque terminé — quelques détails' },
-      subtitle: { en: 'Your information is private and used only to personalize your kit.', fr: 'Vos informations sont privées et utilisées uniquement pour personnaliser votre kit.' },
+      subtitle: { en: 'Your information is private and used only to personalize your outputs.', fr: 'Vos informations sont privées et utilisées uniquement pour personnaliser vos résultats.' },
       type: 'names',
     }
   ];
@@ -684,11 +648,11 @@
   // ─── LANGUAGE ─────────────────────────────────────────────────────────────
   function setLang(l) {
     lang = l;
-    sessionStorage.setItem('tfw_lang', l);
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
     document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`).classList.add('active');
     document.querySelectorAll('.en-text').forEach(el => el.classList.toggle('hidden', l !== 'en'));
     document.querySelectorAll('.fr-text').forEach(el => el.classList.toggle('hidden', l !== 'fr'));
+    // Swap logo
     const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
     const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
     const navLogo = document.getElementById('nav-logo-img');
@@ -697,10 +661,6 @@
     if (outputHeaderLogo) outputHeaderLogo.src = l === 'fr' ? logoFr : logoEn;
     const letterLogo = document.getElementById('letter-logo');
     if (letterLogo) letterLogo.src = l === 'fr' ? logoFr : logoEn;
-    const guideLogoEn = document.getElementById('guide-logo-en');
-    const guideLogoFr = document.getElementById('guide-logo-fr');
-    if (guideLogoEn) guideLogoEn.style.display = l === 'fr' ? 'none' : '';
-    if (guideLogoFr) guideLogoFr.style.display = l === 'fr' ? '' : 'none';
     renderQuestion();
   }
 
@@ -749,9 +709,9 @@
             <input type="text" class="text-input" id="patientNameInput" placeholder="${lang === 'en' ? 'e.g. Mathieu' : 'ex. Mathieu'}" value="${answers.patientName || ''}" oninput="answers.patientName=this.value" />
           </div>
           <div>
-            <p style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:8px;">${lang === 'en' ? 'Your email — we\'ll send your kit here' : 'Votre courriel — nous y enverrons votre kit'} <span style="color:var(--cta);">*</span></p>
+            <p style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:8px;">${lang === 'en' ? 'Your email — required for delivery & weekly support' : 'Votre courriel — requis pour la livraison et le soutien hebdomadaire'} <span style="color:var(--cta);">*</span></p>
             <input type="email" class="text-input" id="emailInput" placeholder="${lang === 'en' ? 'your@email.com' : 'votre@courriel.com'}" value="${answers.email || ''}" oninput="answers.email=this.value" />
-            <p style="font-size:11px;color:var(--text-light);margin-top:6px;">${lang === 'en' ? '🔒 Your email is private and never shared.' : '🔒 Votre courriel est privé et jamais partagé.'}</p>
+            <p style="font-size:11px;color:var(--text-light);margin-top:6px;">${lang === 'en' ? '🔒 Your email is private and never shared. Used only to deliver your outputs and send weekly check-ins (Complete plan).' : '🔒 Votre courriel est privé et jamais partagé. Utilisé uniquement pour livrer vos résultats et envoyer des suivis hebdomadaires (plan Complet).'}</p>
           </div>
           <div style="background:rgba(232,165,75,0.08);border:1px solid rgba(232,165,75,0.2);border-radius:10px;padding:14px;">
             <p style="font-size:12px;color:rgba(196,98,45,0.9);line-height:1.6;">${lang === 'en' ? '⚠️ TheFirstWord is designed for adults (18+) helping another adult. If your loved one is under 18, please contact a youth addiction specialist directly.' : '⚠️ TheFirstWord est conçu pour les adultes (18+) aidant un autre adulte. Si votre proche a moins de 18 ans, veuillez contacter directement un spécialiste en dépendance jeunesse.'}</p>
@@ -817,39 +777,6 @@
   function showPricing() {
     document.getElementById('questionnaireView').classList.add('hidden');
     document.getElementById('pricingView').classList.remove('hidden');
-
-    // Personalized recommendation banner based on their answers
-    const patientName = answers.patientName || (lang === 'en' ? 'your loved one' : 'votre proche');
-    const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
-
-    let recEn = '', recFr = '';
-    if (answers.attitude === 'denial' || answers.attitude === 'resistant') {
-      recEn = `Based on ${cap(patientName)}'s resistance, we recommend the <span>Complete plan</span> — the Plan B strategy is likely something you'll need.`;
-      recFr = `En raison de la résistance de ${cap(patientName)}, nous recommandons le plan <span>Complet</span> — la stratégie Plan B est probablement ce dont vous aurez besoin.`;
-      // Pre-select Complete
-      document.querySelectorAll('.price-card').forEach(c => c.classList.remove('selected'));
-      document.querySelector('[data-plan="complete"]')?.classList.add('selected');
-      selectedPlan = 'complete';
-    } else if (answers.treatment === 'multiple') {
-      recEn = `Given the history of multiple attempts, we recommend the <span>Monthly plan</span> — ongoing support matters here.`;
-      recFr = `Étant donné l'historique de plusieurs tentatives, nous recommandons le plan <span>Mensuel</span> — le soutien continu compte ici.`;
-      document.querySelectorAll('.price-card').forEach(c => c.classList.remove('selected'));
-      document.querySelector('[data-plan="monthly"]')?.classList.add('selected');
-      selectedPlan = 'monthly';
-    } else {
-      recEn = `For ${cap(patientName)}'s situation, the <span>Essential plan</span> gives you everything you need to start the conversation.`;
-      recFr = `Pour la situation de ${cap(patientName)}, le plan <span>Essentiel</span> vous donne tout ce dont vous avez besoin pour commencer la conversation.`;
-      document.querySelectorAll('.price-card').forEach(c => c.classList.remove('selected'));
-      document.querySelector('[data-plan="essential"]')?.classList.add('selected');
-      selectedPlan = 'essential';
-    }
-
-    document.getElementById('recBannerEn').innerHTML = '💡 ' + recEn;
-    document.getElementById('recBannerFr').innerHTML = '💡 ' + recFr;
-    if (lang === 'fr') {
-      document.getElementById('recBannerEn').classList.add('hidden');
-      document.getElementById('recBannerFr').classList.remove('hidden');
-    }
   }
 
   function selectPlan(el) {
@@ -863,18 +790,9 @@
     document.getElementById('pricingView').classList.add('hidden');
     document.getElementById('loadingView').classList.remove('hidden');
 
-    // Cold start warning after 20 seconds
-    coldStartTimer = setTimeout(() => {
-      const noteEn = document.getElementById('coldStartNote');
-      const noteFr = document.getElementById('coldStartNoteFr');
-      if (noteEn) { noteEn.style.display = 'block'; noteEn.classList.remove('hidden'); }
-      if (noteFr) { noteFr.style.display = 'block'; noteFr.classList.remove('hidden'); }
-    }, 20000);
-
     const senderName = answers.senderName || (lang === 'en' ? 'the family' : 'la famille');
     const patientName = answers.patientName || (lang === 'en' ? 'your loved one' : 'votre proche');
     const outputLang = lang === 'en' ? 'Write entirely in English.' : 'Write entirely in natural, Québécois-friendly French.';
-
     const context = `
 Relationship: ${profileContext[answers.relationship] || 'A concerned family member'}
 Substance: ${substanceContext[answers.substance] || 'substance addiction'}
@@ -907,10 +825,8 @@ Language: ${outputLang}
         }).then(r => r.json())
       ));
       keys.forEach((k, i) => { outputs[k] = results[i].letter || ''; });
-      clearTimeout(coldStartTimer);
       showOutputs(senderName, patientName);
     } catch(e) {
-      clearTimeout(coldStartTimer);
       alert(lang === 'en' ? 'Connection error. Please try again.' : 'Erreur de connexion. Veuillez réessayer.');
       document.getElementById('loadingView').classList.add('hidden');
       document.getElementById('pricingView').classList.remove('hidden');
@@ -957,7 +873,7 @@ Sections:
 6. What to avoid — common mistakes
 
 Make every section specific. End with encouragement for ${sender}.
-CANADIAN RESOURCES ONLY: If you reference a helpline or resource, use ONLY these two:
+- CANADIAN RESOURCES ONLY: If you reference a helpline or resource, use ONLY these two:
   * Quebec French: Drogue Aide et Référence — 1-800-265-2626
   * Quebec English: Drug and Alcohol Helpline — 1-800-565-8603
   Never mention SAMHSA or any US-based resources.
@@ -1002,14 +918,14 @@ FORMAT:
 - 4-6 paragraphs of spoken dialogue
 - Ends with invitation to call for help together
 
-CANADIAN RESOURCES ONLY: If you reference a helpline or resource, use ONLY these two:
+- CANADIAN RESOURCES ONLY: If you reference a helpline or resource, use ONLY these two:
   * Quebec French: Drogue Aide et Référence — 1-800-265-2626
   * Quebec English: Drug and Alcohol Helpline — 1-800-565-8603
   Never mention SAMHSA or any US-based resources.
 Return ONLY the script.`;
   }
 
-  // ─── MARKDOWN TO HTML ────────────────────────────────────────────────────
+  // ─── MARKDOWN TO HTML ─────────────────────────────────────────────────────
   function markdownToHtml(text) {
     if (!text) return '';
     const lines = text.split('\n');
@@ -1046,6 +962,8 @@ Return ONLY the script.`;
   // ─── SHOW OUTPUTS ─────────────────────────────────────────────────────────
   function showOutputs(senderName, patientName) {
     document.getElementById('loadingView').classList.add('hidden');
+    document.getElementById('questionnaireView').classList.add('hidden');
+    document.getElementById('pricingView').classList.add('hidden');
     document.getElementById('outputView').classList.remove('hidden');
 
     const date = new Date().toLocaleDateString(lang === 'fr' ? 'fr-CA' : 'en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -1070,7 +988,7 @@ Return ONLY the script.`;
       { id: 'Letter', label: lang === 'en' ? '✉️ Letter' : '✉️ Lettre', available: true },
       { id: 'Guide', label: '📋 Guide', available: true },
       { id: 'SMS', label: '💬 SMS', available: selectedPlan !== 'starter' },
-      { id: 'Script', label: lang === 'en' ? '🎭 Script' : '🎭 Script', available: selectedPlan !== 'starter' },
+      { id: 'Script', label: '🎭 Script', available: selectedPlan !== 'starter' },
       { id: 'PlanB', label: 'Plan B', available: selectedPlan === 'complete' || selectedPlan === 'monthly' },
     ];
 
@@ -1083,7 +1001,6 @@ Return ONLY the script.`;
 
     showTab('Letter', document.querySelector('.output-tab'), true);
 
-    // Pre-populate delivery email from questionnaire
     const deliveryEmailInput = document.getElementById('deliveryEmail');
     if (deliveryEmailInput && answers.email) {
       deliveryEmailInput.value = answers.email;
@@ -1107,25 +1024,17 @@ Return ONLY the script.`;
   }
 
   function showLockedOverlay(tabId) {
-    ['tabLetter','tabGuide','tabSMS','tabScript','tabPlanB'].forEach(id => document.getElementById(id).classList.add('hidden'));
     const lockedTab = document.getElementById('tab' + tabId);
+    ['tabLetter','tabGuide','tabSMS','tabScript','tabPlanB'].forEach(id => document.getElementById(id).classList.add('hidden'));
     lockedTab.classList.remove('hidden');
     lockedTab.innerHTML = `
       <div class="locked-overlay">
         <div class="lock-icon">🔒</div>
         <h3 class="lock-title">${lang === 'en' ? 'Unlock this feature' : 'Débloquer cette fonctionnalité'}</h3>
-        <p class="lock-sub">${lang === 'en' ? 'Upgrade to the Complete plan ($29) to access Plan B and all other outputs.' : 'Passez au plan Complet (29$) pour accéder au Plan B et à tous les autres résultats.'}</p>
-        <!-- FIX: Goes back to pricing, NOT restart() — answers are preserved -->
-        <button class="btn-unlock" onclick="goBackToPricing()">${lang === 'en' ? 'See Upgrade Options' : 'Voir les options de mise à niveau'}</button>
+        <p class="lock-sub">${lang === 'en' ? 'Upgrade to the Complete plan ($29) to access the Plan B strategy — and every other feature.' : 'Passez au plan Complet (29$) pour accéder à la stratégie Plan B — et toutes les autres fonctionnalités.'}</p>
+        <button class="btn-unlock" onclick="restart()">${lang === 'en' ? 'Upgrade My Plan' : 'Mettre à niveau mon plan'}</button>
       </div>
     `;
-  }
-
-  // FIX: Returns to pricing with all answers intact
-  function goBackToPricing() {
-    document.getElementById('outputView').classList.add('hidden');
-    document.getElementById('pricingView').classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function buildActionRow(tabId, available) {
@@ -1144,66 +1053,45 @@ Return ONLY the script.`;
     navigator.clipboard.writeText(text);
   }
 
-  // ─── PLAN B (3 questions) ─────────────────────────────────────────────────
+  // ─── PLAN B ───────────────────────────────────────────────────────────────
   async function generatePlanB() {
-    const q1 = (document.getElementById('planbQ1')?.value || '').trim();
-    const q2 = (document.getElementById('planbQ2')?.value || '').trim();
-    const q3 = (document.getElementById('planbQ3')?.value || '').trim();
-
-    if (!q1) {
-      alert(lang === 'en' ? 'Please describe what happened (question 1).' : 'Veuillez décrire ce qui s\'est passé (question 1).');
-      return;
-    }
-
+    const whatHappened = (document.getElementById('planbInput')?.value || document.getElementById('planbInputFr')?.value || '').trim();
+    if (!whatHappened) { alert(lang === 'en' ? 'Please describe what happened.' : 'Veuillez décrire ce qui s\'est passé.'); return; }
     const senderName = answers.senderName || 'the family';
     const patientName = answers.patientName || 'their loved one';
-
     const prompt = `You are a professional interventionist at TheFirstWord.
 
 A family intervention was attempted but did NOT work. Generate a completely different Plan B strategy.
 
 SENDER: ${senderName}
 PATIENT: ${patientName}
-ORIGINAL CONTEXT: Substance: ${answers.substance || 'unknown'}, Duration: ${answers.duration || 'unknown'}, Attitude: ${answers.attitude || 'resistant'}, Tone used: ${answers.tone || 'loving'}
-WHAT HAPPENED: ${q1}
-WHAT SEEMED TO RESONATE (if anything): ${q2 || 'Nothing seemed to land'}
-WHAT THEY WANT TO DO DIFFERENTLY: ${q3 || 'Not specified'}
+ORIGINAL CONTEXT: Substance: ${answers.substance}, Duration: ${answers.duration}, Attitude: ${answers.attitude}
+WHAT HAPPENED: ${whatHappened}
 LANGUAGE: ${lang === 'en' ? 'Write entirely in English.' : 'Write entirely in natural, Québécois-friendly French.'}
-CANADIAN RESOURCES ONLY: Quebec French: Drogue Aide et Référence — 1-800-265-2626. Quebec English: Drug and Alcohol Helpline — 1-800-565-8603. Never mention SAMHSA or US resources.
 
 Include:
-1. Why the first attempt likely didn't work (specific to their context)
+1. Why the first attempt likely didn't work
 2. The new strategy — completely different angle
-3. How to use what resonated (if anything) as a bridge
-4. Who should deliver it and why
-5. New specific talking points
-6. Boundaries to set now
-7. When to consider a professional interventionist
-8. Encouragement for ${senderName}
+3. Who should deliver it and why
+4. New talking points
+5. Boundaries to set now
+6. When to consider a professional interventionist
+7. Encouragement for ${senderName}
 
 Return ONLY the Plan B guide.`;
 
-    const btn = document.querySelector('.btn-planb');
-    if (btn) { btn.disabled = true; btn.textContent = lang === 'en' ? 'Generating...' : 'Génération en cours...'; }
-
+    document.querySelector('.btn-planb').disabled = true;
     try {
       const res = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt }) });
       const data = await res.json();
       if (data.letter) {
         outputs.planB = data.letter;
-        document.getElementById('planbBody').innerHTML = markdownToHtml(data.letter);
+        document.getElementById('planbBody').textContent = data.letter;
         document.getElementById('planbOutput').classList.remove('hidden');
-        document.getElementById('planbForm').style.marginBottom = '0';
         buildActionRow('PlanB', true);
       }
-    } catch(e) {
-      alert(lang === 'en' ? 'Error. Please try again.' : 'Erreur. Veuillez réessayer.');
-    }
-
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = lang === 'en' ? 'Regenerate Plan B →' : 'Régénérer le Plan B →';
-    }
+    } catch(e) { alert(lang === 'en' ? 'Error. Please try again.' : 'Erreur. Veuillez réessayer.'); }
+    document.querySelector('.btn-planb').disabled = false;
   }
 
   // ─── PDF ──────────────────────────────────────────────────────────────────
@@ -1248,7 +1136,7 @@ Return ONLY the Plan B guide.`;
     function addFooter() {
       doc.setFontSize(7.5); doc.setFont('helvetica', 'italic'); doc.setTextColor(140, 140, 140);
       const disc = lang === 'en'
-        ? 'TheFirstWord is a communication support tool. Not a substitute for professional medical or psychological advice.'
+        ? 'TheFirstWord is a communication support tool. Not a substitute for professional medical or psychological advice. TheFirstWord is not responsible for the outcome of any conversation based on this content.'
         : 'TheFirstWord est un outil de soutien à la communication. Ne remplace pas un avis médical ou psychologique professionnel.';
       const dlines = doc.splitTextToSize(disc, uw);
       let dy = ph - 18;
@@ -1287,6 +1175,8 @@ Return ONLY the Plan B guide.`;
     const btn = document.querySelector('.btn-checkin');
     btn.disabled = true;
     btn.textContent = lang === 'en' ? 'Sending...' : 'Envoi...';
+
+    answers.deliveryEmail = email;
 
     try {
       const response = await fetch('/api/send-email', {
@@ -1349,7 +1239,6 @@ Return ONLY the Plan B guide.`;
     answers = {};
     outputs = {};
     selectedPlan = 'essential';
-    clearTimeout(coldStartTimer);
     document.getElementById('outputView').classList.add('hidden');
     document.getElementById('pricingView').classList.add('hidden');
     document.getElementById('loadingView').classList.add('hidden');
@@ -1360,31 +1249,14 @@ Return ONLY the Plan B guide.`;
 
   // ─── INIT ─────────────────────────────────────────────────────────────────
   async function init() {
-    // Apply language from sessionStorage (set when user clicks Commencer on homepage)
-    const savedLang = sessionStorage.getItem('tfw_lang') || 'en';
-    if (savedLang !== lang) {
-      lang = savedLang;
-    }
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    const activeLangBtn = document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`);
-    if (activeLangBtn) activeLangBtn.classList.add('active');
-    document.querySelectorAll('.en-text').forEach(el => el.classList.toggle('hidden', lang !== 'en'));
-    document.querySelectorAll('.fr-text').forEach(el => el.classList.toggle('hidden', lang !== 'fr'));
-    const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
-    const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
-    const navLogo = document.getElementById('nav-logo-img');
-    if (navLogo) navLogo.src = lang === 'fr' ? logoFr : logoEn;
-
     const params = new URLSearchParams(window.location.search);
     const isReturning = params.get('returning') === 'true';
     const returnEmail = params.get('email');
     const returnLang = params.get('lang');
-    const isPlanB = params.get('planb') === 'true';
 
     if (isReturning && returnEmail) {
       if (returnLang) {
         lang = returnLang;
-        sessionStorage.setItem('tfw_lang', lang);
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
         const btn = document.querySelector(`.lang-btn[onclick="setLang('${returnLang}')"]`);
         if (btn) btn.classList.add('active');
@@ -1410,49 +1282,33 @@ Return ONLY the Plan B guide.`;
             answers.patientName = data.answers.patientName || '';
           }
 
-          const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
-
-          if (isPlanB) {
-            // Returning from email for Plan B — skip straight to Plan B form
-            document.getElementById('questionnaireView').classList.add('hidden');
-            document.getElementById('outputView').classList.remove('hidden');
-
-            // Set up minimal output view with just Plan B tab
-            document.getElementById('outputMeta').textContent = lang === 'en'
-              ? `Plan B for ${cap(answers.patientName)}`
-              : `Plan B pour ${cap(answers.patientName)}`;
-            document.getElementById('outputTabs').innerHTML = `<button class="output-tab active">Plan B</button>`;
-            document.getElementById('tabPlanB').classList.remove('hidden');
-            document.getElementById('checkinCard').classList.add('hidden');
-            selectedPlan = data.plan || 'monthly';
-
-          } else if (data.kitOutputs) {
-            // Has stored kit — show it directly, no regeneration
-            outputs = data.kitOutputs;
-            selectedPlan = data.plan || 'complete';
-            showOutputs(cap(answers.senderName), cap(answers.patientName));
-
-          } else {
-            // No stored kit — show welcome screen
-            document.getElementById('questionnaireView').innerHTML = `
-              <div style="max-width:520px;margin:0 auto;padding:40px 20px;text-align:center;">
-                <div style="font-size:40px;margin-bottom:16px;">👋</div>
-                <h2 style="font-family:'Playfair Display',serif;font-size:26px;color:var(--text);margin-bottom:12px;">
-                  ${lang === 'en' ? `Welcome back${data.name ? ', ' + cap(data.name) : ''}.` : `Bon retour${data.name ? ', ' + cap(data.name) : ''}.`}
-                </h2>
-                <p style="font-size:15px;color:var(--text-light);line-height:1.7;margin-bottom:32px;">
-                  ${lang === 'en'
-                    ? "We have your original answers on file. Click below to generate a new Plan B strategy."
-                    : "Nous avons vos réponses originales en dossier. Cliquez ci-dessous pour générer une nouvelle stratégie Plan B."
-                  }
+          document.getElementById('questionnaireView').innerHTML = `
+            <div style="max-width:520px;margin:0 auto;padding:40px 20px;text-align:center;">
+              <div style="font-size:40px;margin-bottom:16px;">👋</div>
+              <h2 style="font-family:'Playfair Display',serif;font-size:26px;color:var(--text);margin-bottom:12px;">
+                ${lang === 'en' ? `Welcome back${data.name ? ', ' + data.name.charAt(0).toUpperCase() + data.name.slice(1) : ''}.` : `Bon retour${data.name ? ', ' + data.name.charAt(0).toUpperCase() + data.name.slice(1) : ''}.`}
+              </h2>
+              <p style="font-size:15px;color:var(--text-light);line-height:1.7;margin-bottom:32px;">
+                ${lang === 'en'
+                  ? "We know this road hasn't been easy. You're here because you haven't given up" + (answers.patientName ? " on " + answers.patientName.charAt(0).toUpperCase() + answers.patientName.slice(1) : "") + " — and that matters. Let's build a new approach together."
+                  : "Nous savons que ce chemin n'a pas été facile. Vous êtes là parce que vous n'avez pas abandonné" + (answers.patientName ? " " + answers.patientName.charAt(0).toUpperCase() + answers.patientName.slice(1) : "") + " — et cela compte. Construisons une nouvelle approche ensemble."
+                }
+              </p>
+              <div style="background:var(--teal-light);border-radius:12px;padding:20px 24px;margin-bottom:24px;text-align:left;">
+                <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1px;">
+                  ${lang === 'en' ? 'What happens next:' : 'Ce qui se passe ensuite:'}
                 </p>
-                <button onclick="showDirectPlanBForm()" style="background:var(--teal);color:white;border:none;border-radius:10px;padding:16px 36px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;">
-                  ${lang === 'en' ? 'Generate My Plan B →' : 'Générer mon Plan B →'}
-                </button>
+                <ul style="margin:0;padding-left:20px;font-size:14px;color:var(--text);line-height:2;">
+                  <li>${lang === 'en' ? 'Tell us briefly what happened when you tried' : "Dites-nous brièvement ce qui s'est passé quand vous avez essayé"}</li>
+                  <li>${lang === 'en' ? 'We generate a completely different Plan B strategy' : 'Nous générons une stratégie Plan B complètement différente'}</li>
+                  <li>${lang === 'en' ? 'Your new kit is sent to your email' : 'Votre nouveau kit vous est envoyé par courriel'}</li>
+                </ul>
               </div>
-            `;
-            return;
-          }
+              <button onclick="showPlanBDirect()" style="background:var(--teal);color:white;border:none;border-radius:10px;padding:16px 36px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;">
+                ${lang === 'en' ? 'Generate My Plan B →' : 'Générer mon Plan B →'}
+              </button>
+            </div>
+          `;
           return;
         }
       } catch(e) {
@@ -1463,17 +1319,94 @@ Return ONLY the Plan B guide.`;
     renderQuestion();
   }
 
-  function showDirectPlanBForm() {
+  function showPlanBDirect() {
     document.getElementById('questionnaireView').classList.add('hidden');
-    document.getElementById('outputView').classList.remove('hidden');
-    const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
-    document.getElementById('outputMeta').textContent = lang === 'en'
-      ? `Plan B for ${cap(answers.patientName)}`
-      : `Plan B pour ${cap(answers.patientName)}`;
-    document.getElementById('outputTabs').innerHTML = `<button class="output-tab active">Plan B</button>`;
-    document.getElementById('tabPlanB').classList.remove('hidden');
-    document.getElementById('checkinCard').classList.add('hidden');
-    selectedPlan = 'complete';
+    const planBView = document.createElement('div');
+    planBView.id = 'directPlanBView';
+    planBView.style.cssText = 'max-width:520px;margin:0 auto;padding:40px 20px;';
+    planBView.innerHTML = `
+      <h2 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--text);margin-bottom:8px;">
+        ${lang === 'en' ? 'What happened when you tried?' : "Qu'est-ce qui s'est passé quand vous avez essayé?"}
+      </h2>
+      <p style="font-size:14px;color:var(--text-light);margin-bottom:20px;line-height:1.7;">
+        ${lang === 'en'
+          ? 'Describe what happened — their reaction, what was said, how it ended. The more detail you give, the better your Plan B will be.'
+          : "Décrivez ce qui s'est passé — leur réaction, ce qui a été dit, comment ça s'est terminé. Plus vous donnez de détails, meilleur sera votre Plan B."
+        }
+      </p>
+      <textarea id="planBDirectInput" style="width:100%;min-height:160px;padding:16px;border:1.5px solid var(--divider);border-radius:10px;font-family:inherit;font-size:14px;resize:vertical;outline:none;margin-bottom:16px;" placeholder="${lang === 'en' ? 'e.g. I tried talking to them last Tuesday. They got very angry and left the room. They said I was exaggerating and that they don\'t have a problem...' : "ex. J'ai essayé de lui parler mardi dernier. Il/elle s'est mis(e) très en colère et a quitté la pièce..."}"></textarea>
+      <button onclick="generatePlanBDirect()" style="background:var(--teal);color:white;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;">
+        ${lang === 'en' ? 'Generate My New Strategy →' : 'Générer ma nouvelle stratégie →'}
+      </button>
+      <div id="planBDirectResult" style="margin-top:24px;display:none;"></div>
+    `;
+    document.querySelector('.app-container').appendChild(planBView);
+  }
+
+  async function generatePlanBDirect() {
+    const input = document.getElementById('planBDirectInput')?.value?.trim();
+    if (!input) return alert(lang === 'en' ? 'Please describe what happened.' : "Veuillez décrire ce qui s'est passé.");
+
+    const btn = document.querySelector('#directPlanBView button:last-of-type');
+    btn.disabled = true;
+    btn.textContent = lang === 'en' ? 'Generating...' : 'Génération en cours...';
+
+    const savedContext = answers.substance || answers.relationship ? `
+Original context:
+- Relationship: ${answers.relationship || 'family member'}
+- Substance: ${answers.substance || 'substance addiction'}
+- Duration: ${answers.duration || 'unknown'}
+- Treatment history: ${answers.treatment || 'unknown'}
+- Their attitude toward help: ${answers.attitude || 'resistant'}
+- Tone of first approach: ${answers.tone || 'loving'}
+- Sender name: ${answers.senderName || 'the family'}
+- Loved one name: ${answers.patientName || 'their loved one'}
+- Original situation: ${answers.situation || 'not provided'}` : '';
+
+    const prompt = `You are a professional interventionist at TheFirstWord.
+
+A family intervention was attempted but did NOT work. Generate a completely different Plan B strategy.
+
+${savedContext}
+WHAT HAPPENED WHEN THEY TRIED: ${input}
+LANGUAGE: ${lang === 'en' ? 'Write entirely in English.' : 'Write entirely in natural, Québécois-friendly French.'}
+CANADIAN RESOURCES ONLY: Quebec French: Drogue Aide et Référence — 1-800-265-2626. Quebec English: Drug and Alcohol Helpline — 1-800-565-8603. Never mention SAMHSA or US resources.
+
+Include:
+1. Why the first attempt likely didn't work (based on their specific context)
+2. The new strategy — completely different angle tailored to this person and substance
+3. Who should deliver it and how
+4. New specific talking points for this situation
+5. Boundaries to set now
+6. When to consider a professional interventionist
+7. Encouragement for ${answers.senderName || 'the family'}
+
+Return ONLY the Plan B guide.`;
+
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await res.json();
+      if (data.letter) {
+        const resultDiv = document.getElementById('planBDirectResult');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `
+          <div style="background:white;border:1px solid var(--divider);border-radius:12px;padding:24px;white-space:pre-wrap;font-size:14px;line-height:1.8;color:var(--text);">${data.letter}</div>
+          <button onclick="navigator.clipboard.writeText(document.getElementById('planBDirectResult').querySelector('div').innerText)" style="margin-top:12px;background:var(--bg);border:1px solid var(--divider);border-radius:8px;padding:10px 20px;font-size:13px;cursor:pointer;width:100%;">
+            📋 ${lang === 'en' ? 'Copy to clipboard' : 'Copier'}
+          </button>
+        `;
+        btn.textContent = lang === 'en' ? 'Regenerate →' : 'Régénérer →';
+        btn.disabled = false;
+      }
+    } catch(e) {
+      btn.disabled = false;
+      btn.textContent = lang === 'en' ? 'Generate My New Strategy →' : 'Générer ma nouvelle stratégie →';
+      alert(lang === 'en' ? 'Error. Please try again.' : 'Erreur. Veuillez réessayer.');
+    }
   }
 
   init();
