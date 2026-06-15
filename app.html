@@ -264,7 +264,7 @@
 
 <nav>
   <a href="index.html" class="nav-logo">
-    <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/ehn-family-coach/main/logo-en.png" alt="TheFirstWord" style="height:48px;width:auto;display:block;" />
+    <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:48px;width:auto;display:block;" />
   </a>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -638,8 +638,8 @@
     document.querySelectorAll('.en-text').forEach(el => el.classList.toggle('hidden', l !== 'en'));
     document.querySelectorAll('.fr-text').forEach(el => el.classList.toggle('hidden', l !== 'fr'));
     // Swap logo
-    const logoEn = 'https://raw.githubusercontent.com/ssoussa/ehn-family-coach/main/logo-en.png';
-    const logoFr = 'https://raw.githubusercontent.com/ssoussa/ehn-family-coach/main/logo-fr.png';
+    const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
+    const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
     const navLogo = document.getElementById('nav-logo-img');
     if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
     renderQuestion();
