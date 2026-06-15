@@ -49,12 +49,12 @@ async function supabaseUpdate(table, id, data) {
   return res.status;
 }
 
-// ─── EMAIL TEMPLATES ──────────────────────────────────────────────────────────
+// ─── EMAIL WRAPPER ────────────────────────────────────────────────────────────
 
 const signature = `
   <table style="margin-top:32px;padding-top:20px;border-top:1px solid #e8e0d8;width:100%;">
     <tr>
-      <td style="vertical-align:middle;padding-right:20px;">
+      <td style="vertical-align:middle;">
         <p style="margin:0;font-size:16px;font-weight:700;color:#1a1a1a;font-family:Georgia,serif;">Sami Soussa</p>
         <p style="margin:3px 0 0;font-size:13px;color:#E8650A;font-weight:600;">Founder &amp; CEO</p>
         <p style="margin:3px 0 0;font-size:13px;color:#6b6460;">TheFirstWord</p>
@@ -104,7 +104,7 @@ function emailWrapper(content, lang = 'en') {
                 © ${new Date().getFullYear()} TheFirstWord — thefirstword.ca<br>
                 ${lang === 'en'
                   ? 'This email was sent because you used TheFirstWord to generate a personalized intervention kit.'
-                  : 'Ce courriel vous a été envoyé parce que vous avez utilisé TheFirstWord pour générer un kit d\'intervention personnalisé.'
+                  : "Ce courriel vous a été envoyé parce que vous avez utilisé TheFirstWord pour générer un kit d'intervention personnalisé."
                 }
               </p>
             </td>
@@ -119,71 +119,59 @@ function emailWrapper(content, lang = 'en') {
   `;
 }
 
-// ─── KIT EMAIL ────────────────────────────────────────────────────────────────
+// ─── KIT EMAIL — preview teasers + "Open My Full Kit" button ─────────────────
 
-function buildKitEmail(outputs, recipientName, lang) {
+function buildKitEmail(outputs, recipientName, lang, recipientEmail) {
   const isEn = lang !== 'fr';
   const name = recipientName
     ? recipientName.charAt(0).toUpperCase() + recipientName.slice(1)
     : '';
 
-  function mdToHtml(text) {
-    if (!text) return '';
-    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-    const lines = text.split('\n');
-    let html = '';
-    let inList = false;
-
-    for (let line of lines) {
-      line = line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-      line = line.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
-
-      if (/^#{1,3}\s+/.test(line)) {
-        if (inList) { html += '</ul>'; inList = false; }
-        const txt = line.replace(/^#{1,3}\s+/, '');
-        html += `<p style="margin:18px 0 6px;font-size:15px;font-weight:700;color:#1a1a1a;border-bottom:1px solid #e8e0d8;padding-bottom:4px;">${txt}</p>`;
-      }
-      else if (/^(\d+\.|-|•|\*)\s+/.test(line)) {
-        if (!inList) { html += '<table style="width:100%;margin:6px 0;" cellpadding="0" cellspacing="0">'; inList = true; }
-        const txt = line.replace(/^(\d+\.|-|•|\*)\s+/, '');
-        html += `<tr><td style="width:16px;font-size:14px;color:#2A7F7F;vertical-align:top;padding:3px 0;">•</td><td style="font-size:14px;color:#3a3330;line-height:1.7;padding:3px 0;">${txt}</td></tr>`;
-      }
-      else if (line.trim() === '') {
-        if (inList) { html += '</table>'; inList = false; }
-        html += '<div style="height:8px;"></div>';
-      }
-      else {
-        if (inList) { html += '</table>'; inList = false; }
-        html += `<p style="margin:0 0 8px;font-size:14px;line-height:1.8;color:#3a3330;">${line}</p>`;
-      }
-    }
-    if (inList) html += '</table>';
-    return html;
+  // Grab first ~200 chars of plain text from a section, strip markdown symbols
+  function teaser(text) {
+    if (!text || !text.trim()) return '';
+    const plain = text
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/\*(.+?)\*/g, '$1')
+      .replace(/^#{1,3}\s+/gm, '')
+      .replace(/^[-•*]\s+/gm, '')
+      .replace(/\n+/g, ' ')
+      .trim();
+    if (plain.length <= 200) return plain;
+    // Cut at last space before 200 chars
+    return plain.substring(0, plain.lastIndexOf(' ', 200)) + '...';
   }
 
-  function section(label, emoji, color, rawText) {
-    if (!rawText || !rawText.trim()) return '';
+  // The deep-link back to the app — returns them to their stored kit instantly
+  const kitUrl = recipientEmail
+    ? `https://thefirstword.ca/app.html?returning=true&view=kit&email=${encodeURIComponent(recipientEmail)}&lang=${lang}`
+    : 'https://thefirstword.ca/app.html';
+
+  function previewSection(label, emoji, color, text) {
+    const preview = teaser(text);
+    if (!preview) return '';
     return `
-    <table style="width:100%;margin-bottom:24px;border:1px solid #e8e0d8;border-radius:10px;border-collapse:separate;border-spacing:0;overflow:hidden;" cellpadding="0" cellspacing="0">
+    <table style="width:100%;margin-bottom:20px;border:1px solid #e8e0d8;border-radius:10px;border-collapse:separate;border-spacing:0;overflow:hidden;" cellpadding="0" cellspacing="0">
       <tr>
-        <td style="background:#f5f0eb;padding:12px 20px;border-bottom:1px solid #e8e0d8;">
+        <td style="background:#f5f0eb;padding:10px 20px;border-bottom:1px solid #e8e0d8;">
           <p style="margin:0;font-size:11px;font-weight:700;color:${color};letter-spacing:2px;text-transform:uppercase;">${emoji} ${label}</p>
         </td>
       </tr>
       <tr>
-        <td style="background:white;padding:20px 24px;">
-          ${mdToHtml(rawText)}
+        <td style="background:white;padding:16px 20px;">
+          <p style="margin:0 0 12px;font-size:14px;line-height:1.8;color:#3a3330;">${preview}</p>
+          <a href="${kitUrl}" style="font-size:13px;font-weight:600;color:#2A7F7F;text-decoration:none;">${isEn ? 'Read full version →' : 'Lire la version complète →'}</a>
         </td>
       </tr>
     </table>`;
   }
 
-  const sections = [
-    section(isEn ? 'Intervention Letter' : "Lettre d'intervention", '📄', '#2A7F7F', outputs.letter),
-    section(isEn ? 'Conversation Guide' : 'Guide de conversation', '📋', '#2A7F7F', outputs.guide),
-    section(isEn ? 'SMS Message' : 'Message SMS', '💬', '#2A7F7F', outputs.sms),
-    section(isEn ? 'Spoken Script' : 'Script parlé', '🎭', '#2A7F7F', outputs.script),
-    section('Plan B', '🔄', '#c4622d', outputs.planB),
+  const previews = [
+    previewSection(isEn ? 'Intervention Letter' : "Lettre d'intervention", '📄', '#2A7F7F', outputs.letter),
+    previewSection(isEn ? 'Conversation Guide' : 'Guide de conversation', '📋', '#2A7F7F', outputs.guide),
+    previewSection(isEn ? 'SMS Message' : 'Message SMS', '💬', '#2A7F7F', outputs.sms),
+    previewSection(isEn ? 'Spoken Script' : 'Script parlé', '🎭', '#2A7F7F', outputs.script),
+    previewSection('Plan B', '🔄', '#c4622d', outputs.planB),
   ].join('');
 
   const content = `
@@ -192,12 +180,26 @@ function buildKitEmail(outputs, recipientName, lang) {
     </p>
     <p style="font-size:14px;color:#3a3330;line-height:1.7;margin:0 0 28px;">
       ${isEn
-        ? 'Your personalized intervention kit is ready. Everything below was written specifically for your situation. Take your time reading it — and trust that reaching out took courage.'
-        : "Votre kit d'intervention personnalisé est prêt. Tout ce qui suit a été rédigé spécifiquement pour votre situation. Prenez le temps de le lire — et faites confiance au fait que cette démarche demande du courage."
+        ? 'Your personalized intervention kit is ready. Below is a preview of each section.'
+        : "Votre kit d'intervention personnalisé est prêt. Voici un aperçu de chaque section."
       }
     </p>
 
-    ${sections}
+    <!-- MAIN CTA BUTTON -->
+    <table style="width:100%;margin-bottom:32px;" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="text-align:center;">
+          <a href="${kitUrl}" style="display:inline-block;background:#C4622D;color:white;text-decoration:none;padding:18px 40px;border-radius:10px;font-size:17px;font-weight:700;font-family:Georgia,serif;">
+            📖 ${isEn ? 'Open My Full Kit →' : 'Ouvrir mon kit complet →'}
+          </a>
+          <p style="margin:10px 0 0;font-size:12px;color:#9b9390;">
+            ${isEn ? 'All sections available on the site — works on any device.' : 'Toutes les sections disponibles sur le site — fonctionne sur tout appareil.'}
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    ${previews}
 
     <table style="width:100%;background:#f0f7f7;border-left:4px solid #2A7F7F;border-radius:0 8px 8px 0;margin-top:8px;" cellpadding="0" cellspacing="0">
       <tr>
@@ -339,7 +341,7 @@ function buildWeeklyEmail(weekNumber, recipientName, lang, subscriberId) {
             ${isEn ? 'Where things might stand:' : 'Où en sont les choses:'}
           </p>
           <ul style="margin:0;padding-left:20px;font-size:14px;color:#3a3330;line-height:2;">
-            <li>${isEn ? '✅ Your loved one agreed to get help — keep supporting, keep documenting' : '✅ Votre proche a accepté de l\'aide — continuez à soutenir, continuez à documenter'}</li>
+            <li>${isEn ? "✅ Your loved one agreed to get help — keep supporting, keep documenting" : "✅ Votre proche a accepté de l'aide — continuez à soutenir, continuez à documenter"}</li>
             <li>${isEn ? '⏳ Still resistant — a professional interventionist may be the next step' : '⏳ Toujours résistant(e) — un intervenant professionnel pourrait être la prochaine étape'}</li>
             <li>${isEn ? '💛 You need support too — your wellbeing is not optional' : '💛 Vous avez besoin de soutien aussi — votre bien-être n\'est pas optionnel'}</li>
           </ul>
@@ -350,7 +352,7 @@ function buildWeeklyEmail(weekNumber, recipientName, lang, subscriberId) {
           </p>
           <p style="margin:0 0 16px;font-size:13px;color:#6b6460;line-height:1.6;">
             ${isEn
-              ? 'Click below and we\'ll bring up your original situation so you can generate a new Plan B strategy — no need to start from scratch.'
+              ? "Click below and we'll bring up your original situation so you can generate a new Plan B strategy — no need to start from scratch."
               : 'Cliquez ci-dessous et nous afficherons votre situation originale pour générer une nouvelle stratégie Plan B — sans repartir de zéro.'
             }
           </p>
@@ -442,36 +444,19 @@ app.post("/api/send-email", async (req, res) => {
   if (!resendKey) return res.status(500).json({ error: "Email service not configured." });
 
   try {
-    // 1. Send the kit email
-    const html = buildKitEmail(outputs, name, lang);
-    const subject = lang === 'fr'
-      ? "Votre kit d'intervention personnalisé — TheFirstWord"
-      : "Your personalized intervention kit — TheFirstWord";
-
-    const emailResult = await sendEmail(email, subject, html);
-
-    if (!emailResult.id) {
-      console.error("Resend error:", emailResult);
-      return res.status(500).json({ error: "Failed to send email." });
-    }
-
-    // 2. Save ALL plans to Supabase (not just monthly)
+    // 1. Save to Supabase FIRST so the "Open My Full Kit" link works immediately
+    let savedSuccessfully = false;
     if (SUPABASE_KEY) {
       try {
         const clientAnswers = answers || {};
-
-        // Check if subscriber already exists (e.g. resending email)
         const existing = await supabaseQuery('subscribers', `email=eq.${encodeURIComponent(email)}&select=id&limit=1`);
 
         if (existing && existing.length > 0) {
-          // Update existing record with latest kit outputs
           await supabaseUpdate('subscribers', existing[0].id, {
             kit_outputs: outputs,
             plan: plan || 'complete'
           });
-          console.log(`Subscriber updated: ${email}`);
         } else {
-          // Insert new subscriber record
           await supabaseInsert('subscribers', {
             email,
             name: name || '',
@@ -482,7 +467,6 @@ app.post("/api/send-email", async (req, res) => {
             week2_sent: false,
             week3_sent: false,
             week4_sent: false,
-            // Only active for email sequences on monthly plan
             active: plan === 'monthly',
             relationship: clientAnswers.relationship || '',
             substance: clientAnswers.substance || '',
@@ -494,12 +478,27 @@ app.post("/api/send-email", async (req, res) => {
             patient_name: clientAnswers.patientName || '',
             kit_outputs: outputs
           });
-          console.log(`Subscriber saved: ${email} (plan: ${plan})`);
         }
+        savedSuccessfully = true;
+        console.log(`Subscriber saved: ${email} (plan: ${plan})`);
       } catch (dbErr) {
         console.error("Supabase save error:", dbErr);
-        // Don't fail the request if DB save fails
+        // Continue to send email even if DB save fails
       }
+    }
+
+    // 2. Build and send the kit email — teaser version with "Open My Full Kit" button
+    //    Pass the email address so the button URL includes it for instant kit retrieval
+    const html = buildKitEmail(outputs, name, lang, email);
+    const subject = lang === 'fr'
+      ? "Votre kit d'intervention personnalisé — TheFirstWord"
+      : "Your personalized intervention kit — TheFirstWord";
+
+    const emailResult = await sendEmail(email, subject, html);
+
+    if (!emailResult.id) {
+      console.error("Resend error:", emailResult);
+      return res.status(500).json({ error: "Failed to send email." });
     }
 
     res.json({ success: true, id: emailResult.id });
@@ -524,7 +523,6 @@ app.post("/api/send-weekly-batch", async (req, res) => {
     const now = new Date();
     const results = { sent: 0, failed: 0, skipped: 0 };
 
-    // Only get active monthly subscribers for weekly emails
     const subscribers = await supabaseQuery('subscribers', 'active=eq.true&plan=eq.monthly&select=*');
 
     for (const sub of subscribers) {
@@ -532,56 +530,49 @@ app.post("/api/send-weekly-batch", async (req, res) => {
       const daysSince = Math.floor((now - signedUp) / (1000 * 60 * 60 * 24));
 
       const weekChecks = [
-        { week: 1, field: 'week1_sent', minDays: 7, maxDays: 13 },
+        { week: 1, field: 'week1_sent', minDays: 7,  maxDays: 13 },
         { week: 2, field: 'week2_sent', minDays: 14, maxDays: 20 },
         { week: 3, field: 'week3_sent', minDays: 21, maxDays: 27 },
         { week: 4, field: 'week4_sent', minDays: 28, maxDays: 34 },
       ];
 
-      // After week 4: send continuation opt-in email for monthly subscribers
       const allSent = sub.week1_sent && sub.week2_sent && sub.week3_sent && sub.week4_sent;
       if (allSent && sub.plan === 'monthly' && daysSince >= 35 && daysSince <= 41) {
         try {
           const isEn = sub.lang !== 'fr';
           const subName = sub.name ? sub.name.charAt(0).toUpperCase() + sub.name.slice(1) : (isEn ? 'there' : '');
-          // FIX: Use sub.email (not sub.name) in the Plan B link
           const continueUrl = 'https://thefirstword.ca/api/checkin-continue?id=' + sub.id + '&choice=yes';
-          const stopUrl = 'https://thefirstword.ca/api/checkin-continue?id=' + sub.id + '&choice=no';
-          const unsubUrl = 'https://thefirstword.ca/api/unsubscribe?id=' + sub.id;
+          const stopUrl    = 'https://thefirstword.ca/api/checkin-continue?id=' + sub.id + '&choice=no';
+          const unsubUrl   = 'https://thefirstword.ca/api/unsubscribe?id=' + sub.id;
 
           const subject = isEn ? 'Do you still need us?' : 'Avez-vous encore besoin de nous?';
-
           const greeting = isEn ? ('Hi ' + subName + ',') : ('Bonjour ' + subName + ',');
-          const intro = isEn
+          const intro    = isEn
             ? "It's been 4 weeks since you started this journey. We want to check in one more time — are you still in the thick of it, or has things changed?"
             : "Cela fait 4 semaines que vous avez commencé ce parcours. Nous voulons prendre de vos nouvelles une dernière fois — êtes-vous toujours dans la situation?";
-          const question = isEn ? 'Do you still need weekly support?' : 'Avez-vous encore besoin de soutien hebdomadaire?';
-          const yesLabel = isEn ? '✅ Yes, keep them coming' : '✅ Oui, continuez';
-          const noLabel = isEn ? "🙏 No, I'm okay now" : '🙏 Non, ça va maintenant';
-          const noteText = isEn
+          const question  = isEn ? 'Do you still need weekly support?' : 'Avez-vous encore besoin de soutien hebdomadaire?';
+          const yesLabel  = isEn ? '✅ Yes, keep them coming' : '✅ Oui, continuez';
+          const noLabel   = isEn ? "🙏 No, I'm okay now" : '🙏 Non, ça va maintenant';
+          const noteText  = isEn
             ? 'If you click Yes, your weekly check-ins will continue every Monday.'
             : 'Si vous cliquez Oui, vos suivis hebdomadaires continueront chaque lundi.';
           const unsubLabel = isEn ? 'Unsubscribe from all emails' : 'Se désabonner de tous les courriels';
 
-          const bodyHtml = '<p style="font-size:16px;color:#1a1a1a;margin:0 0 8px;">' + greeting + '</p>'
+          const bodyHtml =
+            '<p style="font-size:16px;color:#1a1a1a;margin:0 0 8px;">' + greeting + '</p>'
             + '<p style="font-size:15px;color:#3a3330;line-height:1.7;margin:0 0 24px;">' + intro + '</p>'
-            + '<table style="width:100%;background:#f5f0eb;border-radius:12px;margin-bottom:24px;" cellpadding="24" cellspacing="0">'
-            + '<tr><td style="text-align:center;">'
+            + '<table style="width:100%;background:#f5f0eb;border-radius:12px;margin-bottom:24px;" cellpadding="24" cellspacing="0"><tr><td style="text-align:center;">'
             + '<p style="margin:0 0 20px;font-size:16px;font-weight:700;color:#1a1a1a;">' + question + '</p>'
             + '<table cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr>'
             + '<td style="padding-right:12px;"><a href="' + continueUrl + '" style="display:inline-block;background:#2A7F7F;color:white;text-decoration:none;padding:14px 28px;border-radius:8px;font-size:14px;font-weight:700;">' + yesLabel + '</a></td>'
             + '<td><a href="' + stopUrl + '" style="display:inline-block;background:white;color:#3a3330;text-decoration:none;padding:14px 28px;border-radius:8px;font-size:14px;font-weight:700;border:1px solid #e8e0d8;">' + noLabel + '</a></td>'
-            + '</tr></table>'
-            + '</td></tr></table>'
+            + '</tr></table></td></tr></table>'
             + '<p style="font-size:13px;color:#9b9390;text-align:center;">' + noteText + '</p>'
             + '<p style="font-size:11px;color:#c0b8b0;text-align:center;margin-top:16px;"><a href="' + unsubUrl + '" style="color:#c0b8b0;">' + unsubLabel + '</a></p>';
 
           const html = emailWrapper(bodyHtml, sub.lang);
           const result = await sendEmail(sub.email, subject, html);
-          if (result.id) {
-            results.sent++;
-            console.log('Continuation email sent to ' + sub.email);
-          }
+          if (result.id) { results.sent++; console.log('Continuation email sent to ' + sub.email); }
         } catch(e) {
           console.error('Continuation email failed for ' + sub.email + ':', e);
           results.failed++;
@@ -592,15 +583,12 @@ app.post("/api/send-weekly-batch", async (req, res) => {
       for (const check of weekChecks) {
         if (!sub[check.field] && daysSince >= check.minDays && daysSince <= check.maxDays) {
           try {
-            // FIX: Build the weekly email with correct email in Plan B link
             let { subject, html } = buildWeeklyEmail(check.week, sub.name, sub.lang, sub.id);
-            // Replace the placeholder email and lang in the Week 4 Plan B link
             html = html
               .replace('EMAIL_PLACEHOLDER', encodeURIComponent(sub.email))
               .replace('LANG_PLACEHOLDER', sub.lang || 'en');
 
             const result = await sendEmail(sub.email, subject, html);
-
             if (result.id) {
               await supabaseUpdate('subscribers', sub.id, { [check.field]: true });
               results.sent++;
@@ -635,17 +623,13 @@ app.get("/api/checkin-continue", async (req, res) => {
   try {
     if (choice === 'yes') {
       await supabaseUpdate('subscribers', id, {
-        week1_sent: false,
-        week2_sent: false,
-        week3_sent: false,
-        week4_sent: false,
-        active: true,
-        signed_up_at: new Date().toISOString()
+        week1_sent: false, week2_sent: false, week3_sent: false, week4_sent: false,
+        active: true, signed_up_at: new Date().toISOString()
       });
       res.send(`<!DOCTYPE html><html><body style="font-family:Georgia,serif;max-width:500px;margin:80px auto;text-align:center;padding:20px;">
         <div style="font-size:48px;margin-bottom:16px;">💚</div>
         <h2 style="color:#1a1a1a;margin-bottom:12px;">We're still with you.</h2>
-        <p style="color:#6b6460;line-height:1.7;">Your weekly check-ins will continue. You'll hear from us again next Monday. You're not doing this alone.</p>
+        <p style="color:#6b6460;line-height:1.7;">Your weekly check-ins will continue. You'll hear from us again next Monday.</p>
         <a href="https://thefirstword.ca" style="display:inline-block;margin-top:24px;background:#2A7F7F;color:white;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:700;">Return to TheFirstWord</a>
       </body></html>`);
     } else {
@@ -653,7 +637,7 @@ app.get("/api/checkin-continue", async (req, res) => {
       res.send(`<!DOCTYPE html><html><body style="font-family:Georgia,serif;max-width:500px;margin:80px auto;text-align:center;padding:20px;">
         <div style="font-size:48px;margin-bottom:16px;">🙏</div>
         <h2 style="color:#1a1a1a;margin-bottom:12px;">Thank you for letting us know.</h2>
-        <p style="color:#6b6460;line-height:1.7;">We hope things are moving in the right direction. You can always come back to TheFirstWord if you need support again.</p>
+        <p style="color:#6b6460;line-height:1.7;">We hope things are moving in the right direction. You can always come back if you need support.</p>
         <a href="https://thefirstword.ca" style="display:inline-block;margin-top:24px;background:#2A7F7F;color:white;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:700;">Return to TheFirstWord</a>
       </body></html>`);
     }
