@@ -4,6 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TheFirstWord — Start the conversation</title>
+  <meta name="description" content="Answer 8 questions about your situation and get a personalized intervention letter, conversation guide, SMS, and spoken script — in under 60 seconds." />
+  <link rel="canonical" href="https://thefirstword.ca/app.html" />
+  <meta property="og:title" content="TheFirstWord — Get your personalized intervention kit" />
+  <meta property="og:description" content="Start the conversation that changes everything. Personalized intervention tools for families dealing with addiction." />
+  <meta property="og:url" content="https://thefirstword.ca/app.html" />
+  <!-- Analytics: Posthog -->
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_REPLACE_WITH_YOUR_POSTHOG_KEY', {api_host:'https://app.posthog.com'});
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -307,8 +317,8 @@
       <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px;" class="fr-text hidden">Choisissez votre plan</p>
       <h2 class="pricing-title en-text">Choose your plan.</h2>
       <h2 class="pricing-title fr-text hidden">Choisissez votre plan.</h2>
-      <p class="pricing-subtitle en-text">One-time payment or monthly plan. No hidden fees. 100% money-back guarantee.</p>
-      <p class="pricing-subtitle fr-text hidden">Paiement unique ou plan mensuel. Pas de frais cachés. Garantie de remboursement 100%.</p>
+      <p class="pricing-subtitle en-text">One-time payment or Premium plan. No hidden fees. 100% money-back guarantee.</p>
+      <p class="pricing-subtitle fr-text hidden">Paiement unique ou plan Premium. Pas de frais cachés. Garantie de remboursement 100%.</p>
 
       <div class="pricing-grid">
         <!-- STARTER -->
@@ -363,15 +373,15 @@
 
         <!-- MONTHLY -->
         <div class="price-card monthly" data-plan="monthly" onclick="selectPlan(this)">
-          <div class="price-monthly-badge en-text">♾ Monthly</div>
-          <div class="price-monthly-badge fr-text hidden">♾ Mensuel</div>
-          <div class="price-tier en-text">Ongoing Support</div>
-          <div class="price-tier fr-text hidden">Soutien continu</div>
+          <div class="price-monthly-badge en-text">⭐ Premium</div>
+          <div class="price-monthly-badge fr-text hidden">⭐ Premium</div>
+          <div class="price-tier en-text">Premium</div>
+          <div class="price-tier fr-text hidden">Premium</div>
           <div class="price-amount"><sup>$</sup>19<span style="font-size:18px;font-weight:400;opacity:0.6;">/mo</span></div>
           <p class="price-note en-text">cancel anytime</p>
           <p class="price-note fr-text hidden">annulez en tout temps</p>
           <ul class="price-features">
-            <li class="included"><span class="price-check">✓</span><span class="en-text">Everything in Complete</span><span class="fr-text hidden">Tout dans Complet</span></li>
+            <li class="included"><span class="price-check">✓</span><span class="en-text">Everything in Complete plan</span><span class="fr-text hidden">Tout du plan Complet</span></li>
             <li class="included"><span class="price-check">✓</span><span class="en-text">Unlimited Plan B strategies</span><span class="fr-text hidden">Stratégies Plan B illimitées</span></li>
             <li class="included"><span class="price-check">✓</span><span class="en-text">Weekly check-ins for as long as you need</span><span class="fr-text hidden">Suivis hebdomadaires aussi longtemps que nécessaire</span></li>
             <li class="included"><span class="price-check">✓</span><span class="en-text">Cancel anytime — no commitment</span><span class="fr-text hidden">Annulez en tout temps — sans engagement</span></li>
@@ -739,7 +749,9 @@
       </div>
     `;
 
-    document.getElementById('questionCard').innerHTML = html;
+    if (currentQ === 0) {
+      try { posthog.capture('questionnaire_started'); } catch(e) {}
+    }
   }
 
   function selectOption(qId, value, el) {
@@ -790,6 +802,7 @@
     document.querySelectorAll('.price-card').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
     selectedPlan = el.dataset.plan;
+    try { posthog.capture('plan_selected', { plan: selectedPlan }); } catch(e) {}
   }
 
   // ─── GENERATION ───────────────────────────────────────────────────────────
@@ -841,6 +854,7 @@ Language: ${outputLang}
       ));
       keys.forEach((k, i) => { outputs[k] = results[i].letter || ''; });
       clearTimeout(coldStartTimer);
+      try { posthog.capture('kit_generated', { plan: selectedPlan, lang }); } catch(e) {}
       showOutputs(senderName, patientName);
     } catch(e) {
       clearTimeout(coldStartTimer);
@@ -1049,7 +1063,7 @@ Return ONLY the script.`;
       <div class="locked-overlay">
         <div class="lock-icon">🔒</div>
         <h3 class="lock-title">${lang === 'en' ? 'Unlock this feature' : 'Débloquer cette fonctionnalité'}</h3>
-        <p class="lock-sub">${lang === 'en' ? 'Upgrade to the Complete plan ($29) to access the Plan B strategy — and every other feature.' : 'Passez au plan Complet (29$) pour accéder à la stratégie Plan B — et toutes les autres fonctionnalités.'}</p>
+        <p class="lock-sub">${lang === 'en' ? 'Upgrade to the Complete ($29) or Premium ($19/mo) plan to access the Plan B strategy — and every other feature.' : 'Passez au plan Complet (29$) ou Premium (19$/mois) pour accéder à la stratégie Plan B — et toutes les autres fonctionnalités.'}</p>
         <button class="btn-unlock" onclick="upgradeFromPlanB()">${lang === 'en' ? 'Upgrade My Plan' : 'Mettre à niveau mon plan'}</button>
       </div>
     `;
