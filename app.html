@@ -46,12 +46,12 @@
 
     /* NAV LOGO SIZE */
     #nav-logo-img {
-      height: 68px;
-      width: auto;
+      width: 180px;
+      height: auto;
     }
     @media (max-width: 600px) {
       nav { padding: 8px 20px; }
-      #nav-logo-img { height: 52px; }
+      #nav-logo-img { width: 140px; }
     }
 
     /* MAIN LAYOUT */
@@ -515,6 +515,7 @@
   let answers = {};
   let selectedPlan = 'essential';
   let outputs = {};
+  let activeTab = 'Letter';
 
   // ─── QUESTIONS ────────────────────────────────────────────────────────────
   const questions = [
@@ -1012,6 +1013,7 @@ Return ONLY the script.`;
       showLockedOverlay(tabId);
       return;
     }
+    activeTab = tabId;
     document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
     if (el) el.classList.add('active');
 
@@ -1080,18 +1082,74 @@ Include:
 
 Return ONLY the Plan B guide.`;
 
-    document.querySelector('.btn-planb').disabled = true;
+    // Select the visible Plan B button by language class (hidden uses CSS class, not inline style)
+    const planbBtn = lang === 'en'
+      ? document.querySelector('.btn-planb.en-text')
+      : document.querySelector('.btn-planb.fr-text');
+
+    if (!planbBtn) {
+      alert(lang === 'en' ? 'Error. Please refresh and try again.' : 'Erreur. Veuillez actualiser et réessayer.');
+      return;
+    }
+
+    const originalBtnText = planbBtn.textContent;
+    planbBtn.disabled = true;
+    planbBtn.textContent = lang === 'en' ? '⏳ Generating your Plan B...' : '⏳ Génération en cours...';
+
     try {
       const res = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt }) });
       const data = await res.json();
+
       if (data.letter) {
         outputs.planB = data.letter;
-        document.getElementById('planbBody').textContent = data.letter;
-        document.getElementById('planbOutput').classList.remove('hidden');
+
+        // Guard: re-inject Plan B output HTML in case showLockedOverlay wiped the DOM
+        let planbOutput = document.getElementById('planbOutput');
+        let planbBody = document.getElementById('planbBody');
+        if (!planbBody) {
+          const tabPlanB = document.getElementById('tabPlanB');
+          if (tabPlanB) {
+            // Re-render the Plan B tab structure
+            const existingForm = tabPlanB.querySelector('.planb-input-area');
+            if (!document.getElementById('planbOutput')) {
+              const outputDiv = document.createElement('div');
+              outputDiv.id = 'planbOutput';
+              outputDiv.className = 'output-content hidden';
+              outputDiv.innerHTML = '<div class="output-body" id="planbBody"></div><div class="output-disclaimer en-text">DISCLAIMER: TheFirstWord is not responsible for the outcome of any conversation or intervention based on this content.</div><div class="output-disclaimer fr-text hidden">AVIS: TheFirstWord n\'est pas responsable des résultats de toute conversation ou intervention basée sur ce contenu.</div>';
+              tabPlanB.appendChild(outputDiv);
+            }
+            planbOutput = document.getElementById('planbOutput');
+            planbBody = document.getElementById('planbBody');
+          }
+        }
+
+        if (planbBody) {
+          planbBody.innerHTML = markdownToHtml(data.letter);
+          if (planbOutput) planbOutput.classList.remove('hidden');
+        }
+
         buildActionRow('PlanB', true);
+
+        // Update checkin card text to reflect Plan B context
+        const titleEn = document.querySelector('#checkinCard .checkin-title.en-text');
+        const subEn = document.querySelector('#checkinCard .checkin-sub.en-text');
+        const titleFr = document.querySelector('#checkinCard .checkin-title.fr-text');
+        const subFr = document.querySelector('#checkinCard .checkin-sub.fr-text');
+        if (titleEn) titleEn.textContent = '📬 Send your Plan B by email';
+        if (subEn) subEn.textContent = "We'll send your new Plan B strategy to your inbox, linked to your original profile.";
+        if (titleFr) titleFr.textContent = '📬 Envoyer votre Plan B par courriel';
+        if (subFr) subFr.textContent = "Nous vous enverrons votre nouvelle stratégie Plan B directement dans votre boîte de réception.";
+
+      } else {
+        alert(lang === 'en' ? 'Error generating Plan B. Please try again.' : 'Erreur lors de la génération. Veuillez réessayer.');
       }
-    } catch(e) { alert(lang === 'en' ? 'Error. Please try again.' : 'Erreur. Veuillez réessayer.'); }
-    document.querySelector('.btn-planb').disabled = false;
+    } catch(e) {
+      console.error('Plan B error:', e);
+      alert(lang === 'en' ? 'Connection error. Please try again.' : 'Erreur de connexion. Veuillez réessayer.');
+    }
+
+    planbBtn.disabled = false;
+    planbBtn.textContent = originalBtnText;
   }
 
   // ─── PDF ──────────────────────────────────────────────────────────────────
@@ -1178,8 +1236,12 @@ Return ONLY the Plan B guide.`;
 
     answers.deliveryEmail = email;
 
+    // If Plan B tab is active and has content, send Plan B email instead
+    const isPlanBEmail = activeTab === 'PlanB' && outputs.planB;
+    const endpoint = isPlanBEmail ? '/api/send-planb-email' : '/api/send-email';
+
     try {
-      const response = await fetch('/api/send-email', {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1212,13 +1274,13 @@ Return ONLY the Plan B guide.`;
       if (data.success) {
         document.getElementById('checkinCard').innerHTML = `
           <div class="checkin-title" style="color:var(--teal);">✅ ${lang === 'en' ? 'On its way!' : 'En route!'}</div>
-          <p class="checkin-sub">${lang === 'en'
-            ? 'Your personalized kit has been sent to <strong>' + email + '</strong>. Check your inbox in the next few minutes.'
-            : 'Votre kit personnalisé a été envoyé à <strong>' + email + '</strong>. Vérifiez votre boîte de réception dans les prochaines minutes.'
-          }</p>
-          <p style="font-size:12px;color:var(--text-light);margin-top:8px;">${lang === 'en'
-            ? 'Need ongoing support? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Upgrade to the monthly plan →</a>'
-            : 'Besoin d\'un soutien continu? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Passez au plan mensuel →</a>'
+          <p class="checkin-sub">${isPlanBEmail
+            ? (lang === 'en'
+                ? 'Your Plan B strategy has been sent to <strong>' + email + '</strong>.'
+                : 'Votre stratégie Plan B a été envoyée à <strong>' + email + '</strong>.')
+            : (lang === 'en'
+                ? 'Your personalized kit has been sent to <strong>' + email + '</strong>. Check your inbox in the next few minutes.'
+                : 'Votre kit personnalisé a été envoyé à <strong>' + email + '</strong>. Vérifiez votre boîte de réception dans les prochaines minutes.')
           }</p>
         `;
       } else {
