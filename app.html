@@ -1253,8 +1253,10 @@ Return ONLY the Plan B guide.`;
     const isReturning = params.get('returning') === 'true';
     const returnEmail = params.get('email');
     const returnLang = params.get('lang');
+    const viewKit = params.get('view') === 'kit';
 
     if (isReturning && returnEmail) {
+      // Apply language from URL param
       if (returnLang) {
         lang = returnLang;
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -1282,16 +1284,37 @@ Return ONLY the Plan B guide.`;
             answers.patientName = data.answers.patientName || '';
           }
 
+          // VIEW=KIT: show stored kit instantly without regenerating
+          if (viewKit && data.kitOutputs && (data.kitOutputs.letter || data.kitOutputs.guide)) {
+            outputs = {
+              letter: data.kitOutputs.letter || '',
+              guide: data.kitOutputs.guide || '',
+              sms: data.kitOutputs.sms || '',
+              script: data.kitOutputs.script || '',
+              planB: data.kitOutputs.planB || ''
+            };
+            selectedPlan = data.plan || 'essential';
+            const senderName = data.name || (lang === 'en' ? 'there' : '');
+            const patientName = (data.answers && data.answers.patientName) || '';
+            document.getElementById('questionnaireView').classList.add('hidden');
+            showOutputs(senderName, patientName);
+            return;
+          }
+
+          // PLAN B or returning welcome screen
+          const firstName = data.name ? data.name.charAt(0).toUpperCase() + data.name.slice(1) : '';
+          const patientFirst = answers.patientName ? answers.patientName.charAt(0).toUpperCase() + answers.patientName.slice(1) : '';
+
           document.getElementById('questionnaireView').innerHTML = `
             <div style="max-width:520px;margin:0 auto;padding:40px 20px;text-align:center;">
               <div style="font-size:40px;margin-bottom:16px;">👋</div>
               <h2 style="font-family:'Playfair Display',serif;font-size:26px;color:var(--text);margin-bottom:12px;">
-                ${lang === 'en' ? `Welcome back${data.name ? ', ' + data.name.charAt(0).toUpperCase() + data.name.slice(1) : ''}.` : `Bon retour${data.name ? ', ' + data.name.charAt(0).toUpperCase() + data.name.slice(1) : ''}.`}
+                ${lang === 'en' ? `Welcome back${firstName ? ', ' + firstName : ''}.` : `Bon retour${firstName ? ', ' + firstName : ''}.`}
               </h2>
               <p style="font-size:15px;color:var(--text-light);line-height:1.7;margin-bottom:32px;">
                 ${lang === 'en'
-                  ? "We know this road hasn't been easy. You're here because you haven't given up" + (answers.patientName ? " on " + answers.patientName.charAt(0).toUpperCase() + answers.patientName.slice(1) : "") + " — and that matters. Let's build a new approach together."
-                  : "Nous savons que ce chemin n'a pas été facile. Vous êtes là parce que vous n'avez pas abandonné" + (answers.patientName ? " " + answers.patientName.charAt(0).toUpperCase() + answers.patientName.slice(1) : "") + " — et cela compte. Construisons une nouvelle approche ensemble."
+                  ? "We know this road hasn't been easy. You're here because you haven't given up" + (patientFirst ? ' on ' + patientFirst : '') + " — and that matters. Let's build a new approach together."
+                  : "Nous savons que ce chemin n'a pas été facile. Vous êtes là parce que vous n'avez pas abandonné" + (patientFirst ? ' ' + patientFirst : '') + " — et cela compte. Construisons une nouvelle approche ensemble."
                 }
               </p>
               <div style="background:var(--teal-light);border-radius:12px;padding:20px 24px;margin-bottom:24px;text-align:left;">
