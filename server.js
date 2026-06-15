@@ -7,6 +7,27 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
+// ─── MARKDOWN → HTML ──────────────────────────────────────────────────────────
+
+function markdownToHtml(text) {
+  if (!text) return '';
+  return text
+    // Strip markdown bold but keep the text
+    .replace(/\*\*(.+?)\*\*/g, '<strong style="color:#1a1a1a;">$1</strong>')
+    // H2 headers (##)
+    .replace(/^## (.+)$/gm, '<h3 style="font-size:13px;font-weight:700;color:#2A7F7F;text-transform:uppercase;letter-spacing:1px;margin:20px 0 8px;">$1</h3>')
+    // H1 headers (#)
+    .replace(/^# (.+)$/gm, '<h2 style="font-size:16px;font-weight:700;color:#1a1a1a;margin:20px 0 8px;">$1</h2>')
+    // Bullet points (- or •)
+    .replace(/^[-•] (.+)$/gm, '<div style="display:flex;gap:8px;margin:4px 0;"><span style="color:#2A7F7F;flex-shrink:0;">•</span><span>$1</span></div>')
+    // Horizontal rule
+    .replace(/^---+$/gm, '<hr style="border:none;border-top:1px solid #e8e0d8;margin:16px 0;">')
+    // Blank lines → paragraph breaks
+    .replace(/\n\n+/g, '</p><p style="font-size:14px;line-height:1.8;color:#3a3330;margin:8px 0;">')
+    // Single newlines → line breaks (inside paragraphs)
+    .replace(/\n/g, '<br>');
+}
+
 // ─── EMAIL TEMPLATES ──────────────────────────────────────────────────────────
 
 const signature = `
@@ -42,7 +63,7 @@ function emailWrapper(content, lang = 'en') {
               <img src="${lang === 'fr'
                 ? 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png'
                 : 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png'
-              }" alt="TheFirstWord" style="height:64px;width:auto;display:inline-block;" />
+              }" alt="TheFirstWord" style="height:96px;width:auto;display:inline-block;" />
             </td>
           </tr>
 
@@ -86,7 +107,9 @@ function buildKitEmail(outputs, recipientName, lang) {
       <div style="background:#f5f0eb;padding:12px 20px;border-bottom:1px solid #e8e0d8;">
         <p style="margin:0;font-size:13px;font-weight:700;color:#2A7F7F;letter-spacing:1px;text-transform:uppercase;">${emoji} ${label}</p>
       </div>
-      <div style="padding:20px;font-size:14px;line-height:1.8;color:#3a3330;white-space:pre-wrap;">${content}</div>
+      <div style="padding:20px;">
+        <p style="font-size:14px;line-height:1.8;color:#3a3330;margin:0;">${markdownToHtml(content)}</p>
+      </div>
     </div>
   `;
 
