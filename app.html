@@ -263,8 +263,8 @@
 <body>
 
 <nav>
-  <a href="index.html" class="nav-logo">
-    <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:64px;width:auto;display:block;" />
+  <a href="index.html" style="display:flex;align-items:center;text-decoration:none;line-height:0;">
+    <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:80px;width:auto;" />
   </a>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -1124,23 +1124,51 @@ Return ONLY the Plan B guide.`;
     btn.disabled = true;
     btn.textContent = lang === 'en' ? 'Sending...' : 'Envoi...';
 
-    // Store the email in answers for reference
     answers.deliveryEmail = email;
 
-    // Simulate send (replace with real API call when email backend is ready)
-    setTimeout(() => {
-      document.getElementById('checkinCard').innerHTML = `
-        <div class="checkin-title" style="color:var(--teal);">✅ ${lang === 'en' ? 'On its way!' : 'En route!'}</div>
-        <p class="checkin-sub">${lang === 'en'
-          ? 'Your personalized kit has been sent to <strong>' + email + '</strong>. Check your inbox in the next few minutes.'
-          : 'Votre kit personnalisé a été envoyé à <strong>' + email + '</strong>. Vérifiez votre boîte de réception dans les prochaines minutes.'
-        }</p>
-        <p style="font-size:12px;color:var(--text-light);margin-top:8px;">${lang === 'en'
-          ? 'Need ongoing support? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Upgrade to the monthly plan →</a>'
-          : 'Besoin d\'un soutien continu? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Passez au plan mensuel →</a>'
-        }</p>
-      `;
-    }, 1200);
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          name: answers.senderName || '',
+          lang,
+          outputs: {
+            letter: generatedOutputs.Letter || '',
+            guide: generatedOutputs.Guide || '',
+            sms: generatedOutputs.SMS || '',
+            script: generatedOutputs.Script || '',
+            planB: generatedOutputs.PlanB || ''
+          }
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        document.getElementById('checkinCard').innerHTML = `
+          <div class="checkin-title" style="color:var(--teal);">✅ ${lang === 'en' ? 'On its way!' : 'En route!'}</div>
+          <p class="checkin-sub">${lang === 'en'
+            ? 'Your personalized kit has been sent to <strong>' + email + '</strong>. Check your inbox in the next few minutes.'
+            : 'Votre kit personnalisé a été envoyé à <strong>' + email + '</strong>. Vérifiez votre boîte de réception dans les prochaines minutes.'
+          }</p>
+          <p style="font-size:12px;color:var(--text-light);margin-top:8px;">${lang === 'en'
+            ? 'Need ongoing support? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Upgrade to the monthly plan →</a>'
+            : 'Besoin d\'un soutien continu? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Passez au plan mensuel →</a>'
+          }</p>
+        `;
+      } else {
+        btn.disabled = false;
+        btn.textContent = lang === 'en' ? 'Send →' : 'Envoyer →';
+        alert(lang === 'en' ? 'Failed to send. Please try again.' : 'Échec de l\'envoi. Veuillez réessayer.');
+      }
+    } catch (err) {
+      console.error(err);
+      btn.disabled = false;
+      btn.textContent = lang === 'en' ? 'Send →' : 'Envoyer →';
+      alert(lang === 'en' ? 'Failed to send. Please try again.' : 'Échec de l\'envoi. Veuillez réessayer.');
+    }
   }
 
   function restart() {
