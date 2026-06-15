@@ -127,12 +127,26 @@ function buildKitEmail(outputs, recipientName, lang) {
     ? recipientName.charAt(0).toUpperCase() + recipientName.slice(1)
     : '';
 
+  function markdownToHtml(text) {
+    if (!text) return '';
+    return text
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/^#{1,3}\s+(.+)$/gm, '<p style="font-weight:700;font-size:15px;color:#1a1a1a;margin:16px 0 8px;">$1</p>')
+      .replace(/^\d+\.\s+(.+)$/gm, '<p style="margin:6px 0;padding-left:20px;">• $1</p>')
+      .replace(/^[-•]\s+(.+)$/gm, '<p style="margin:6px 0;padding-left:20px;">• $1</p>')
+      .replace(/\n{2,}/g, '</p><p style="margin:12px 0;font-size:14px;line-height:1.8;color:#3a3330;">')
+      .replace(/\n/g, '<br/>')
+      .replace(/^/, '<p style="margin:0 0 12px;font-size:14px;line-height:1.8;color:#3a3330;">')
+      .replace(/$/, '</p>');
+  }
+
   const outputSection = (label, emoji, content) => content ? `
     <div style="margin-bottom:28px;border:1px solid #e8e0d8;border-radius:10px;overflow:hidden;">
       <div style="background:#f5f0eb;padding:12px 20px;border-bottom:1px solid #e8e0d8;">
         <p style="margin:0;font-size:13px;font-weight:700;color:#2A7F7F;letter-spacing:1px;text-transform:uppercase;">${emoji} ${label}</p>
       </div>
-      <div style="padding:20px;font-size:14px;line-height:1.8;color:#3a3330;white-space:pre-wrap;">${content}</div>
+      <div style="padding:20px;font-size:14px;line-height:1.8;color:#3a3330;">${markdownToHtml(content)}</div>
     </div>
   ` : '';
 
@@ -397,8 +411,8 @@ app.post("/api/send-email", async (req, res) => {
       return res.status(500).json({ error: "Failed to send email." });
     }
 
-    // 2. Save subscriber to Supabase for weekly follow-ups
-    if (SUPABASE_KEY) {
+    // 2. Save subscriber to Supabase — monthly plan ONLY gets weekly emails
+    if (SUPABASE_KEY && plan === 'monthly') {
       try {
         await supabaseInsert('subscribers', {
           email,
