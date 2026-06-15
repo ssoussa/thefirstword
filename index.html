@@ -73,10 +73,12 @@
     .output-emoji { font-size: 32px; margin-bottom: 16px; display: block; }
     .output-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
     .output-card p { font-size: 14px; color: var(--text-light); line-height: 1.6; font-weight: 300; }
-    .output-card-planb { grid-column: span 2; background: var(--teal-light); border-color: rgba(42,127,127,0.2); }
+    .output-card-planb { grid-column: span 1; background: white; border-color: var(--divider); }
     @media (max-width: 480px) { .output-card-planb { grid-column: span 1; } }
     .pricing-section { background: var(--bg-dark); }
     .pricing-tiers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px; max-width: 900px; margin-left: auto; margin-right: auto; }
+    .pricing-tiers-grid > div { display: flex; flex-direction: column; }
+    .pricing-tiers-grid ul { flex: 1; }
     @media (max-width: 700px) { .pricing-tiers-grid { grid-template-columns: 1fr !important; } .pricing-tiers-grid > div { transform: none !important; } }
     .story-section { background: var(--bg); }
     .story-inner { max-width: 800px; margin: 0 auto; padding: 100px 24px; }
@@ -278,7 +280,7 @@
       <div class="output-card fade-in"><span class="output-emoji">💬</span><h3 class="en-text">SMS Message</h3><h3 class="fr-text" style="display:none;">Message SMS</h3><p class="en-text">A short, powerful text you can send right now. Sometimes a text opens a door a conversation can't.</p><p class="fr-text" style="display:none;">Un message texte court et puissant. Parfois un texto ouvre une porte qu'une conversation ne peut pas.</p></div>
       <div class="output-card fade-in"><span class="output-emoji">🎭</span><h3 class="en-text">Spoken Script</h3><h3 class="fr-text" style="display:none;">Script parlé</h3><p class="en-text">Word-for-word dialogue with stage directions. Read it aloud. It's exactly what to say, and how.</p><p class="fr-text" style="display:none;">Un dialogue mot pour mot avec des didascalies. Lisez-le à voix haute.</p></div>
       <div class="output-card output-card-planb fade-in"><span class="output-emoji">🔄</span><h3 class="en-text">Plan B Strategy</h3><h3 class="fr-text" style="display:none;">Stratégie Plan B</h3><p class="en-text">If the first attempt didn't work — describe what happened and get a completely new strategy. Different angle, different approach. Because giving up is not an option.</p><p class="fr-text" style="display:none;">Si la première tentative n'a pas fonctionné — décrivez ce qui s'est passé et obtenez une stratégie entièrement nouvelle.</p></div>
-      <div class="output-card fade-in" style="background:var(--teal-light);border-color:rgba(42,127,127,0.2);"><span class="output-emoji">📧</span><h3 class="en-text">4-Week Support Emails</h3><h3 class="fr-text" style="display:none;">4 semaines de courriels de soutien</h3><p class="en-text">Monthly plan subscribers receive weekly check-in emails — new strategies and encouragement for as long as you need.</p><p class="fr-text" style="display:none;">Les abonnés au plan mensuel reçoivent des courriels de suivi hebdomadaires avec de nouvelles stratégies et encouragements.</p></div>
+      <div class="output-card fade-in"><span class="output-emoji">📧</span><h3 class="en-text">4-Week Support Emails</h3><h3 class="fr-text" style="display:none;">4 semaines de courriels de soutien</h3><p class="en-text">Monthly plan subscribers receive weekly check-in emails — new strategies and encouragement for as long as you need.</p><p class="fr-text" style="display:none;">Les abonnés au plan mensuel reçoivent des courriels de suivi hebdomadaires avec de nouvelles stratégies et encouragements.</p></div>
     </div>
   </div>
 </div>
