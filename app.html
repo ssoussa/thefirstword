@@ -394,6 +394,12 @@
       <h2 class="loading-title fr-text hidden">Création de votre kit personnalisé...</h2>
       <p class="loading-sub en-text">Our AI is writing your letter, guide and more based on your answers. This takes about 30–40 seconds.</p>
       <p class="loading-sub fr-text hidden">Notre IA rédige votre lettre, guide et plus selon vos réponses. Cela prend environ 30 à 40 secondes.</p>
+      <p id="coldStartMsg" style="display:none;margin-top:20px;font-size:13px;color:var(--text-light);line-height:1.6;max-width:360px;margin-left:auto;margin-right:auto;" class="en-text">
+        ⏳ Still working — our server may be warming up. This can take up to 60 seconds on the first request of the day. Please don't close this tab.
+      </p>
+      <p id="coldStartMsgFr" style="display:none;margin-top:20px;font-size:13px;color:var(--text-light);line-height:1.6;max-width:360px;margin-left:auto;margin-right:auto;" class="fr-text hidden">
+        ⏳ Toujours en cours — notre serveur est peut-être en train de démarrer. Cela peut prendre jusqu'à 60 secondes lors de la première demande de la journée. Veuillez ne pas fermer cet onglet.
+      </p>
     </div>
   </div>
 
@@ -791,6 +797,14 @@
     document.getElementById('pricingView').classList.add('hidden');
     document.getElementById('loadingView').classList.remove('hidden');
 
+    // Show cold start warning after 12 seconds
+    const coldStartTimer = setTimeout(() => {
+      const msgEn = document.getElementById('coldStartMsg');
+      const msgFr = document.getElementById('coldStartMsgFr');
+      if (msgEn) msgEn.style.display = lang === 'en' ? 'block' : 'none';
+      if (msgFr) msgFr.style.display = lang === 'fr' ? 'block' : 'none';
+    }, 12000);
+
     const senderName = answers.senderName || (lang === 'en' ? 'the family' : 'la famille');
     const patientName = answers.patientName || (lang === 'en' ? 'your loved one' : 'votre proche');
     const outputLang = lang === 'en' ? 'Write entirely in English.' : 'Write entirely in natural, Québécois-friendly French.';
@@ -826,8 +840,10 @@ Language: ${outputLang}
         }).then(r => r.json())
       ));
       keys.forEach((k, i) => { outputs[k] = results[i].letter || ''; });
+      clearTimeout(coldStartTimer);
       showOutputs(senderName, patientName);
     } catch(e) {
+      clearTimeout(coldStartTimer);
       alert(lang === 'en' ? 'Connection error. Please try again.' : 'Erreur de connexion. Veuillez réessayer.');
       document.getElementById('loadingView').classList.add('hidden');
       document.getElementById('pricingView').classList.remove('hidden');
@@ -1034,7 +1050,7 @@ Return ONLY the script.`;
         <div class="lock-icon">🔒</div>
         <h3 class="lock-title">${lang === 'en' ? 'Unlock this feature' : 'Débloquer cette fonctionnalité'}</h3>
         <p class="lock-sub">${lang === 'en' ? 'Upgrade to the Complete plan ($29) to access the Plan B strategy — and every other feature.' : 'Passez au plan Complet (29$) pour accéder à la stratégie Plan B — et toutes les autres fonctionnalités.'}</p>
-        <button class="btn-unlock" onclick="restart()">${lang === 'en' ? 'Upgrade My Plan' : 'Mettre à niveau mon plan'}</button>
+        <button class="btn-unlock" onclick="upgradeFromPlanB()">${lang === 'en' ? 'Upgrade My Plan' : 'Mettre à niveau mon plan'}</button>
       </div>
     `;
   }
@@ -1294,6 +1310,20 @@ Return ONLY the Plan B guide.`;
       btn.textContent = lang === 'en' ? 'Send →' : 'Envoyer →';
       alert(lang === 'en' ? 'Failed to send. Please try again.' : 'Échec de l\'envoi. Veuillez réessayer.');
     }
+  }
+
+  function upgradeFromPlanB() {
+    // Preserve all answers — just go back to pricing with Complete pre-selected
+    selectedPlan = 'complete';
+    document.getElementById('outputView').classList.add('hidden');
+    document.getElementById('loadingView').classList.add('hidden');
+    document.getElementById('questionnaireView').classList.add('hidden');
+    document.getElementById('pricingView').classList.remove('hidden');
+    // Pre-select Complete card visually
+    document.querySelectorAll('.price-card').forEach(c => c.classList.remove('selected'));
+    const completeCard = document.querySelector('.price-card[data-plan="complete"]');
+    if (completeCard) completeCard.classList.add('selected');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function restart() {
