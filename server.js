@@ -460,6 +460,7 @@ app.post("/api/send-email", async (req, res) => {
     // 2. Save subscriber to Supabase — monthly plan ONLY gets weekly emails
     if (SUPABASE_KEY && plan === 'monthly') {
       try {
+        const clientAnswers = req.body.answers || {};
         await supabaseInsert('subscribers', {
           email,
           name: name || '',
@@ -470,7 +471,15 @@ app.post("/api/send-email", async (req, res) => {
           week2_sent: false,
           week3_sent: false,
           week4_sent: false,
-          active: true
+          active: true,
+          relationship: clientAnswers.relationship || '',
+          substance: clientAnswers.substance || '',
+          duration: clientAnswers.duration || '',
+          treatment: clientAnswers.treatment || '',
+          attitude: clientAnswers.attitude || '',
+          tone: clientAnswers.tone || '',
+          situation: clientAnswers.situation || '',
+          patient_name: clientAnswers.patientName || ''
         });
         console.log(`Subscriber saved: ${email}`);
       } catch (dbErr) {
@@ -665,7 +674,17 @@ app.get("/api/returning-client", async (req, res) => {
         name: sub.name,
         lang: sub.lang,
         plan: sub.plan,
-        signedUpAt: sub.signed_up_at
+        signedUpAt: sub.signed_up_at,
+        answers: {
+          relationship: sub.relationship || '',
+          substance: sub.substance || '',
+          duration: sub.duration || '',
+          treatment: sub.treatment || '',
+          attitude: sub.attitude || '',
+          tone: sub.tone || '',
+          situation: sub.situation || '',
+          patientName: sub.patient_name || ''
+        }
       });
     } else {
       res.json({ found: false });
