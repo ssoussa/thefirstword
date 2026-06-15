@@ -264,7 +264,7 @@
 
 <nav>
   <a href="index.html" style="display:flex;align-items:center;text-decoration:none;line-height:0;">
-    <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:80px;width:auto;" />
+    <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:90px;width:auto;" />
   </a>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -384,6 +384,9 @@
 
   <!-- OUTPUT VIEW -->
   <div id="outputView" class="hidden">
+    <div style="text-align:center;margin-bottom:24px;padding-top:8px;">
+      <img id="output-header-logo" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:80px;width:auto;" />
+    </div>
     <div class="output-header">
       <h2 class="output-title en-text">Your kit is ready ✅</h2>
       <h2 class="output-title fr-text hidden">Votre kit est prêt ✅</h2>
@@ -396,9 +399,7 @@
     <div id="tabLetter" class="output-content hidden">
       <div class="output-letterhead">
         <div>
-          <div class="output-brand-label en-text">Prepared by</div>
-          <div class="output-brand-label fr-text hidden">Préparé par</div>
-          <div class="output-brand-name">TheFirstWord</div>
+          <img id="letter-logo" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:56px;width:auto;" />
         </div>
         <div class="output-date" id="outputDate"></div>
       </div>
@@ -411,8 +412,7 @@
     <div id="tabGuide" class="output-content hidden">
       <div class="output-letterhead">
         <div>
-          <div class="output-brand-label en-text">Conversation Guide — TheFirstWord</div>
-          <div class="output-brand-label fr-text hidden">Guide de conversation — TheFirstWord</div>
+          <img src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:56px;width:auto;" class="en-text" /><img src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png" alt="TheFirstWord" style="height:56px;width:auto;" class="fr-text hidden" />
           <div class="output-brand-name" id="guideTitle"></div>
         </div>
         <div class="output-date" id="outputDate2"></div>
@@ -642,6 +642,10 @@
     const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
     const navLogo = document.getElementById('nav-logo-img');
     if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
+    const outputHeaderLogo = document.getElementById('output-header-logo');
+    if (outputHeaderLogo) outputHeaderLogo.src = l === 'fr' ? logoFr : logoEn;
+    const letterLogo = document.getElementById('letter-logo');
+    if (letterLogo) letterLogo.src = l === 'fr' ? logoFr : logoEn;
     renderQuestion();
   }
 
