@@ -201,6 +201,7 @@
     }
     .problem-section { background: var(--bg); }
     .problem-inner { max-width: 1100px; margin: 0 auto; padding: 100px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    @media (max-width: 640px) { #resources > div > div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; } }
     @media (max-width: 768px) { .problem-inner { grid-template-columns: 1fr; gap: 40px; } }
     .problem-text h2 {
       font-family: 'Playfair Display', serif;
@@ -252,6 +253,7 @@
       max-width: 600px;
     }
     .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+    @media (max-width: 640px) { #resources > div > div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; } }
     @media (max-width: 768px) { .steps { grid-template-columns: 1fr; gap: 32px; } }
     .step { position: relative; }
     .step-number {
@@ -277,6 +279,7 @@
     }
     .outputs-subtitle { font-size: 17px; color: var(--text-light); margin-bottom: 56px; font-weight: 300; }
     .outputs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media (max-width: 640px) { #resources > div > div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; } }
     @media (max-width: 768px) { .outputs-grid { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 480px) { .outputs-grid { grid-template-columns: 1fr; } }
     .output-card {
@@ -567,7 +570,9 @@
     <a href="#how-it-works" class="en-text">How it works</a>
     <a href="#how-it-works" class="fr-text" style="display:none;">Comment ça marche</a>
     <a href="#pricing" class="en-text">Pricing</a>
-    <a href="#pricing" class="fr-text" style="display:none;">Tarifs</a>
+      <a href="#resources" class="en-text">Resources</a>
+    <a href="#resources" class="fr-text" style="display:none;">Ressources</a>
+      <a href="#pricing" class="fr-text" style="display:none;">Tarifs</a>
     <a href="app.html" class="nav-cta en-text">Start Now</a>
     <a href="app.html" class="nav-cta fr-text" style="display:none;">Commencer</a>
   </div>
@@ -925,6 +930,56 @@
 </div>
 
 <!-- FINAL CTA -->
+
+<!-- RESOURCES SECTION -->
+<div id="resources" style="background:#f0f7f7;padding:80px 40px;">
+  <div style="max-width:800px;margin:0 auto;text-align:center;">
+
+    <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#2A7F7F;margin-bottom:12px;" class="en-text">SUPPORT RESOURCES</p>
+    <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#2A7F7F;margin-bottom:12px;" class="fr-text" style="display:none;">RESSOURCES DE SOUTIEN</p>
+
+    <h2 style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#1C2B3A;margin-bottom:16px;" class="en-text">You don't have to figure this out alone.</h2>
+    <h2 style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#1C2B3A;margin-bottom:16px;" class="fr-text" style="display:none;">Vous n'avez pas à traverser ça seul(e).</h2>
+
+    <p style="font-size:16px;color:#5a6a7a;margin-bottom:48px;line-height:1.7;" class="en-text">If you or your loved one needs immediate support, these free, confidential resources are available 24/7.</p>
+    <p style="font-size:16px;color:#5a6a7a;margin-bottom:48px;line-height:1.7;" class="fr-text" style="display:none;">Si vous ou votre proche avez besoin d'un soutien immédiat, ces ressources gratuites et confidentielles sont disponibles 24h/24, 7j/7.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;text-align:left;">
+
+      <!-- FR Resource -->
+      <div style="background:white;border-radius:14px;padding:28px 32px;border:1px solid #e8e0d8;box-shadow:0 2px 12px rgba(0,0,0,0.04);">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <span style="font-size:28px;">🇨🇦</span>
+          <div>
+            <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2A7F7F;">QUÉBEC — FRANÇAIS</p>
+          </div>
+        </div>
+        <p style="margin:0 0 8px;font-size:17px;font-weight:700;color:#1C2B3A;">Drogue Aide et Référence</p>
+        <p style="margin:0 0 16px;font-size:14px;color:#5a6a7a;line-height:1.6;">Ligne provinciale de prévention des dépendances. Gratuit, confidentiel, disponible 24h/24.</p>
+        <a href="tel:18002652626" style="display:inline-block;background:#1C2B3A;color:white;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:18px;font-weight:700;letter-spacing:1px;">1-800-265-2626</a>
+      </div>
+
+      <!-- EN Resource -->
+      <div style="background:white;border-radius:14px;padding:28px 32px;border:1px solid #e8e0d8;box-shadow:0 2px 12px rgba(0,0,0,0.04);">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <span style="font-size:28px;">🇨🇦</span>
+          <div>
+            <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2A7F7F;">QUÉBEC — ENGLISH</p>
+          </div>
+        </div>
+        <p style="margin:0 0 8px;font-size:17px;font-weight:700;color:#1C2B3A;">Drug and Alcohol Helpline</p>
+        <p style="margin:0 0 16px;font-size:14px;color:#5a6a7a;line-height:1.6;">Free, confidential support for families and individuals dealing with substance use. Available 24/7.</p>
+        <a href="tel:18005658603" style="display:inline-block;background:#1C2B3A;color:white;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:18px;font-weight:700;letter-spacing:1px;">1-800-565-8603</a>
+      </div>
+
+    </div>
+
+    <p style="margin-top:32px;font-size:13px;color:#5a6a7a;" class="en-text">TheFirstWord is a communication support tool and does not replace professional medical or psychological advice.</p>
+    <p style="margin-top:32px;font-size:13px;color:#5a6a7a;" class="fr-text" style="display:none;">TheFirstWord est un outil de soutien à la communication et ne remplace pas un avis médical ou psychologique professionnel.</p>
+
+  </div>
+</div>
+
 <div class="cta-section" id="start" onclick="window.location.href='app.html'">
   <h2 class="en-text">The conversation starts with one word. Let's find it.</h2>
   <h2 class="fr-text" style="display:none;">La conversation commence par un mot. Trouvons-le.</h2>
