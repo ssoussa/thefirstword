@@ -369,6 +369,64 @@ app.post("/api/testimonial", async (req, res) => {
       message: message.trim(), lang: lang || 'en', rating: rating || 5,
       approved: false, created_at: new Date().toISOString()
     });
+
+    // ── Notify Sami ──────────────────────────────────────────────────────────
+    const resendKey = process.env.RESEND_API_KEY;
+    if (resendKey) {
+      const submitterName = (name || '').trim() || 'Anonymous';
+      const notifHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#f5f0eb;font-family:Georgia,serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;padding:32px 16px;">
+<tr><td align="center">
+<table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:white;border-radius:12px;overflow:hidden;">
+  <tr><td style="background:#1C2B3A;padding:20px 28px;border-bottom:3px solid #E8650A;">
+    <p style="margin:0;font-size:11px;font-weight:700;color:#2A7F7F;letter-spacing:2px;text-transform:uppercase;">TheFirstWord — Admin</p>
+    <p style="margin:6px 0 0;font-size:18px;font-weight:700;color:white;">💬 New Testimonial Submitted</p>
+  </td></tr>
+  <tr><td style="padding:28px;">
+    <table style="width:100%;background:#f5f0eb;border-radius:10px;margin-bottom:20px;" cellpadding="14" cellspacing="0">
+      <tr><td>
+        <p style="margin:0 0 2px;font-size:11px;font-weight:700;color:#2A7F7F;text-transform:uppercase;letter-spacing:1px;">From</p>
+        <p style="margin:0;font-size:16px;font-weight:700;color:#1a1a1a;">${submitterName}</p>
+        ${relationship ? `<p style="margin:4px 0 0;font-size:13px;color:#6b6460;">Relationship: ${relationship}</p>` : ''}
+      </td></tr>
+    </table>
+    <table style="width:100%;border:1px solid #e8e0d8;border-radius:10px;margin-bottom:20px;" cellpadding="16" cellspacing="0">
+      <tr><td>
+        <p style="margin:0 0 8px;font-size:11px;font-weight:700;color:#2A7F7F;text-transform:uppercase;letter-spacing:1px;">Their message</p>
+        <p style="margin:0;font-size:15px;color:#1a1a1a;line-height:1.8;font-style:italic;">"${message.trim()}"</p>
+      </td></tr>
+    </table>
+    <table style="width:100%;background:#f0f7f7;border-radius:10px;" cellpadding="16" cellspacing="0">
+      <tr><td>
+        <p style="margin:0 0 10px;font-size:14px;color:#1a1a1a;font-weight:600;">To approve and publish:</p>
+        <p style="margin:0;font-size:13px;color:#3a3330;line-height:1.8;">
+          1. Go to <a href="https://supabase.com" style="color:#2A7F7F;">supabase.com</a> → your project<br>
+          2. Table Editor → <strong>testimonials</strong><br>
+          3. Find this row → set <strong>approved = true</strong>
+        </p>
+      </td></tr>
+    </table>
+    <p style="margin:16px 0 0;font-size:11px;color:#9b9390;text-align:center;">
+      ${new Date().toLocaleString('en-CA', { timeZone: 'America/Toronto', dateStyle: 'full', timeStyle: 'short' })}
+    </p>
+  </td></tr>
+</table>
+</td></tr></table>
+</body></html>`;
+
+      fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${resendKey}` },
+        body: JSON.stringify({
+          from: "TheFirstWord <hello@thefirstword.ca>",
+          to: ["thefirstword.ca@gmail.com"],
+          subject: `💬 New testimonial from ${submitterName} — TheFirstWord`,
+          html: notifHtml,
+        }),
+      }).catch(e => console.error("Notification email failed:", e));
+    }
+
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: "Failed to save." }); }
 });
