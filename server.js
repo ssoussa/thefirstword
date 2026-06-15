@@ -127,59 +127,93 @@ function buildKitEmail(outputs, recipientName, lang) {
     ? recipientName.charAt(0).toUpperCase() + recipientName.slice(1)
     : '';
 
-  function markdownToHtml(text) {
+  function mdToHtml(text) {
     if (!text) return '';
-    return text
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/^#{1,3}\s+(.+)$/gm, '<p style="font-weight:700;font-size:15px;color:#1a1a1a;margin:16px 0 8px;">$1</p>')
-      .replace(/^\d+\.\s+(.+)$/gm, '<p style="margin:6px 0;padding-left:20px;">• $1</p>')
-      .replace(/^[-•]\s+(.+)$/gm, '<p style="margin:6px 0;padding-left:20px;">• $1</p>')
-      .replace(/\n{2,}/g, '</p><p style="margin:12px 0;font-size:14px;line-height:1.8;color:#3a3330;">')
-      .replace(/\n/g, '<br/>')
-      .replace(/^/, '<p style="margin:0 0 12px;font-size:14px;line-height:1.8;color:#3a3330;">')
-      .replace(/$/, '</p>');
+    // Normalize line endings
+    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    const lines = text.split('\n');
+    let html = '';
+    let inList = false;
+
+    for (let line of lines) {
+      // Inline bold/italic
+      line = line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      line = line.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+
+      if (/^#{1,3}\s+/.test(line)) {
+        if (inList) { html += '</ul>'; inList = false; }
+        const txt = line.replace(/^#{1,3}\s+/, '');
+        html += `<p style="margin:18px 0 6px;font-size:15px;font-weight:700;color:#1a1a1a;border-bottom:1px solid #e8e0d8;padding-bottom:4px;">${txt}</p>`;
+      }
+      else if (/^(\d+\.|-|•|\*)\s+/.test(line)) {
+        if (!inList) { html += '<table style="width:100%;margin:6px 0;" cellpadding="0" cellspacing="0">'; inList = true; }
+        const txt = line.replace(/^(\d+\.|-|•|\*)\s+/, '');
+        html += `<tr><td style="width:16px;font-size:14px;color:#2A7F7F;vertical-align:top;padding:3px 0;">•</td><td style="font-size:14px;color:#3a3330;line-height:1.7;padding:3px 0;">${txt}</td></tr>`;
+      }
+      else if (line.trim() === '') {
+        if (inList) { html += '</table>'; inList = false; }
+        html += '<div style="height:8px;"></div>';
+      }
+      else {
+        if (inList) { html += '</table>'; inList = false; }
+        html += `<p style="margin:0 0 8px;font-size:14px;line-height:1.8;color:#3a3330;">${line}</p>`;
+      }
+    }
+    if (inList) html += '</table>';
+    return html;
   }
 
-  const outputSection = (label, emoji, content) => content ? `
-    <div style="margin-bottom:28px;border:1px solid #e8e0d8;border-radius:10px;overflow:hidden;">
-      <div style="background:#f5f0eb;padding:12px 20px;border-bottom:1px solid #e8e0d8;">
-        <p style="margin:0;font-size:13px;font-weight:700;color:#2A7F7F;letter-spacing:1px;text-transform:uppercase;">${emoji} ${label}</p>
-      </div>
-      <div style="padding:20px;font-size:14px;line-height:1.8;color:#3a3330;">${markdownToHtml(content)}</div>
-    </div>
-  ` : '';
+  function section(label, emoji, color, rawText) {
+    if (!rawText || !rawText.trim()) return '';
+    return `
+    <table style="width:100%;margin-bottom:24px;border:1px solid #e8e0d8;border-radius:10px;border-collapse:separate;border-spacing:0;overflow:hidden;" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="background:#f5f0eb;padding:12px 20px;border-bottom:1px solid #e8e0d8;">
+          <p style="margin:0;font-size:11px;font-weight:700;color:${color};letter-spacing:2px;text-transform:uppercase;">${emoji} ${label}</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="background:white;padding:20px 24px;">
+          ${mdToHtml(rawText)}
+        </td>
+      </tr>
+    </table>`;
+  }
 
   const sections = [
-    outputSection(isEn ? 'Intervention Letter' : "Lettre d'intervention", '📄', outputs.letter),
-    outputSection(isEn ? 'Conversation Guide' : 'Guide de conversation', '📋', outputs.guide),
-    outputSection(isEn ? 'SMS Message' : 'Message SMS', '💬', outputs.sms),
-    outputSection(isEn ? 'Spoken Script' : 'Script parlé', '🎭', outputs.script),
-    outputSection('Plan B', '🔄', outputs.planB),
+    section(isEn ? 'Intervention Letter' : "Lettre d'intervention", '📄', '#2A7F7F', outputs.letter),
+    section(isEn ? 'Conversation Guide' : 'Guide de conversation', '📋', '#2A7F7F', outputs.guide),
+    section(isEn ? 'SMS Message' : 'Message SMS', '💬', '#2A7F7F', outputs.sms),
+    section(isEn ? 'Spoken Script' : 'Script parlé', '🎭', '#2A7F7F', outputs.script),
+    section('Plan B', '🔄', '#c4622d', outputs.planB),
   ].join('');
 
   const content = `
-    <p style="font-size:16px;color:#1a1a1a;margin:0 0 8px;">
+    <p style="font-size:16px;color:#1a1a1a;margin:0 0 6px;font-family:Georgia,serif;">
       ${isEn ? `Hi${name ? ' ' + name : ''},` : `Bonjour${name ? ' ' + name : ''},`}
     </p>
-    <p style="font-size:15px;color:#3a3330;line-height:1.7;margin:0 0 24px;">
+    <p style="font-size:14px;color:#3a3330;line-height:1.7;margin:0 0 28px;">
       ${isEn
-        ? 'Your personalized intervention kit is ready. Everything below was written specifically for your situation. Take your time, read it through, and trust yourself — reaching out took courage.'
-        : "Votre kit d'intervention personnalisé est prêt. Tout ce qui suit a été rédigé spécifiquement pour votre situation. Prenez le temps de le lire et faites confiance à votre instinct — faire cette démarche demande du courage."
+        ? 'Your personalized intervention kit is ready. Everything below was written specifically for your situation. Take your time reading it — and trust that reaching out took courage.'
+        : "Votre kit d'intervention personnalisé est prêt. Tout ce qui suit a été rédigé spécifiquement pour votre situation. Prenez le temps de le lire — et faites confiance au fait que cette démarche demande du courage."
       }
     </p>
 
     ${sections}
 
-    <div style="background:#f0f7f7;border-left:4px solid #2A7F7F;padding:16px 20px;border-radius:0 8px 8px 0;margin-top:8px;">
-      <p style="margin:0;font-size:13px;color:#2A7F7F;font-weight:700;">${isEn ? 'A reminder' : 'Un rappel'}</p>
-      <p style="margin:6px 0 0;font-size:13px;color:#3a3330;line-height:1.6;">
-        ${isEn
-          ? "You don't have to say everything perfectly. What matters is that you show up. This kit is your foundation — use what feels right, adapt what doesn't."
-          : "Vous n'avez pas à tout dire parfaitement. Ce qui compte, c'est d'être présent(e). Ce kit est votre point de départ — utilisez ce qui vous convient, adaptez le reste."
-        }
-      </p>
-    </div>
+    <table style="width:100%;background:#f0f7f7;border-left:4px solid #2A7F7F;border-radius:0 8px 8px 0;margin-top:8px;" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="padding:16px 20px;">
+          <p style="margin:0 0 6px;font-size:13px;color:#2A7F7F;font-weight:700;">${isEn ? 'A reminder' : 'Un rappel'}</p>
+          <p style="margin:0;font-size:13px;color:#3a3330;line-height:1.6;">
+            ${isEn
+              ? "You don't have to say everything perfectly. What matters is that you show up. This kit is your foundation — use what feels right, adapt what doesn't."
+              : "Vous n'avez pas à tout dire parfaitement. Ce qui compte, c'est d'être présent(e). Ce kit est votre point de départ — utilisez ce qui vous convient, adaptez le reste."
+            }
+          </p>
+        </td>
+      </tr>
+    </table>
   `;
 
   return emailWrapper(content, lang);
@@ -187,7 +221,7 @@ function buildKitEmail(outputs, recipientName, lang) {
 
 // ─── WEEKLY EMAIL TEMPLATES ────────────────────────────────────────────────────
 
-function buildWeeklyEmail(weekNumber, recipientName, lang) {
+function buildWeeklyEmail(weekNumber, recipientName, lang, subscriberId) {
   const isEn = lang !== 'fr';
   const name = recipientName
     ? recipientName.charAt(0).toUpperCase() + recipientName.slice(1)
@@ -312,22 +346,34 @@ function buildWeeklyEmail(weekNumber, recipientName, lang) {
             <li>${isEn ? '💛 You need support too — your wellbeing is not optional' : '💛 Vous avez besoin de soutien aussi — votre bien-être n\'est pas optionnel'}</li>
           </ul>
         </div>
-        <div style="background:#f0f7f7;border-radius:10px;padding:20px 24px;text-align:center;">
-          <p style="margin:0 0 12px;font-size:14px;color:#1a1a1a;">
-            ${isEn ? 'Need to regenerate your kit with a new approach?' : 'Besoin de régénérer votre kit avec une nouvelle approche?'}
+        <div style="background:#f0f7f7;border-radius:10px;padding:24px;text-align:center;">
+          <p style="margin:0 0 8px;font-size:15px;font-weight:700;color:#1a1a1a;">
+            ${isEn ? 'Ready to try a different approach?' : 'Prêt(e) à essayer une approche différente?'}
           </p>
-          <a href="https://thefirstword.ca/app.html" style="display:inline-block;background:#2A7F7F;color:white;text-decoration:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;">
-            ${isEn ? 'Return to TheFirstWord →' : 'Retourner à TheFirstWord →'}
+          <p style="margin:0 0 16px;font-size:13px;color:#6b6460;line-height:1.6;">
+            ${isEn
+              ? 'Click below and we\'ll bring up your original situation so you can generate a new Plan B strategy — no need to start from scratch.'
+              : 'Cliquez ci-dessous et nous afficherons votre situation originale pour générer une nouvelle stratégie Plan B — sans repartir de zéro.'
+            }
+          </p>
+          <a href="https://thefirstword.ca/app.html?returning=true&email=${encodeURIComponent(recipientName || '')}&lang=${lang}" style="display:inline-block;background:#2A7F7F;color:white;text-decoration:none;padding:14px 32px;border-radius:8px;font-size:15px;font-weight:700;">
+            ${isEn ? 'Generate My Plan B →' : 'Générer mon Plan B →'}
           </a>
+          <p style="margin:12px 0 0;font-size:11px;color:#9b9390;">
+            ${isEn ? 'Your previous answers are saved. This takes less than 2 minutes.' : 'Vos réponses précédentes sont sauvegardées. Cela prend moins de 2 minutes.'}
+          </p>
         </div>
       `
     }
   };
 
   const week = weeks[weekNumber];
+  const unsubLink = subscriberId
+    ? `<p style="font-size:11px;color:#c0b8b0;text-align:center;margin-top:20px;"><a href="https://thefirstword.ca/api/unsubscribe?id=${subscriberId}" style="color:#c0b8b0;">${isEn ? 'Unsubscribe from weekly emails' : 'Se désabonner des courriels hebdomadaires'}</a></p>`
+    : '';
   return {
     subject: week.subject,
-    html: emailWrapper(week.content, lang)
+    html: emailWrapper(week.content + unsubLink, lang)
   };
 }
 
@@ -468,11 +514,65 @@ app.post("/api/send-weekly-batch", async (req, res) => {
         { week: 3, field: 'week3_sent', minDays: 21, maxDays: 27 },
         { week: 4, field: 'week4_sent', minDays: 28, maxDays: 34 },
       ];
+      // After week 4: send continuation opt-in email for monthly subscribers
+      const allSent = sub.week1_sent && sub.week2_sent && sub.week3_sent && sub.week4_sent;
+      if (allSent && sub.plan === 'monthly' && daysSince >= 35 && daysSince <= 41) {
+        try {
+          const isEn = sub.lang !== 'fr';
+          const name = sub.name ? sub.name.charAt(0).toUpperCase() + sub.name.slice(1) : (isEn ? 'there' : '');
+          const continueUrl = \`https://thefirstword.ca/api/checkin-continue?id=\${sub.id}&choice=yes\`;
+          const stopUrl = \`https://thefirstword.ca/api/checkin-continue?id=\${sub.id}&choice=no\`;
+          const unsubUrl = \`https://thefirstword.ca/api/unsubscribe?id=\${sub.id}\`;
+
+          const subject = isEn ? 'Do you still need us?' : 'Avez-vous encore besoin de nous?';
+          const html = emailWrapper(\`
+            <p style="font-size:16px;color:#1a1a1a;margin:0 0 8px;">\${isEn ? \`Hi \${name},\` : \`Bonjour \${name},\`}</p>
+            <p style="font-size:15px;color:#3a3330;line-height:1.7;margin:0 0 24px;">
+              \${isEn
+                ? "It's been 4 weeks since you started this journey. We want to check in one more time — are you still in the thick of it, or has the situation changed?"
+                : "Cela fait 4 semaines que vous avez commencé ce parcours. Nous voulons vous contacter une dernière fois — êtes-vous toujours dans la situation, ou les choses ont-elles changé?"
+              }
+            </p>
+            <div style="background:#f5f0eb;border-radius:12px;padding:24px;margin-bottom:24px;text-align:center;">
+              <p style="margin:0 0 20px;font-size:16px;font-weight:700;color:#1a1a1a;">
+                \${isEn ? 'Do you still need weekly support?' : 'Avez-vous encore besoin de soutien hebdomadaire?'}
+              </p>
+              <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+                <a href="\${continueUrl}" style="display:inline-block;background:#2A7F7F;color:white;text-decoration:none;padding:14px 32px;border-radius:8px;font-size:15px;font-weight:700;">
+                  \${isEn ? '✅ Yes, keep them coming' : '✅ Oui, continuez'}
+                </a>
+                <a href="\${stopUrl}" style="display:inline-block;background:#f5f0eb;color:#3a3330;text-decoration:none;padding:14px 32px;border-radius:8px;font-size:15px;font-weight:700;border:1px solid #e8e0d8;">
+                  \${isEn ? "🙏 No, I'm okay now" : '🙏 Non, ça va maintenant'}
+                </a>
+              </div>
+            </div>
+            <p style="font-size:13px;color:#9b9390;text-align:center;">
+              \${isEn
+                ? \`If you said Yes, your weekly check-ins will continue every Monday. No action needed if you want to stop — just click No.\`
+                : \`Si vous avez dit Oui, vos suivis hebdomadaires continueront chaque lundi. Aucune action nécessaire si vous souhaitez arrêter — cliquez simplement sur Non.\`
+              }
+            </p>
+            <p style="font-size:11px;color:#c0b8b0;text-align:center;margin-top:16px;">
+              <a href="\${unsubUrl}" style="color:#c0b8b0;">\${isEn ? 'Unsubscribe from all emails' : 'Se désabonner de tous les courriels'}</a>
+            </p>
+          \`, sub.lang);
+
+          const result = await sendEmail(sub.email, subject, html);
+          if (result.id) {
+            results.sent++;
+            console.log(\`Continuation email sent to \${sub.email}\`);
+          }
+        } catch(e) {
+          console.error(\`Continuation email failed for \${sub.email}:\`, e);
+          results.failed++;
+        }
+        continue;
+      }
 
       for (const check of weekChecks) {
         if (!sub[check.field] && daysSince >= check.minDays && daysSince <= check.maxDays) {
           try {
-            const { subject, html } = buildWeeklyEmail(check.week, sub.name, sub.lang);
+            const { subject, html } = buildWeeklyEmail(check.week, sub.name, sub.lang, sub.id);
             const result = await sendEmail(sub.email, subject, html);
 
             if (result.id) {
@@ -496,6 +596,88 @@ app.post("/api/send-weekly-batch", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Batch send failed." });
+  }
+});
+
+// ─── API: WEEKLY CONTINUATION OPT-IN/OUT ─────────────────────────────────────
+
+app.get("/api/checkin-continue", async (req, res) => {
+  const { id, choice } = req.query;
+  if (!id || !choice) return res.status(400).send('Missing parameters');
+  if (!SUPABASE_KEY) return res.status(500).send('Database not configured');
+
+  try {
+    if (choice === 'yes') {
+      // Reset week counters so they get another 4 weeks
+      await supabaseUpdate('subscribers', id, {
+        week1_sent: false,
+        week2_sent: false,
+        week3_sent: false,
+        week4_sent: false,
+        active: true,
+        signed_up_at: new Date().toISOString()
+      });
+      res.send(`<!DOCTYPE html><html><body style="font-family:Georgia,serif;max-width:500px;margin:80px auto;text-align:center;padding:20px;">
+        <div style="font-size:48px;margin-bottom:16px;">💚</div>
+        <h2 style="color:#1a1a1a;margin-bottom:12px;">We're still with you.</h2>
+        <p style="color:#6b6460;line-height:1.7;">Your weekly check-ins will continue. You'll hear from us again next Monday. You're not doing this alone.</p>
+        <a href="https://thefirstword.ca" style="display:inline-block;margin-top:24px;background:#2A7F7F;color:white;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:700;">Return to TheFirstWord</a>
+      </body></html>`);
+    } else {
+      await supabaseUpdate('subscribers', id, { active: false });
+      res.send(`<!DOCTYPE html><html><body style="font-family:Georgia,serif;max-width:500px;margin:80px auto;text-align:center;padding:20px;">
+        <div style="font-size:48px;margin-bottom:16px;">🙏</div>
+        <h2 style="color:#1a1a1a;margin-bottom:12px;">Thank you for letting us know.</h2>
+        <p style="color:#6b6460;line-height:1.7;">We hope things are moving in the right direction. You can always come back to TheFirstWord if you need support again.</p>
+        <a href="https://thefirstword.ca" style="display:inline-block;margin-top:24px;background:#2A7F7F;color:white;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:700;">Return to TheFirstWord</a>
+      </body></html>`);
+    }
+  } catch(err) {
+    console.error(err);
+    res.status(500).send('Something went wrong. Please try again.');
+  }
+});
+
+app.get("/api/unsubscribe", async (req, res) => {
+  const { id } = req.query;
+  if (!id) return res.status(400).send('Missing id');
+  if (!SUPABASE_KEY) return res.status(500).send('Database not configured');
+  try {
+    await supabaseUpdate('subscribers', id, { active: false });
+    res.send(`<!DOCTYPE html><html><body style="font-family:Georgia,serif;max-width:500px;margin:80px auto;text-align:center;padding:20px;">
+      <h2 style="color:#1a1a1a;margin-bottom:12px;">You've been unsubscribed.</h2>
+      <p style="color:#6b6460;line-height:1.7;">You won't receive any more emails from TheFirstWord. We wish you and your family well.</p>
+      <a href="https://thefirstword.ca" style="display:inline-block;margin-top:24px;background:#2A7F7F;color:white;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:700;">Return to TheFirstWord</a>
+    </body></html>`);
+  } catch(err) {
+    res.status(500).send('Something went wrong.');
+  }
+});
+
+// ─── API: RETURNING CLIENT LOOKUP ────────────────────────────────────────────
+
+app.get("/api/returning-client", async (req, res) => {
+  const { email } = req.query;
+  if (!email) return res.status(400).json({ error: "Missing email" });
+  if (!SUPABASE_KEY) return res.status(500).json({ error: "Database not configured" });
+
+  try {
+    const rows = await supabaseQuery('subscribers', `email=eq.${encodeURIComponent(email)}&select=*&limit=1`);
+    if (rows && rows.length > 0) {
+      const sub = rows[0];
+      res.json({
+        found: true,
+        name: sub.name,
+        lang: sub.lang,
+        plan: sub.plan,
+        signedUpAt: sub.signed_up_at
+      });
+    } else {
+      res.json({ found: false });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Lookup failed" });
   }
 });
 
