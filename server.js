@@ -105,7 +105,7 @@ function mdPreview(text, maxChars = 220) {
 function buildKitEmail(outputs, recipientName, lang, subscriberEmail) {
   const isEn = lang !== 'fr';
   const name = recipientName ? recipientName.charAt(0).toUpperCase() + recipientName.slice(1) : '';
-  const kitUrl = `https://thefirstword.ca/app.html?returning=true&email=${encodeURIComponent(subscriberEmail || '')}&lang=${lang}`;
+  const kitUrl = `https://thefirstword.ca/app.html?returning=true&view=kit&email=${encodeURIComponent(subscriberEmail || '')}&lang=${lang}`;
 
   function previewSection(label, emoji, color, rawText, tabId) {
     if (!rawText || !rawText.trim()) return '';
