@@ -336,19 +336,51 @@ app.post("/api/send-email", async (req, res) => {
       console.error("Resend error:", emailResult);
       return res.status(500).json({ error: "Failed to send email." });
     }
-    if (SUPABASE_KEY && plan === 'monthly') {
+
+    // Save to Supabase for ALL plans — store outputs so "Open My Full Kit" shows exact same content
+    if (SUPABASE_KEY) {
       try {
         const a = answers || {};
-        await supabaseInsert('subscribers', {
-          email, name: name || '', lang: lang || 'en', plan,
+
+        // Check if subscriber already exists
+        const existing = await supabaseQuery('subscribers', `email=eq.${encodeURIComponent(email)}&select=id&limit=1`);
+
+        const record = {
+          email, name: name || '', lang: lang || 'en', plan: plan || 'complete',
           signed_up_at: new Date().toISOString(),
-          week1_sent: false, week2_sent: false, week3_sent: false, week4_sent: false, active: true,
+          week1_sent: false, week2_sent: false, week3_sent: false, week4_sent: false,
+          active: plan === 'monthly',
           relationship: a.relationship || '', substance: a.substance || '', duration: a.duration || '',
           treatment: a.treatment || '', attitude: a.attitude || '', tone: a.tone || '',
-          situation: a.situation || '', patient_name: a.patientName || ''
-        });
+          situation: a.situation || '', patient_name: a.patientName || '',
+          // Store the actual generated outputs so "Open My Full Kit" shows exact same content
+          kit_outputs: {
+            letter:  outputs.letter  || '',
+            guide:   outputs.guide   || '',
+            sms:     outputs.sms     || '',
+            script:  outputs.script  || '',
+            planB:   outputs.planB   || '',
+          }
+        };
+
+        if (existing && existing.length > 0) {
+          // Update existing record with new kit outputs
+          await supabaseUpdate('subscribers', existing[0].id, {
+            lang: record.lang, plan: record.plan,
+            kit_outputs: record.kit_outputs,
+            relationship: record.relationship, substance: record.substance,
+            duration: record.duration, treatment: record.treatment,
+            attitude: record.attitude, tone: record.tone,
+            situation: record.situation, patient_name: record.patient_name,
+            active: plan === 'monthly' ? true : (existing[0].active || false),
+          });
+        } else {
+          await supabaseInsert('subscribers', record);
+        }
+        console.log(`Subscriber saved/updated: ${email}`);
       } catch (dbErr) { console.error("Supabase save error:", dbErr); }
     }
+
     res.json({ success: true, id: emailResult.id });
   } catch (err) {
     console.error(err);
@@ -541,6 +573,8 @@ app.get("/api/returning-client", async (req, res) => {
       const sub = rows[0];
       res.json({
         found: true, name: sub.name, lang: sub.lang, plan: sub.plan, signedUpAt: sub.signed_up_at,
+        // Return stored outputs so app can display exact same kit without regenerating
+        kitOutputs: sub.kit_outputs || null,
         answers: {
           relationship: sub.relationship || '', substance: sub.substance || '',
           duration: sub.duration || '', treatment: sub.treatment || '',
