@@ -75,14 +75,14 @@
 
     /* NAV LOGO SIZE */
     #nav-logo-img {
-      height: 52px;
+      height: 68px;
       width: auto;
     }
     @media (max-width: 600px) {
       nav { padding: 8px 20px; }
       .nav-links { gap: 16px; }
       .nav-links a:not(.nav-cta) { display: none; }
-      #nav-logo-img { height: 44px; }
+      #nav-logo-img { height: 52px; }
     }
 
     /* HERO */
@@ -269,7 +269,7 @@
       font-family: 'Playfair Display', serif;
       font-size: 64px;
       font-weight: 700;
-      color: rgba(42,127,127,0.2);
+      color: rgba(42,127,127,0.55);
       line-height: 1;
       margin-bottom: 16px;
     }
@@ -305,8 +305,8 @@
     .output-card p { font-size: 14px; color: var(--text-light); line-height: 1.6; font-weight: 300; }
     .output-card-planb {
       grid-column: span 2;
-      background: var(--teal-light);
-      border-color: rgba(42,127,127,0.2);
+      background: white;
+      border-color: var(--divider);
     }
     @media (max-width: 480px) { .output-card-planb { grid-column: span 1; } }
 
@@ -499,11 +499,11 @@
       gap: 16px;
     }
     #footer-logo-img {
-      height: 44px;
+      height: 60px;
       width: auto;
       background: white;
       border-radius: 8px;
-      padding: 6px 14px;
+      padding: 8px 16px;
     }
     .footer-links { display: flex; gap: 24px; }
     .footer-links a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
@@ -739,7 +739,7 @@
         <p class="en-text">If the first attempt didn't work — describe what happened and get a completely new strategy. Different angle, different messenger, new approach. Because giving up is not an option.</p>
         <p class="fr-text" style="display:none;">Si la première tentative n'a pas fonctionné — décrivez ce qui s'est passé et obtenez une stratégie entièrement nouvelle. Angle différent, messager différent, nouvelle approche.</p>
       </div>
-      <div class="output-card fade-in" style="background:var(--teal-light);border-color:rgba(42,127,127,0.2);">
+      <div class="output-card fade-in">
         <span class="output-emoji">📧</span>
         <h3 class="en-text">4-Week Support Emails</h3>
         <h3 class="fr-text" style="display:none;">4 semaines de courriels de soutien</h3>
@@ -762,13 +762,13 @@
     <p style="font-size:17px;color:rgba(255,255,255,0.6);margin-bottom:48px;font-weight:300;" class="en-text">One-time plans or monthly support. 100% money-back guarantee.</p>
     <p style="display:none;font-size:17px;color:rgba(255,255,255,0.6);margin-bottom:48px;font-weight:300;" class="fr-text">Plans uniques ou soutien mensuel. Garantie de remboursement 100%.</p>
     <div class="pricing-tiers-grid">
-      <div style="background:white;border-radius:16px;padding:32px 24px;">
+      <div style="background:white;border-radius:16px;padding:32px 24px;display:flex;flex-direction:column;">
         <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;" class="en-text">Starter</p>
         <p style="display:none;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;" class="fr-text">Débutant</p>
         <div style="font-family:'Playfair Display',serif;font-size:48px;font-weight:700;color:var(--text);line-height:1;margin-bottom:4px;"><sup style="font-size:20px;vertical-align:top;margin-top:10px;">$</sup>9</div>
         <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;" class="en-text">one-time payment</p>
         <p style="display:none;font-size:13px;color:var(--text-light);margin-bottom:20px;" class="fr-text">paiement unique</p>
-        <ul style="list-style:none;margin-bottom:24px;">
+        <ul style="list-style:none;margin-bottom:24px;flex:1;">
           <li style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--divider);display:flex;gap:8px;color:var(--text);"><span style="color:var(--teal);font-weight:700;">✓</span><span class="en-text">Intervention Letter (PDF)</span><span class="fr-text" style="display:none;">Lettre d'intervention (PDF)</span></li>
           <li style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--divider);display:flex;gap:8px;color:var(--text);"><span style="color:var(--teal);font-weight:700;">✓</span><span class="en-text">Conversation Guide (PDF)</span><span class="fr-text" style="display:none;">Guide de conversation (PDF)</span></li>
           <li style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--divider);display:flex;gap:8px;color:#ccc;"><span style="color:#ddd;">—</span><span class="en-text">SMS Message</span><span class="fr-text" style="display:none;">Message SMS</span></li>
@@ -778,7 +778,7 @@
         <a href="app.html" style="display:block;background:var(--bg-dark);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="en-text">Start for $9</a>
         <a href="app.html" style="display:none;background:var(--bg-dark);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="fr-text">Commencer pour 9$</a>
       </div>
-      <div style="background:white;border-radius:16px;padding:32px 24px;border:3px solid var(--teal);position:relative;transform:scale(1.03);box-shadow:0 8px 32px rgba(42,127,127,0.2);">
+      <div style="background:white;border-radius:16px;padding:32px 24px;border:3px solid var(--teal);position:relative;transform:scale(1.03);box-shadow:0 8px 32px rgba(42,127,127,0.2);display:flex;flex-direction:column;">
         <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--teal);color:white;font-size:11px;font-weight:600;padding:5px 16px;border-radius:20px;white-space:nowrap;" class="en-text">⭐ Most Popular</div>
         <div style="display:none;position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--teal);color:white;font-size:11px;font-weight:600;padding:5px 16px;border-radius:20px;white-space:nowrap;" class="fr-text">⭐ Le plus populaire</div>
         <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;" class="en-text">Essential</p>
@@ -786,7 +786,7 @@
         <div style="font-family:'Playfair Display',serif;font-size:48px;font-weight:700;color:var(--text);line-height:1;margin-bottom:4px;"><sup style="font-size:20px;vertical-align:top;margin-top:10px;">$</sup>19</div>
         <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;" class="en-text">one-time payment</p>
         <p style="display:none;font-size:13px;color:var(--text-light);margin-bottom:20px;" class="fr-text">paiement unique</p>
-        <ul style="list-style:none;margin-bottom:24px;">
+        <ul style="list-style:none;margin-bottom:24px;flex:1;">
           <li style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--divider);display:flex;gap:8px;color:var(--text);"><span style="color:var(--teal);font-weight:700;">✓</span><span class="en-text">Intervention Letter (PDF)</span><span class="fr-text" style="display:none;">Lettre d'intervention (PDF)</span></li>
           <li style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--divider);display:flex;gap:8px;color:var(--text);"><span style="color:var(--teal);font-weight:700;">✓</span><span class="en-text">Conversation Guide (PDF)</span><span class="fr-text" style="display:none;">Guide de conversation (PDF)</span></li>
           <li style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--divider);display:flex;gap:8px;color:var(--text);"><span style="color:var(--teal);font-weight:700;">✓</span><span class="en-text">SMS Message</span><span class="fr-text" style="display:none;">Message SMS</span></li>
@@ -796,13 +796,13 @@
         <a href="app.html" style="display:block;background:var(--cta);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="en-text">Start for $19</a>
         <a href="app.html" style="display:none;background:var(--cta);color:white;padding:14px;border-radius:8px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;" class="fr-text">Commencer pour 19$</a>
       </div>
-      <div style="background:white;border-radius:16px;padding:32px 24px;">
+      <div style="background:white;border-radius:16px;padding:32px 24px;display:flex;flex-direction:column;">
         <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;" class="en-text">Complete</p>
         <p style="display:none;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;" class="fr-text">Complet</p>
         <div style="font-family:'Playfair Display',serif;font-size:48px;font-weight:700;color:var(--text);line-height:1;margin-bottom:4px;"><sup style="font-size:20px;vertical-align:top;margin-top:10px;">$</sup>29</div>
         <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;" class="en-text">one-time payment</p>
         <p style="display:none;font-size:13px;color:var(--text-light);margin-bottom:20px;" class="fr-text">paiement unique</p>
-        <ul style="list-style:none;margin-bottom:24px;">
+        <ul style="list-style:none;margin-bottom:24px;flex:1;">
           <li style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--divider);display:flex;gap:8px;color:var(--text);"><span style="color:var(--teal);font-weight:700;">✓</span><span class="en-text">Intervention Letter (PDF)</span><span class="fr-text" style="display:none;">Lettre d'intervention (PDF)</span></li>
           <li style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--divider);display:flex;gap:8px;color:var(--text);"><span style="color:var(--teal);font-weight:700;">✓</span><span class="en-text">Conversation Guide (PDF)</span><span class="fr-text" style="display:none;">Guide de conversation (PDF)</span></li>
           <li style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--divider);display:flex;gap:8px;color:var(--text);"><span style="color:var(--teal);font-weight:700;">✓</span><span class="en-text">SMS Message</span><span class="fr-text" style="display:none;">Message SMS</span></li>
