@@ -30,7 +30,7 @@
       background: rgba(247,244,239,0.95);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--divider);
-      padding: 16px 40px;
+      padding: 10px 40px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1135,11 +1135,11 @@ Return ONLY the Plan B guide.`;
           name: answers.senderName || '',
           lang,
           outputs: {
-            letter: generatedOutputs.Letter || '',
-            guide: generatedOutputs.Guide || '',
-            sms: generatedOutputs.SMS || '',
-            script: generatedOutputs.Script || '',
-            planB: generatedOutputs.PlanB || ''
+            letter: outputs.Letter || '',
+            guide: outputs.Guide || '',
+            sms: outputs.SMS || '',
+            script: outputs.Script || '',
+            planB: outputs.PlanB || ''
           }
         })
       });
