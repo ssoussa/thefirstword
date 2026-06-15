@@ -519,51 +519,46 @@ app.post("/api/send-weekly-batch", async (req, res) => {
       if (allSent && sub.plan === 'monthly' && daysSince >= 35 && daysSince <= 41) {
         try {
           const isEn = sub.lang !== 'fr';
-          const name = sub.name ? sub.name.charAt(0).toUpperCase() + sub.name.slice(1) : (isEn ? 'there' : '');
-          const continueUrl = \`https://thefirstword.ca/api/checkin-continue?id=\${sub.id}&choice=yes\`;
-          const stopUrl = \`https://thefirstword.ca/api/checkin-continue?id=\${sub.id}&choice=no\`;
-          const unsubUrl = \`https://thefirstword.ca/api/unsubscribe?id=\${sub.id}\`;
+          const subName = sub.name ? sub.name.charAt(0).toUpperCase() + sub.name.slice(1) : (isEn ? 'there' : '');
+          const continueUrl = 'https://thefirstword.ca/api/checkin-continue?id=' + sub.id + '&choice=yes';
+          const stopUrl = 'https://thefirstword.ca/api/checkin-continue?id=' + sub.id + '&choice=no';
+          const unsubUrl = 'https://thefirstword.ca/api/unsubscribe?id=' + sub.id;
 
           const subject = isEn ? 'Do you still need us?' : 'Avez-vous encore besoin de nous?';
-          const html = emailWrapper(\`
-            <p style="font-size:16px;color:#1a1a1a;margin:0 0 8px;">\${isEn ? \`Hi \${name},\` : \`Bonjour \${name},\`}</p>
-            <p style="font-size:15px;color:#3a3330;line-height:1.7;margin:0 0 24px;">
-              \${isEn
-                ? "It's been 4 weeks since you started this journey. We want to check in one more time — are you still in the thick of it, or has the situation changed?"
-                : "Cela fait 4 semaines que vous avez commencé ce parcours. Nous voulons vous contacter une dernière fois — êtes-vous toujours dans la situation, ou les choses ont-elles changé?"
-              }
-            </p>
-            <div style="background:#f5f0eb;border-radius:12px;padding:24px;margin-bottom:24px;text-align:center;">
-              <p style="margin:0 0 20px;font-size:16px;font-weight:700;color:#1a1a1a;">
-                \${isEn ? 'Do you still need weekly support?' : 'Avez-vous encore besoin de soutien hebdomadaire?'}
-              </p>
-              <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-                <a href="\${continueUrl}" style="display:inline-block;background:#2A7F7F;color:white;text-decoration:none;padding:14px 32px;border-radius:8px;font-size:15px;font-weight:700;">
-                  \${isEn ? '✅ Yes, keep them coming' : '✅ Oui, continuez'}
-                </a>
-                <a href="\${stopUrl}" style="display:inline-block;background:#f5f0eb;color:#3a3330;text-decoration:none;padding:14px 32px;border-radius:8px;font-size:15px;font-weight:700;border:1px solid #e8e0d8;">
-                  \${isEn ? "🙏 No, I'm okay now" : '🙏 Non, ça va maintenant'}
-                </a>
-              </div>
-            </div>
-            <p style="font-size:13px;color:#9b9390;text-align:center;">
-              \${isEn
-                ? \`If you said Yes, your weekly check-ins will continue every Monday. No action needed if you want to stop — just click No.\`
-                : \`Si vous avez dit Oui, vos suivis hebdomadaires continueront chaque lundi. Aucune action nécessaire si vous souhaitez arrêter — cliquez simplement sur Non.\`
-              }
-            </p>
-            <p style="font-size:11px;color:#c0b8b0;text-align:center;margin-top:16px;">
-              <a href="\${unsubUrl}" style="color:#c0b8b0;">\${isEn ? 'Unsubscribe from all emails' : 'Se désabonner de tous les courriels'}</a>
-            </p>
-          \`, sub.lang);
 
+          const greeting = isEn ? ('Hi ' + subName + ',') : ('Bonjour ' + subName + ',');
+          const intro = isEn
+            ? "It's been 4 weeks since you started this journey. We want to check in one more time — are you still in the thick of it, or has things changed?"
+            : "Cela fait 4 semaines que vous avez commencé ce parcours. Nous voulons prendre de vos nouvelles une dernière fois — êtes-vous toujours dans la situation?";
+          const question = isEn ? 'Do you still need weekly support?' : 'Avez-vous encore besoin de soutien hebdomadaire?';
+          const yesLabel = isEn ? '✅ Yes, keep them coming' : '✅ Oui, continuez';
+          const noLabel = isEn ? "🙏 No, I'm okay now" : '🙏 Non, ça va maintenant';
+          const noteText = isEn
+            ? 'If you click Yes, your weekly check-ins will continue every Monday.'
+            : 'Si vous cliquez Oui, vos suivis hebdomadaires continueront chaque lundi.';
+          const unsubLabel = isEn ? 'Unsubscribe from all emails' : 'Se désabonner de tous les courriels';
+
+          const bodyHtml = '<p style="font-size:16px;color:#1a1a1a;margin:0 0 8px;">' + greeting + '</p>'
+            + '<p style="font-size:15px;color:#3a3330;line-height:1.7;margin:0 0 24px;">' + intro + '</p>'
+            + '<table style="width:100%;background:#f5f0eb;border-radius:12px;margin-bottom:24px;" cellpadding="24" cellspacing="0">'
+            + '<tr><td style="text-align:center;">'
+            + '<p style="margin:0 0 20px;font-size:16px;font-weight:700;color:#1a1a1a;">' + question + '</p>'
+            + '<table cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr>'
+            + '<td style="padding-right:12px;"><a href="' + continueUrl + '" style="display:inline-block;background:#2A7F7F;color:white;text-decoration:none;padding:14px 28px;border-radius:8px;font-size:14px;font-weight:700;">' + yesLabel + '</a></td>'
+            + '<td><a href="' + stopUrl + '" style="display:inline-block;background:white;color:#3a3330;text-decoration:none;padding:14px 28px;border-radius:8px;font-size:14px;font-weight:700;border:1px solid #e8e0d8;">' + noLabel + '</a></td>'
+            + '</tr></table>'
+            + '</td></tr></table>'
+            + '<p style="font-size:13px;color:#9b9390;text-align:center;">' + noteText + '</p>'
+            + '<p style="font-size:11px;color:#c0b8b0;text-align:center;margin-top:16px;"><a href="' + unsubUrl + '" style="color:#c0b8b0;">' + unsubLabel + '</a></p>';
+
+          const html = emailWrapper(bodyHtml, sub.lang);
           const result = await sendEmail(sub.email, subject, html);
           if (result.id) {
             results.sent++;
-            console.log(\`Continuation email sent to \${sub.email}\`);
+            console.log('Continuation email sent to ' + sub.email);
           }
         } catch(e) {
-          console.error(\`Continuation email failed for \${sub.email}:\`, e);
+          console.error('Continuation email failed for ' + sub.email + ':', e);
           results.failed++;
         }
         continue;
