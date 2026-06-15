@@ -40,8 +40,8 @@ function emailWrapper(content, lang = 'en') {
           <tr>
             <td style="background:white;padding:20px 32px;border-radius:12px 12px 0 0;border-bottom:3px solid #E8650A;text-align:center;">
               <img src="${lang === 'fr'
-                ? 'https://raw.githubusercontent.com/ssoussa/ehn-family-coach/main/logo-fr.png'
-                : 'https://raw.githubusercontent.com/ssoussa/ehn-family-coach/main/logo-en.png'
+                ? 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png'
+                : 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png'
               }" alt="TheFirstWord" style="height:64px;width:auto;display:inline-block;" />
             </td>
           </tr>
