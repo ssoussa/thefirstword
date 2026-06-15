@@ -899,6 +899,8 @@ Return ONLY the Plan B strategy.`;
 
           const name       = data.name ? data.name.charAt(0).toUpperCase() + data.name.slice(1) : '';
           const patientCap = answers.patientName ? answers.patientName.charAt(0).toUpperCase() + answers.patientName.slice(1) : '';
+          const senderName  = answers.senderName  || (lang === 'en' ? 'the family' : 'la famille');
+          const patientName = answers.patientName || (lang === 'en' ? 'your loved one' : 'votre proche');
 
           // ── VIEW=KIT: came from "Open My Full Kit" email button ──────────────
           if (isViewKit) {
