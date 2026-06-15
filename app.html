@@ -472,7 +472,7 @@
     ['nav-logo-img','output-header-logo','letter-logo'].forEach(id => {
       const el = document.getElementById(id); if (el) el.src = l === 'fr' ? logoFr : logoEn;
     });
-    if (document.getElementById('questionCard')) renderQuestion();
+    if (document.getElementById('questionCard') && document.getElementById('questionnaireView') && !document.getElementById('questionnaireView').classList.contains('hidden')) renderQuestion();
   }
 
   // ─── QUESTIONNAIRE ────────────────────────────────────────────────────────
@@ -621,6 +621,9 @@ Language: ${outputLang}`;
 
   function showOutputs(senderName, patientName) {
     document.getElementById('loadingView').classList.add('hidden');
+    document.getElementById('questionnaireView').classList.add('hidden');
+    document.getElementById('pricingView').classList.add('hidden');
+    document.getElementById('returningPlanBView').classList.add('hidden');
     document.getElementById('outputView').classList.remove('hidden');
     const date = new Date().toLocaleDateString(lang === 'fr' ? 'fr-CA' : 'en-CA', {year:'numeric',month:'long',day:'numeric'});
     document.getElementById('outputDate').textContent = date;
