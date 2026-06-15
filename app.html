@@ -1034,6 +1034,7 @@ Return ONLY the Plan B guide.`;
       const res = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt }) });
       const data = await res.json();
       if (data.letter) {
+        outputs.planB = data.letter;
         document.getElementById('planbBody').textContent = data.letter;
         document.getElementById('planbOutput').classList.remove('hidden');
         buildActionRow('PlanB', true);
@@ -1132,14 +1133,14 @@ Return ONLY the Plan B guide.`;
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
-          name: answers.senderName || '',
+          name: (answers.senderName || '').charAt(0).toUpperCase() + (answers.senderName || '').slice(1),
           lang,
           outputs: {
-            letter: outputs.Letter || '',
-            guide: outputs.Guide || '',
-            sms: outputs.SMS || '',
-            script: outputs.Script || '',
-            planB: outputs.PlanB || ''
+            letter: outputs.letter || '',
+            guide: outputs.guide || '',
+            sms: outputs.sms || '',
+            script: outputs.script || '',
+            planB: outputs.planB || ''
           }
         })
       });
