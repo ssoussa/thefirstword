@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TheFirstWord — Start the conversation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F7F4EF;
+      --bg-dark: #1C2B3A;
+      --text: #1C2B3A;
+      --text-light: #5a6a7a;
+      --teal: #2A7F7F;
+      --teal-light: #e8f4f4;
+      --cta: #C4622D;
+      --cta-hover: #a8511f;
+      --divider: #E8E2D9;
+      --white: #FFFFFF;
+      --success: #2A7F7F;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); font-family: 'Inter', sans-serif; color: var(--text); line-height: 1.6; min-height: 100vh; }
+
+    /* NAV */
+    nav {
+      background: rgba(247,244,239,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--divider);
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text); text-decoration: none; }
+    .nav-logo span { color: var(--teal); }
+    .lang-toggle { display: flex; gap: 4px; background: rgba(28,43,58,0.08); border-radius: 6px; padding: 4px; }
+    .lang-btn { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 4px; border: none; cursor: pointer; background: transparent; color: var(--text-light); font-family: inherit; transition: all 0.15s; }
+    .lang-btn.active { background: white; color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+    /* MAIN LAYOUT */
+    .app-container { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    /* PROGRESS */
+    .progress-header { margin-bottom: 40px; }
+    .progress-label { font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; }
+    .progress-bar-track { height: 3px; background: var(--divider); border-radius: 2px; }
+    .progress-bar-fill { height: 100%; background: var(--teal); border-radius: 2px; transition: width 0.4s ease; }
+    .progress-steps { display: flex; justify-content: space-between; margin-top: 8px; }
+    .progress-step-label { font-size: 11px; color: var(--text-light); }
+
+    /* QUESTION CARD */
+    .question-card { background: white; border-radius: 16px; padding: 48px; border: 1px solid var(--divider); box-shadow: 0 2px 20px rgba(28,43,58,0.06); }
+    .question-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; }
+    .question-title { font-family: 'Playfair Display', serif; font-size: clamp(22px, 4vw, 32px); font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
+    .question-subtitle { font-size: 15px; color: var(--text-light); margin-bottom: 36px; font-weight: 300; }
+
+    /* OPTIONS GRID */
+    .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .options-grid.col-3 { grid-template-columns: repeat(3, 1fr); }
+    .options-grid.col-1 { grid-template-columns: 1fr; }
+    @media (max-width: 500px) { .options-grid, .options-grid.col-3 { grid-template-columns: 1fr 1fr; } }
+
+    .option-btn {
+      padding: 16px 12px;
+      border: 2px solid var(--divider);
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+      font-family: inherit;
+    }
+    .option-btn:hover { border-color: var(--teal); background: var(--teal-light); }
+    .option-btn.selected { border-color: var(--teal); background: var(--teal-light); }
+    .option-btn .opt-emoji { font-size: 28px; display: block; margin-bottom: 8px; }
+    .option-btn .opt-label { font-size: 14px; font-weight: 600; color: var(--text); display: block; }
+    .option-btn .opt-sub { font-size: 12px; color: var(--text-light); display: block; margin-top: 3px; }
+
+    /* TEXT INPUT */
+    .text-input {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid var(--divider);
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: inherit;
+      color: var(--text);
+      background: white;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .text-input:focus { border-color: var(--teal); }
+    .text-input::placeholder { color: rgba(28,43,58,0.3); }
+
+    /* NAVIGATION BUTTONS */
+    .nav-buttons { display: flex; gap: 12px; margin-top: 36px; }
+    .btn-back-q { flex: 0; background: transparent; border: 1.5px solid var(--divider); border-radius: 10px; padding: 14px 24px; font-size: 15px; font-weight: 500; color: var(--text-light); cursor: pointer; font-family: inherit; transition: all 0.2s; white-space: nowrap; }
+    .btn-back-q:hover { border-color: var(--text); color: var(--text); }
+    .btn-next { flex: 1; background: var(--teal); border: none; border-radius: 10px; padding: 16px; font-size: 16px; font-weight: 600; color: white; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    .btn-next:hover { background: #1d5f5f; transform: translateY(-1px); }
+    .btn-next:disabled { background: var(--divider); color: var(--text-light); cursor: not-allowed; transform: none; }
+
+    /* PRICING SECTION */
+    .pricing-section { text-align: center; margin-bottom: 40px; }
+    .pricing-title { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 40px); font-weight: 700; margin-bottom: 12px; }
+    .pricing-subtitle { font-size: 16px; color: var(--text-light); margin-bottom: 40px; font-weight: 300; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    @media (max-width: 800px) { .pricing-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .pricing-grid { grid-template-columns: 1fr; } }
+
+    .price-card {
+      background: white;
+      border: 2px solid var(--divider);
+      border-radius: 16px;
+      padding: 32px 24px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      text-align: left;
+    }
+    .price-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+    .price-card.selected { border-color: var(--teal); box-shadow: 0 0 0 4px rgba(42,127,127,0.1); }
+    .price-card.popular { border-color: var(--divider); }
+    .price-card.popular.selected { border-color: var(--teal); box-shadow: 0 0 0 4px rgba(42,127,127,0.1); }
+    .popular-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--teal);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .price-tier { font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+    .price-amount { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 700; color: var(--text); line-height: 1; margin-bottom: 4px; }
+    .price-amount sup { font-size: 20px; vertical-align: top; margin-top: 10px; }
+    .price-note { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
+    .price-features { list-style: none; }
+    .price-features li { font-size: 13px; color: var(--text-light); padding: 6px 0; display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid var(--divider); }
+    .price-features li:last-child { border-bottom: none; }
+    .price-features li.included { color: var(--text); }
+    .price-check { color: var(--teal); flex-shrink: 0; font-weight: 700; }
+    .price-x { color: var(--divider); flex-shrink: 0; }
+
+    .price-card.monthly { background: var(--bg-dark); border-color: var(--bg-dark); color: white; }
+    .price-card.monthly .price-tier { color: #2A7F7F; }
+    .price-card.monthly .price-amount { color: white; }
+    .price-card.monthly .price-note { color: rgba(255,255,255,0.5); }
+    .price-card.monthly .price-features li { border-bottom-color: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); }
+    .price-card.monthly .price-features li.included { color: rgba(255,255,255,0.9); }
+    .price-card.monthly .price-check { color: #2A7F7F; }
+    .price-card.monthly .price-x { color: rgba(255,255,255,0.2); }
+    .price-card.monthly:hover { border-color: #2A7F7F; transform: translateY(-2px); }
+    .price-card.monthly.selected { border-color: #2A7F7F; box-shadow: 0 0 0 4px rgba(42,127,127,0.25); }
+    .price-monthly-badge { background: #2A7F7F; color: white; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 10px; }
+
+    /* GENERATE BUTTON */
+    .btn-generate-main {
+      width: 100%;
+      background: var(--cta);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 20px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+      margin-top: 16px;
+    }
+    .btn-generate-main:hover { background: var(--cta-hover); transform: translateY(-1px); }
+    .btn-generate-main:disabled { background: var(--divider); color: var(--text-light); cursor: not-allowed; transform: none; }
+
+    /* LOADING */
+    .loading-card { background: white; border-radius: 16px; padding: 64px 48px; text-align: center; border: 1px solid var(--divider); }
+    .loading-spinner { width: 48px; height: 48px; border: 3px solid var(--divider); border-top-color: var(--teal); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 24px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .loading-sub { font-size: 15px; color: var(--text-light); font-weight: 300; }
+
+    /* OUTPUT SECTION */
+    .output-header { margin-bottom: 32px; }
+    .output-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .output-meta { font-size: 14px; color: var(--text-light); }
+    .output-tabs { display: flex; gap: 0; margin-bottom: 24px; border-radius: 12px; overflow: hidden; border: 1px solid var(--divider); flex-wrap: wrap; }
+    .output-tab { flex: 1; min-width: 80px; padding: 12px 8px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; background: rgba(248,245,240,0.5); color: var(--text-light); border: none; font-family: inherit; transition: all 0.15s; }
+    .output-tab.active { background: white; color: var(--teal); box-shadow: inset 0 -2px 0 var(--teal); }
+    .output-tab.locked { cursor: not-allowed; opacity: 0.5; }
+
+    .output-content { background: white; border-radius: 16px; padding: 48px; border: 1px solid var(--divider); margin-bottom: 16px; }
+    .output-letterhead { border-bottom: 2px solid var(--bg-dark); padding-bottom: 16px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .output-brand-label { font-size: 10px; letter-spacing: 2px; color: var(--teal); text-transform: uppercase; font-weight: 700; }
+    .output-brand-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 800; color: var(--bg-dark); margin-top: 2px; }
+    .output-date { font-size: 12px; color: #888; }
+    .output-body { font-family: Georgia, serif; font-size: 15px; line-height: 1.9; color: #1a1a1a; white-space: pre-wrap; }
+    .output-disclaimer { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--divider); font-size: 10px; color: #999; line-height: 1.5; }
+
+    /* SMS PREVIEW */
+    .sms-phone { background: #1a1a2e; border-radius: 32px; padding: 20px; max-width: 360px; margin: 0 auto 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.3); border: 6px solid #2a2a3e; }
+    .sms-topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .sms-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), #1d5f5f); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: white; }
+    .sms-name { font-size: 13px; font-weight: 600; color: #F8F5F0; }
+    .sms-status { font-size: 11px; color: rgba(248,245,240,0.4); }
+    .sms-bubble { background: var(--teal); border-radius: 18px 18px 4px 18px; padding: 14px 16px; font-size: 13px; line-height: 1.6; color: white; white-space: pre-wrap; word-break: break-word; }
+    .sms-time { font-size: 10px; color: rgba(248,245,240,0.3); text-align: right; margin-top: 6px; }
+
+    /* SCRIPT */
+    .script-body { font-family: 'Courier New', monospace; font-size: 14px; line-height: 2; color: #1a1a1a; white-space: pre-wrap; }
+
+    /* LOCKED OVERLAY */
+    .locked-overlay { text-align: center; padding: 48px 24px; }
+    .lock-icon { font-size: 48px; margin-bottom: 16px; }
+    .lock-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .lock-sub { font-size: 15px; color: var(--text-light); margin-bottom: 32px; font-weight: 300; }
+    .btn-unlock { background: var(--cta); color: white; border: none; border-radius: 10px; padding: 16px 36px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    .btn-unlock:hover { background: var(--cta-hover); }
+
+    /* PLAN B */
+    .planb-input-area { background: rgba(232,165,75,0.06); border: 1px solid rgba(232,165,75,0.3); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+    .planb-label { font-size: 13px; font-weight: 600; color: #E8A54B; margin-bottom: 12px; display: block; }
+    .planb-textarea { width: 100%; padding: 14px; border: 1.5px solid var(--divider); border-radius: 10px; font-size: 14px; font-family: inherit; color: var(--text); background: white; outline: none; height: 100px; resize: vertical; }
+    .btn-planb { width: 100%; background: #E8A54B; color: white; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 12px; }
+
+    /* ACTION BUTTONS */
+    .action-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-action { flex: 1; min-width: 100px; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; border: 1.5px solid var(--divider); background: white; color: var(--text); }
+    .btn-action:hover { border-color: var(--teal); color: var(--teal); }
+    .btn-action-pdf { background: rgba(232,165,75,0.1); border-color: rgba(232,165,75,0.4); color: #C4622D; }
+    .btn-action-pdf:hover { background: rgba(232,165,75,0.2); }
+    .btn-restart { width: 100%; background: transparent; border: 1.5px solid var(--divider); border-radius: 10px; padding: 14px; font-size: 14px; color: var(--text-light); cursor: pointer; font-family: inherit; margin-top: 12px; }
+
+    /* EMAIL DELIVERY CARD */
+    .checkin-card { background: var(--teal-light); border: 1px solid rgba(42,127,127,0.2); border-radius: 12px; padding: 24px; margin-top: 24px; }
+    .checkin-title { font-size: 16px; font-weight: 600; color: var(--teal); margin-bottom: 8px; }
+    .checkin-sub { font-size: 14px; color: var(--text-light); margin-bottom: 16px; }
+    .checkin-form { display: flex; gap: 8px; flex-wrap: wrap; }
+    .checkin-input { flex: 1; min-width: 200px; padding: 12px 16px; border: 1.5px solid rgba(42,127,127,0.3); border-radius: 8px; font-size: 14px; font-family: inherit; outline: none; background: white; }
+    .checkin-input:focus { border-color: var(--teal); }
+    .btn-checkin { background: var(--teal); color: white; border: none; border-radius: 8px; padding: 12px 20px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; transition: background 0.2s; }
+    .btn-checkin:hover { background: #1d5f5f; }
+    .btn-checkin:disabled { background: var(--divider); color: var(--text-light); cursor: not-allowed; }
+
+    /* INFO BOX */
+    .info-box { background: rgba(232,165,75,0.08); border: 1px solid rgba(232,165,75,0.2); border-radius: 8px; padding: 12px 16px; font-size: 12px; color: rgba(196,98,45,0.8); margin-top: 16px; }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" style="height:64px;width:auto;display:block;" />
+  </a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</nav>
+
+<div class="app-container">
+
+  <!-- QUESTIONNAIRE VIEW -->
+  <div id="questionnaireView">
+    <div class="progress-header">
+      <p class="progress-label" id="progressLabel">Step 1 of 7</p>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressFill" style="width:14%"></div>
+      </div>
+    </div>
+    <div class="question-card" id="questionCard"></div>
+  </div>
+
+  <!-- PRICING VIEW -->
+  <div id="pricingView" class="hidden">
+    <div class="pricing-section">
+      <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px;" class="en-text">Choose your plan</p>
+      <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px;" class="fr-text hidden">Choisissez votre plan</p>
+      <h2 class="pricing-title en-text">Choose your plan.</h2>
+      <h2 class="pricing-title fr-text hidden">Choisissez votre plan.</h2>
+      <p class="pricing-subtitle en-text">One-time payment or monthly plan. No hidden fees. 100% money-back guarantee.</p>
+      <p class="pricing-subtitle fr-text hidden">Paiement unique ou plan mensuel. Pas de frais cachés. Garantie de remboursement 100%.</p>
+
+      <div class="pricing-grid">
+        <!-- STARTER -->
+        <div class="price-card" data-plan="starter" onclick="selectPlan(this)">
+          <div class="price-tier en-text">Starter</div>
+          <div class="price-tier fr-text hidden">Débutant</div>
+          <div class="price-amount"><sup>$</sup>9</div>
+          <p class="price-note en-text">one-time payment</p>
+          <p class="price-note fr-text hidden">paiement unique</p>
+          <ul class="price-features">
+            <li class="included"><span class="price-check">✓</span><span class="en-text">Intervention Letter (PDF)</span><span class="fr-text hidden">Lettre d'intervention (PDF)</span></li>
+            <li class="included"><span class="price-check">✓</span><span class="en-text">Conversation Guide (PDF)</span><span class="fr-text hidden">Guide de conversation (PDF)</span></li>
+            <li><span class="price-x">—</span><span class="en-text">SMS Message</span><span class="fr-text hidden">Message SMS</span></li>
+            <li><span class="price-x">—</span><span class="en-text">Spoken Script</span><span class="fr-text hidden">Script parlé</span></li>
+            <li><span class="price-x">—</span><span class="en-text">Plan B Strategy</span><span class="fr-text hidden">Stratégie Plan B</span></li>
+          </ul>
+        </div>
+
+        <!-- ESSENTIAL -->
+        <div class="price-card popular selected" data-plan="essential" onclick="selectPlan(this)">
+          <div class="popular-badge en-text">⭐ Most Popular</div>
+          <div class="popular-badge fr-text hidden">⭐ Le plus populaire</div>
+          <div class="price-tier en-text">Essential</div>
+          <div class="price-tier fr-text hidden">Essentiel</div>
+          <div class="price-amount"><sup>$</sup>19</div>
+          <p class="price-note en-text">one-time payment</p>
+          <p class="price-note fr-text hidden">paiement unique</p>
+          <ul class="price-features">
+            <li class="included"><span class="price-check">✓</span><span class="en-text">Intervention Letter (PDF)</span><span class="fr-text hidden">Lettre d'intervention (PDF)</span></li>
+            <li class="included"><span class="price-check">✓</span><span class="en-text">Conversation Guide (PDF)</span><span class="fr-text hidden">Guide de conversation (PDF)</span></li>
+            <li class="included"><span class="price-check">✓</span><span class="en-text">SMS Message</span><span class="fr-text hidden">Message SMS</span></li>
+            <li class="included"><span class="price-check">✓</span><span class="en-text">Spoken Script (PDF)</span><span class="fr-text hidden">Script parlé (PDF)</span></li>
+            <li><span class="price-x">—</span><span class="en-text">Plan B Strategy</span><span class="fr-text hidden">Stratégie Plan B</span></li>
+          </ul>
+        </div>
+
+        <!-- COMPLETE -->
+        <div class="price-card" data-plan="complete" onclick="selectPlan(this)">
+          <div class="price-tier en-text">Complete</div>
+          <div class="price-tier fr-text hidden">Complet</div>
+          <div class="price-amount"><sup>$</sup>29</div>
+          <p class="price-note en-text">one-time payment</p>
+          <p class="price-note fr-text hidden">paiement unique</p>
+          <ul class="price-features">
+            <li class="included"><span class="price-check">✓</span><span class="en-text">Intervention Letter (PDF)</span><span class="fr-text hidden">Lettre d'intervention (PDF)</span></li>
+            <li class="included"><span class="price-check">✓</span><span class="en-text">Conversation Guide (PDF)</span><span class="fr-text hidden">Guide de conversation (PDF)</span></li>
+            <li class="included"><span class="price-check">✓</span><span class="en-text">SMS Message</span><span class="fr-text hidden">Message SMS</span></li>
+            <li class="included"><span class="price-check">✓</span><span class="en-text">Spoken Script (PDF)</span><span class="fr-text hidden">Script parlé (PDF)</span></li>
+            <li class="included"><span class="price-check">✓</span><span class="en-text">Plan B Strategy</span><span class="fr-text hidden">Stratégie Plan B</span></li>
+          </ul>
+        </div>
+
+        <!-- MONTHLY -->
+        <div class="price-card monthly" data-plan="monthly" onclick="selectPlan(this)">
+          <div class="price-monthly-badge en-text">♾ Monthly</div>
+          <div class="price-monthly-badge fr-text hidden">♾ Mensuel</div>
+          <div class="price-tier en-text">Ongoing Support</div>
+          <div class="price-tier fr-text hidden">Soutien continu</div>
+          <div class="price-amount"><sup>$</sup>19<span style="font-size:18px;font-weight:400;opacity:0.6;">/mo</span></div>
+          <p class="price-note en-text">cancel anytime</p>
+          <p class="price-note fr-text hidden">annulez en tout temps</p>
+          <ul class="price-features">
+            <li class="included"><span class="price-check">✓</span><span class="en-text">Everything in Complete</span><span class="fr-text hidden">Tout dans Complet</span></li>
+            <li class="included"><span class="price-check">✓</span><span class="en-text">Unlimited regenerations</span><span class="fr-text hidden">Régénérations illimitées</span></li>
+            <li class="included"><span class="price-check">✓</span><span class="en-text">Weekly check-in emails</span><span class="fr-text hidden">Courriels de suivi hebdo</span></li>
+            <li class="included"><span class="price-check">✓</span><span class="en-text">New Plan B as situation evolves</span><span class="fr-text hidden">Plan B selon l'évolution</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <button class="btn-generate-main en-text" onclick="startGeneration()">Generate My Personalized Kit →</button>
+      <button class="btn-generate-main fr-text hidden" onclick="startGeneration()">Générer mon kit personnalisé →</button>
+      <div class="info-box en-text">🔒 Secure payment powered by Stripe. 100% money-back guarantee if not satisfied.</div>
+      <div class="info-box fr-text hidden">🔒 Paiement sécurisé par Stripe. Garantie de remboursement 100% si non satisfait.</div>
+    </div>
+  </div>
+
+  <!-- LOADING VIEW -->
+  <div id="loadingView" class="hidden">
+    <div class="loading-card">
+      <div class="loading-spinner"></div>
+      <h2 class="loading-title en-text">Creating your personalized kit...</h2>
+      <h2 class="loading-title fr-text hidden">Création de votre kit personnalisé...</h2>
+      <p class="loading-sub en-text">Our AI is writing your letter, guide and more based on your answers. This takes about 30–40 seconds.</p>
+      <p class="loading-sub fr-text hidden">Notre IA rédige votre lettre, guide et plus selon vos réponses. Cela prend environ 30 à 40 secondes.</p>
+    </div>
+  </div>
+
+  <!-- OUTPUT VIEW -->
+  <div id="outputView" class="hidden">
+    <div class="output-header">
+      <h2 class="output-title en-text">Your kit is ready ✅</h2>
+      <h2 class="output-title fr-text hidden">Votre kit est prêt ✅</h2>
+      <p class="output-meta" id="outputMeta"></p>
+    </div>
+
+    <div class="output-tabs" id="outputTabs"></div>
+
+    <!-- LETTER -->
+    <div id="tabLetter" class="output-content hidden">
+      <div class="output-letterhead">
+        <div>
+          <div class="output-brand-label en-text">Prepared by</div>
+          <div class="output-brand-label fr-text hidden">Préparé par</div>
+          <div class="output-brand-name">TheFirstWord</div>
+        </div>
+        <div class="output-date" id="outputDate"></div>
+      </div>
+      <div class="output-body" id="letterBody"></div>
+      <div class="output-disclaimer en-text">DISCLAIMER: TheFirstWord is a communication support tool. It is not a substitute for professional medical or psychological advice. TheFirstWord is not responsible for the outcome of any conversation or intervention based on this content.</div>
+      <div class="output-disclaimer fr-text hidden">AVIS: TheFirstWord est un outil de soutien à la communication. Il ne remplace pas un avis médical ou psychologique professionnel. TheFirstWord n'est pas responsable des résultats de toute conversation ou intervention basée sur ce contenu.</div>
+    </div>
+
+    <!-- GUIDE -->
+    <div id="tabGuide" class="output-content hidden">
+      <div class="output-letterhead">
+        <div>
+          <div class="output-brand-label en-text">Conversation Guide — TheFirstWord</div>
+          <div class="output-brand-label fr-text hidden">Guide de conversation — TheFirstWord</div>
+          <div class="output-brand-name" id="guideTitle"></div>
+        </div>
+        <div class="output-date" id="outputDate2"></div>
+      </div>
+      <div class="output-body" id="guideBody"></div>
+      <div class="output-disclaimer en-text">DISCLAIMER: TheFirstWord is a communication support tool. Not a substitute for professional advice. TheFirstWord is not responsible for the outcome of any conversation based on this content.</div>
+      <div class="output-disclaimer fr-text hidden">AVIS: TheFirstWord est un outil de soutien à la communication. Ne remplace pas un avis professionnel. TheFirstWord n'est pas responsable des résultats de toute conversation basée sur ce contenu.</div>
+    </div>
+
+    <!-- SMS -->
+    <div id="tabSMS" class="hidden">
+      <div class="sms-phone">
+        <div class="sms-topbar">
+          <div class="sms-avatar" id="smsAvatar">?</div>
+          <div>
+            <div class="sms-name" id="smsName"></div>
+            <div class="sms-status en-text">Text message</div>
+            <div class="sms-status fr-text hidden">Message texte</div>
+          </div>
+        </div>
+        <div class="sms-bubble" id="smsBody"></div>
+        <div class="sms-time" id="smsTime"></div>
+      </div>
+    </div>
+
+    <!-- SCRIPT -->
+    <div id="tabScript" class="output-content hidden">
+      <div class="output-letterhead">
+        <div>
+          <div class="output-brand-label en-text">Word-for-word Script — TheFirstWord</div>
+          <div class="output-brand-label fr-text hidden">Script mot-à-mot — TheFirstWord</div>
+          <div class="output-brand-name" id="scriptTitle"></div>
+        </div>
+      </div>
+      <div class="script-body" id="scriptBody"></div>
+      <div class="output-disclaimer en-text">DISCLAIMER: TheFirstWord is a communication support tool. Not a substitute for professional advice.</div>
+      <div class="output-disclaimer fr-text hidden">AVIS: TheFirstWord est un outil de soutien à la communication. Ne remplace pas un avis professionnel.</div>
+    </div>
+
+    <!-- PLAN B -->
+    <div id="tabPlanB" class="hidden">
+      <div class="planb-input-area">
+        <span class="planb-label en-text">🔄 What happened when you tried? Describe the reaction:</span>
+        <span class="planb-label fr-text hidden">🔄 Qu'est-ce qui s'est passé? Décrivez la réaction:</span>
+        <textarea class="planb-textarea en-text" id="planbInput" placeholder="Ex: He got very angry and left the room. He hasn't responded to messages since..."></textarea>
+        <textarea class="planb-textarea fr-text hidden" id="planbInputFr" placeholder="Ex: Il s'est mis en colère et a quitté la pièce. Il ne répond plus aux messages..."></textarea>
+        <button class="btn-planb en-text" onclick="generatePlanB()">Generate Plan B Strategy →</button>
+        <button class="btn-planb fr-text hidden" onclick="generatePlanB()">Générer la stratégie Plan B →</button>
+      </div>
+      <div id="planbOutput" class="output-content hidden">
+        <div class="output-body" id="planbBody"></div>
+        <div class="output-disclaimer en-text">DISCLAIMER: TheFirstWord is not responsible for the outcome of any conversation or intervention based on this content.</div>
+        <div class="output-disclaimer fr-text hidden">AVIS: TheFirstWord n'est pas responsable des résultats de toute conversation ou intervention basée sur ce contenu.</div>
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="action-row" id="actionRow" style="margin-top:16px;"></div>
+
+    <!-- EMAIL DELIVERY CARD -->
+    <div class="checkin-card" id="checkinCard">
+      <div class="checkin-title en-text">📬 Send your kit by email</div>
+      <div class="checkin-title fr-text hidden">📬 Envoyer votre kit par courriel</div>
+      <p class="checkin-sub en-text">Enter your email below and we'll send your personalized outputs directly to your inbox.</p>
+      <p class="checkin-sub fr-text hidden">Entrez votre courriel ci-dessous et nous vous enverrons vos résultats personnalisés directement dans votre boîte de réception.</p>
+      <div class="checkin-form">
+        <input type="email" class="checkin-input" id="deliveryEmail" placeholder="your@email.com" />
+        <button class="btn-checkin en-text" onclick="sendByEmail()">Send →</button>
+        <button class="btn-checkin fr-text hidden" onclick="sendByEmail()">Envoyer →</button>
+      </div>
+      <p style="font-size:11px;color:var(--text-light);margin-top:10px;" class="en-text">🔒 Your email is private and never shared.</p>
+      <p style="font-size:11px;color:var(--text-light);margin-top:10px;" class="fr-text hidden">🔒 Votre courriel est privé et jamais partagé.</p>
+    </div>
+
+    <button class="btn-restart en-text" onclick="restart()">← Start over for another person</button>
+    <button class="btn-restart fr-text hidden" onclick="restart()">← Recommencer pour une autre personne</button>
+  </div>
+
+</div>
+
+<script>
+  // ─── STATE ────────────────────────────────────────────────────────────────
+  let lang = 'en';
+  let currentQ = 0;
+  let answers = {};
+  let selectedPlan = 'essential';
+  let outputs = {};
+
+  // ─── QUESTIONS ────────────────────────────────────────────────────────────
+  const questions = [
+    {
+      id: 'relationship',
+      eyebrow: { en: 'About your loved one', fr: 'À propos de votre proche' },
+      title: { en: 'Who are you reaching out for?', fr: 'Pour qui faites-vous cette démarche?' },
+      subtitle: { en: 'This helps us write in the right voice and relationship dynamic.', fr: 'Cela nous aide à écrire avec la bonne dynamique relationnelle.' },
+      type: 'grid',
+      options: [
+        { value: 'son', emoji: '👦', en: 'My Son', fr: 'Mon fils' },
+        { value: 'daughter', emoji: '👧', en: 'My Daughter', fr: 'Ma fille' },
+        { value: 'spouse', emoji: '💑', en: 'My Spouse / Partner', fr: 'Mon conjoint(e)' },
+        { value: 'sibling', emoji: '👫', en: 'My Brother / Sister', fr: 'Mon frère / Ma sœur' },
+        { value: 'parent', emoji: '👴', en: 'My Parent', fr: 'Mon parent' },
+        { value: 'friend', emoji: '🤝', en: 'My Friend', fr: 'Mon ami(e)' },
+      ]
+    },
+    {
+      id: 'substance',
+      eyebrow: { en: 'The situation', fr: 'La situation' },
+      title: { en: 'What are they struggling with?', fr: 'Avec quoi luttent-ils?' },
+      subtitle: { en: 'We tailor the message to the specific challenges of each substance.', fr: 'Nous adaptons le message aux défis spécifiques de chaque substance.' },
+      type: 'grid',
+      options: [
+        { value: 'alcohol', emoji: '🍷', en: 'Alcohol', fr: 'Alcool' },
+        { value: 'opioids', emoji: '💊', en: 'Opioids / Pills', fr: 'Opioïdes / Pilules' },
+        { value: 'cocaine', emoji: '⚡', en: 'Cocaine', fr: 'Cocaïne' },
+        { value: 'benzos', emoji: '😴', en: 'Benzos', fr: 'Benzos' },
+        { value: 'cannabis', emoji: '🌿', en: 'Cannabis', fr: 'Cannabis' },
+        { value: 'meth', emoji: '🔥', en: 'Meth', fr: 'Méthamphétamine' },
+        { value: 'multiple', emoji: '⚠️', en: 'Multiple substances', fr: 'Plusieurs substances' },
+        { value: 'unknown', emoji: '❓', en: "I'm not sure", fr: "Je ne suis pas sûr(e)" },
+      ]
+    },
+    {
+      id: 'duration',
+      eyebrow: { en: 'How long', fr: 'Depuis combien de temps' },
+      title: { en: 'How long have they been struggling?', fr: 'Depuis combien de temps luttent-ils?' },
+      subtitle: { en: 'Duration shapes the urgency and approach of your message.', fr: 'La durée influence l\'urgence et l\'approche de votre message.' },
+      type: 'grid',
+      options: [
+        { value: 'less1', emoji: '📅', en: 'Less than 1 year', fr: 'Moins d\'1 an' },
+        { value: '1to3', emoji: '📆', en: '1 to 3 years', fr: '1 à 3 ans' },
+        { value: '3to5', emoji: '🗓️', en: '3 to 5 years', fr: '3 à 5 ans' },
+        { value: 'over5', emoji: '⏳', en: 'More than 5 years', fr: 'Plus de 5 ans' },
+      ]
+    },
+    {
+      id: 'treatment',
+      eyebrow: { en: 'Treatment history', fr: 'Historique de traitement' },
+      title: { en: 'Have they tried treatment before?', fr: 'Ont-ils déjà essayé un traitement?' },
+      subtitle: { en: 'This shapes how we position recovery in your message.', fr: 'Cela influence la façon dont nous positionnons la guérison dans votre message.' },
+      type: 'grid',
+      options: [
+        { value: 'never', emoji: '🆕', en: 'Never tried', fr: 'Jamais essayé' },
+        { value: 'once', emoji: '1️⃣', en: 'Once before', fr: 'Une fois avant' },
+        { value: 'multiple', emoji: '🔄', en: 'Multiple times', fr: 'Plusieurs fois' },
+        { value: 'unknown', emoji: '❓', en: "I don't know", fr: 'Je ne sais pas' },
+      ]
+    },
+    {
+      id: 'attitude',
+      eyebrow: { en: 'Their mindset', fr: 'Leur état d\'esprit' },
+      title: { en: 'How do they feel about getting help?', fr: 'Comment se sentent-ils par rapport à obtenir de l\'aide?' },
+      subtitle: { en: "This is the most important factor in choosing your approach.", fr: "C\'est le facteur le plus important pour choisir votre approche." },
+      type: 'grid',
+      options: [
+        { value: 'denial', emoji: '🚫', en: 'Complete denial — "I don\'t have a problem"', fr: 'Déni total — "Je n\'ai pas de problème"' },
+        { value: 'resistant', emoji: '😤', en: 'Aware but resistant', fr: 'Conscient(e) mais résistant(e)' },
+        { value: 'scared', emoji: '😰', en: 'Open but scared', fr: 'Ouvert(e) mais effrayé(e)' },
+        { value: 'ready', emoji: '🌱', en: 'Almost ready — needs a push', fr: 'Presque prêt(e) — a besoin d\'une impulsion' },
+      ]
+    },
+    {
+      id: 'tone',
+      eyebrow: { en: 'Your approach', fr: 'Votre approche' },
+      title: { en: 'What tone feels right for you?', fr: 'Quel ton vous convient le mieux?' },
+      subtitle: { en: 'Choose the emotional register that matches your relationship and current situation.', fr: 'Choisissez le registre émotionnel qui correspond à votre relation et situation actuelle.' },
+      type: 'grid',
+      options: [
+        { value: 'loving', emoji: '💛', en: 'Loving & Compassionate', fr: 'Aimant & Compatissant' },
+        { value: 'firm', emoji: '🛑', en: 'Firm & Direct', fr: 'Ferme & Direct' },
+        { value: 'hopeful', emoji: '🌱', en: 'Hopeful & Forward-Looking', fr: 'Plein d\'espoir & Tourné vers l\'avenir' },
+        { value: 'urgent', emoji: '⚡', en: 'Urgent & Crisis-Aware', fr: 'Urgent & Conscient de la crise' },
+      ]
+    },
+    {
+      id: 'situation',
+      eyebrow: { en: 'Your story', fr: 'Votre histoire' },
+      title: { en: 'Tell us about your situation', fr: 'Parlez-nous de votre situation' },
+      subtitle: { en: 'The more specific you are, the more personalized your outputs will be. What have you observed? What has happened recently? What are you most worried about?', fr: 'Plus vous êtes précis, plus vos résultats seront personnalisés. Qu\'avez-vous observé? Que s\'est-il passé récemment? Qu\'est-ce qui vous inquiète le plus?' },
+      type: 'textarea',
+    },
+    {
+      id: 'names',
+      eyebrow: { en: 'Personalization', fr: 'Personnalisation' },
+      title: { en: 'Almost done — a few details', fr: 'Presque terminé — quelques détails' },
+      subtitle: { en: 'Your information is private and used only to personalize your outputs.', fr: 'Vos informations sont privées et utilisées uniquement pour personnaliser vos résultats.' },
+      type: 'names',
+    }
+  ];
+
+  const substanceContext = {
+    alcohol: "alcohol addiction — emphasize physical health risks, blackouts, and the progressive nature of alcoholism. Mention that medical detox is required and can be dangerous alone.",
+    opioids: "opioid addiction — emphasize overdose risk, fentanyl contamination, and that medication-assisted treatment is available and effective.",
+    cocaine: "cocaine addiction — emphasize cardiovascular risks, financial destruction, paranoia, and the psychological nature of the addiction.",
+    benzos: "benzodiazepine addiction — emphasize that benzo withdrawal is medically dangerous, requires supervised detox, and is not a matter of willpower.",
+    cannabis: "heavy cannabis dependency — emphasize cognitive impacts and that dependency is real even if society minimizes it.",
+    meth: "methamphetamine addiction — emphasize psychosis risk, rapid physical deterioration, and high urgency of immediate intervention.",
+    multiple: "poly-substance addiction — emphasize compounded dangers and that specialized treatment is available.",
+    unknown: "substance addiction — focus on behavioral and emotional signs observed."
+  };
+
+  const profileContext = {
+    son: "The writer is the PARENT addressing their SON. Write with deep parental love, the pain of watching your child suffer, and the unconditional bond between parent and child.",
+    daughter: "The writer is the PARENT addressing their DAUGHTER. Write with deep parental love, the pain of watching your child suffer, and the unconditional bond between parent and child.",
+    spouse: "The writer is the SPOUSE/PARTNER. Write about impact on the relationship, shared dreams slipping away, and love being tested.",
+    sibling: "The writer is a SIBLING. Write about growing up together, shared memories, and watching someone you admired change.",
+    parent: "The writer is an ADULT CHILD addressing their PARENT. Write about role reversal, fear of losing a parent, and childhood memories.",
+    friend: "The writer is a CLOSE FRIEND. Write about chosen family, loyalty of friendship, and fear of losing someone important.",
+  };
+
+  const attitudeContext = {
+    denial: "They are in complete denial. The message must gently but firmly introduce reality without triggering defensiveness.",
+    resistant: "They are aware but resistant. Acknowledge their awareness, validate their fear, and show that help is different from what they imagine.",
+    scared: "They are open but scared. Focus on reassurance, safety of treatment, and what recovery actually looks and feels like.",
+    ready: "They are almost ready. This is the final push — make it count. Remove every last barrier and make calling for help the obvious, easy next step.",
+  };
+
+  // ─── LANGUAGE ─────────────────────────────────────────────────────────────
+  function setLang(l) {
+    lang = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`).classList.add('active');
+    document.querySelectorAll('.en-text').forEach(el => el.classList.toggle('hidden', l !== 'en'));
+    document.querySelectorAll('.fr-text').forEach(el => el.classList.toggle('hidden', l !== 'fr'));
+    // Swap logo
+    const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
+    const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
+    const navLogo = document.getElementById('nav-logo-img');
+    if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
+    renderQuestion();
+  }
+
+  // ─── QUESTIONNAIRE ────────────────────────────────────────────────────────
+  function renderQuestion() {
+    const q = questions[currentQ];
+    const total = questions.length;
+    const pct = Math.round(((currentQ + 1) / total) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = lang === 'en'
+      ? `Step ${currentQ + 1} of ${total}` : `Étape ${currentQ + 1} sur ${total}`;
+
+    let html = `
+      <p class="question-eyebrow">${q.eyebrow[lang]}</p>
+      <h2 class="question-title">${q.title[lang]}</h2>
+      <p class="question-subtitle">${q.subtitle ? q.subtitle[lang] : ''}</p>
+    `;
+
+    if (q.type === 'grid') {
+      const cols = q.options.length <= 4 ? 'col-' + (q.options.length <= 2 ? '1' : '2') : '';
+      html += `<div class="options-grid ${cols}">`;
+      q.options.forEach(opt => {
+        const sel = answers[q.id] === opt.value ? 'selected' : '';
+        html += `<button class="option-btn ${sel}" onclick="selectOption('${q.id}', '${opt.value}', this)">
+          <span class="opt-emoji">${opt.emoji}</span>
+          <span class="opt-label">${opt[lang]}</span>
+        </button>`;
+      });
+      html += `</div>`;
+    } else if (q.type === 'textarea') {
+      html += `
+        <textarea class="text-input" style="height:160px;resize:vertical;line-height:1.6;" id="situationInput"
+          placeholder="${lang === 'en' ? 'Ex: My son has been drinking heavily for 3 years. He lost his job last month and his relationship is falling apart. He refuses to admit he has a problem and gets angry when we bring it up. Last week he missed his daughter\'s birthday...' : 'Ex: Mon fils boit beaucoup depuis 3 ans. Il a perdu son emploi le mois dernier et sa relation est en train de s\'effondrer. Il refuse d\'admettre qu\'il a un problème et se fâche quand on en parle...'}"
+          oninput="answers.situation=this.value">${answers.situation || ''}</textarea>
+        <p style="font-size:11px;color:var(--text-light);margin-top:8px;">${lang === 'en' ? '💡 The more details you share, the more personalized your letter, guide and script will be.' : '💡 Plus vous partagez de détails, plus votre lettre, guide et script seront personnalisés.'}</p>
+      `;
+    } else if (q.type === 'names') {
+      html += `
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div>
+            <p style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:8px;">${lang === 'en' ? 'Your first name (sender)' : 'Votre prénom (expéditeur)'}</p>
+            <input type="text" class="text-input" id="senderNameInput" placeholder="${lang === 'en' ? 'e.g. Marie' : 'ex. Marie'}" value="${answers.senderName || ''}" oninput="answers.senderName=this.value" />
+          </div>
+          <div>
+            <p style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:8px;">${lang === 'en' ? 'Their first name (your loved one)' : 'Leur prénom (votre proche)'}</p>
+            <input type="text" class="text-input" id="patientNameInput" placeholder="${lang === 'en' ? 'e.g. Mathieu' : 'ex. Mathieu'}" value="${answers.patientName || ''}" oninput="answers.patientName=this.value" />
+          </div>
+          <div>
+            <p style="font-size:13px;font-weight:600;color:var(--text-light);margin-bottom:8px;">${lang === 'en' ? 'Your email — required for delivery & weekly support' : 'Votre courriel — requis pour la livraison et le soutien hebdomadaire'} <span style="color:var(--cta);">*</span></p>
+            <input type="email" class="text-input" id="emailInput" placeholder="${lang === 'en' ? 'your@email.com' : 'votre@courriel.com'}" value="${answers.email || ''}" oninput="answers.email=this.value" />
+            <p style="font-size:11px;color:var(--text-light);margin-top:6px;">${lang === 'en' ? '🔒 Your email is private and never shared. Used only to deliver your outputs and send weekly check-ins (Complete plan).' : '🔒 Votre courriel est privé et jamais partagé. Utilisé uniquement pour livrer vos résultats et envoyer des suivis hebdomadaires (plan Complet).'}</p>
+          </div>
+          <div style="background:rgba(232,165,75,0.08);border:1px solid rgba(232,165,75,0.2);border-radius:10px;padding:14px;">
+            <p style="font-size:12px;color:rgba(196,98,45,0.9);line-height:1.6;">${lang === 'en' ? '⚠️ TheFirstWord is designed for adults (18+) helping another adult. If your loved one is under 18, please contact a youth addiction specialist directly.' : '⚠️ TheFirstWord est conçu pour les adultes (18+) aidant un autre adulte. Si votre proche a moins de 18 ans, veuillez contacter directement un spécialiste en dépendance jeunesse.'}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    const isFirst = currentQ === 0;
+    const btnLabel = currentQ === questions.length - 1
+      ? (lang === 'en' ? 'Choose My Plan →' : 'Choisir mon plan →')
+      : (lang === 'en' ? 'Continue →' : 'Continuer →');
+
+    html += `
+      <div class="nav-buttons">
+        ${!isFirst ? `<button class="btn-back-q" onclick="prevQuestion()">${lang === 'en' ? '← Back' : '← Retour'}</button>` : ''}
+        <button class="btn-next" onclick="nextQuestion()">${btnLabel}</button>
+      </div>
+    `;
+
+    document.getElementById('questionCard').innerHTML = html;
+  }
+
+  function selectOption(qId, value, el) {
+    answers[qId] = value;
+    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function nextQuestion() {
+    const q = questions[currentQ];
+    if (q.type === 'grid' && !answers[q.id]) {
+      alert(lang === 'en' ? 'Please select an option to continue.' : 'Veuillez sélectionner une option pour continuer.');
+      return;
+    }
+    if (q.type === 'textarea' && (!answers.situation || answers.situation.trim().length < 20)) {
+      alert(lang === 'en' ? 'Please describe your situation in a few sentences to continue.' : 'Veuillez décrire votre situation en quelques phrases pour continuer.');
+      return;
+    }
+    if (q.type === 'names') {
+      if (!answers.senderName || !answers.patientName) {
+        alert(lang === 'en' ? 'Please enter both names to continue.' : 'Veuillez entrer les deux prénoms pour continuer.');
+        return;
+      }
+      if (!answers.email) {
+        alert(lang === 'en' ? 'Please enter your email to continue.' : 'Veuillez entrer votre courriel pour continuer.');
+        return;
+      }
+    }
+    if (currentQ < questions.length - 1) {
+      currentQ++;
+      renderQuestion();
+    } else {
+      showPricing();
+    }
+  }
+
+  function prevQuestion() {
+    if (currentQ > 0) { currentQ--; renderQuestion(); }
+  }
+
+  // ─── PRICING ──────────────────────────────────────────────────────────────
+  function showPricing() {
+    document.getElementById('questionnaireView').classList.add('hidden');
+    document.getElementById('pricingView').classList.remove('hidden');
+  }
+
+  function selectPlan(el) {
+    document.querySelectorAll('.price-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPlan = el.dataset.plan;
+  }
+
+  // ─── GENERATION ───────────────────────────────────────────────────────────
+  async function startGeneration() {
+    document.getElementById('pricingView').classList.add('hidden');
+    document.getElementById('loadingView').classList.remove('hidden');
+
+    const senderName = answers.senderName || (lang === 'en' ? 'the family' : 'la famille');
+    const patientName = answers.patientName || (lang === 'en' ? 'your loved one' : 'votre proche');
+    const outputLang = lang === 'en' ? 'Write entirely in English.' : 'Write entirely in natural, Québécois-friendly French.';
+    const relLabel = answers.relationship || 'family member';
+    const subLabel = answers.substance || 'substance';
+    const context = `
+Relationship: ${profileContext[answers.relationship] || 'A concerned family member'}
+Substance: ${substanceContext[answers.substance] || 'substance addiction'}
+Duration: ${answers.duration}
+Treatment history: ${answers.treatment}
+Their attitude toward help: ${attitudeContext[answers.attitude] || answers.attitude}
+Tone: ${answers.tone}
+Sender name: ${senderName}
+Patient name: ${patientName}
+Situation details: ${answers.situation || 'No additional details provided'}
+Language: ${outputLang}
+    `.trim();
+
+    const prompts = {
+      letter: buildLetterPrompt(context, senderName, patientName),
+      guide: buildGuidePrompt(context, senderName, patientName),
+    };
+    if (selectedPlan !== 'starter') {
+      prompts.sms = buildSMSPrompt(context, senderName, patientName);
+      prompts.script = buildScriptPrompt(context, senderName, patientName);
+    }
+
+    try {
+      const keys = Object.keys(prompts);
+      const results = await Promise.all(keys.map(k =>
+        fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: prompts[k] })
+        }).then(r => r.json())
+      ));
+      keys.forEach((k, i) => { outputs[k] = results[i].letter || ''; });
+      showOutputs(senderName, patientName);
+    } catch(e) {
+      alert(lang === 'en' ? 'Connection error. Please try again.' : 'Erreur de connexion. Veuillez réessayer.');
+      document.getElementById('loadingView').classList.add('hidden');
+      document.getElementById('pricingView').classList.remove('hidden');
+    }
+  }
+
+  function buildLetterPrompt(context, sender, patient) {
+    return `You are a professional interventionist at TheFirstWord, an AI-powered family intervention platform.
+
+Generate a powerful, personalized intervention letter from ${sender} to ${patient} encouraging them to seek addiction treatment.
+
+CONTEXT:
+${context}
+
+RULES:
+- Deeply personal — every paragraph reflects the specific situation
+- Voice matches the relationship type
+- References the substance and its real dangers
+- Ends with a clear call to action to seek help immediately
+- 3-5 paragraphs with proper salutation and closing
+- Do NOT mention AI
+- - CANADIAN RESOURCES ONLY: If you reference a helpline or resource, use ONLY these two:
+  * Quebec French: Drogue Aide et Référence — 1-800-265-2626
+  * Quebec English: Drug and Alcohol Helpline — 1-800-565-8603
+  Never mention SAMHSA or any US-based resources.
+
+Return ONLY the letter.`;
+  }
+
+  function buildGuidePrompt(context, sender, patient) {
+    return `You are a professional family coach at TheFirstWord.
+
+Create a personalized step-by-step conversation guide for ${sender} on how to approach the intervention conversation with ${patient}.
+
+CONTEXT:
+${context}
+
+Sections:
+1. Before the conversation — preparation, mindset, timing, location
+2. How to open — exact suggested opening words
+3. Key points to address — specific to their situation
+4. If they resist — handling denial, anger, excuses
+5. How to close — with a clear ask to get help now
+6. What to avoid — common mistakes
+
+Make every section specific. End with encouragement for ${sender}.
+- CANADIAN RESOURCES ONLY: If you reference a helpline or resource, use ONLY these two:
+  * Quebec French: Drogue Aide et Référence — 1-800-265-2626
+  * Quebec English: Drug and Alcohol Helpline — 1-800-565-8603
+  Never mention SAMHSA or any US-based resources.
+Return ONLY the guide.`;
+  }
+
+  function buildSMSPrompt(context, sender, patient) {
+    return `You are a professional interventionist at TheFirstWord.
+
+Write a SHORT, powerful SMS from ${sender} to ${patient} about their addiction.
+
+CONTEXT:
+${context}
+
+RULES:
+- Maximum 300 characters
+- Raw, human, direct — feels like a real text
+- Ends with an invitation to talk or get help
+- No emojis unless very natural
+- Do NOT mention AI
+- - CANADIAN RESOURCES ONLY: If you reference a helpline or resource, use ONLY these two:
+  * Quebec French: Drogue Aide et Référence — 1-800-265-2626
+  * Quebec English: Drug and Alcohol Helpline — 1-800-565-8603
+  Never mention SAMHSA or any US-based resources.
+
+Return ONLY the SMS text.`;
+  }
+
+  function buildScriptPrompt(context, sender, patient) {
+    return `You are a professional interventionist at TheFirstWord.
+
+Write a word-for-word spoken script for ${sender} to read aloud during the intervention conversation with ${patient}.
+
+CONTEXT:
+${context}
+
+FORMAT:
+- Written exactly as they would SPEAK it
+- Natural pauses with "..."
+- Stage directions in [brackets] like [Pause. Look them in the eyes.]
+- Structure: Opening → Observations → How it affects me → The ask
+- 4-6 paragraphs of spoken dialogue
+- Ends with invitation to call for help together
+
+- CANADIAN RESOURCES ONLY: If you reference a helpline or resource, use ONLY these two:
+  * Quebec French: Drogue Aide et Référence — 1-800-265-2626
+  * Quebec English: Drug and Alcohol Helpline — 1-800-565-8603
+  Never mention SAMHSA or any US-based resources.
+Return ONLY the script.`;
+  }
+
+  // ─── SHOW OUTPUTS ─────────────────────────────────────────────────────────
+  function showOutputs(senderName, patientName) {
+    document.getElementById('loadingView').classList.add('hidden');
+    document.getElementById('outputView').classList.remove('hidden');
+
+    const date = new Date().toLocaleDateString(lang === 'fr' ? 'fr-CA' : 'en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('outputDate').textContent = date;
+    document.getElementById('outputDate2').textContent = date;
+    document.getElementById('outputMeta').textContent = lang === 'en'
+      ? `For ${patientName} · ${selectedPlan.charAt(0).toUpperCase() + selectedPlan.slice(1)} plan`
+      : `Pour ${patientName} · Plan ${selectedPlan}`;
+    document.getElementById('guideTitle').textContent = lang === 'en' ? `How to talk to ${patientName}` : `Comment parler à ${patientName}`;
+    document.getElementById('scriptTitle').textContent = lang === 'en' ? `What to say to ${patientName}` : `Ce que vous pouvez dire à ${patientName}`;
+    document.getElementById('smsName').textContent = patientName;
+    document.getElementById('smsAvatar').textContent = patientName.charAt(0).toUpperCase();
+    document.getElementById('smsTime').textContent = new Date().toLocaleTimeString(lang === 'fr' ? 'fr-CA' : 'en-CA', { hour: '2-digit', minute: '2-digit' });
+
+    document.getElementById('letterBody').textContent = outputs.letter || '';
+    document.getElementById('guideBody').textContent = outputs.guide || '';
+    document.getElementById('smsBody').textContent = outputs.sms || '';
+    document.getElementById('scriptBody').textContent = outputs.script || '';
+
+    // Build tabs
+    const tabs = [
+      { id: 'Letter', label: lang === 'en' ? '✉️ Letter' : '✉️ Lettre', available: true },
+      { id: 'Guide', label: '📋 Guide', available: true },
+      { id: 'SMS', label: '💬 SMS', available: selectedPlan !== 'starter' },
+      { id: 'Script', label: lang === 'en' ? '🎭 Script' : '🎭 Script', available: selectedPlan !== 'starter' },
+      { id: 'PlanB', label: 'Plan B', available: selectedPlan === 'complete' || selectedPlan === 'monthly' },
+    ];
+
+    let tabHtml = '';
+    tabs.forEach(t => {
+      const locked = !t.available ? 'locked' : '';
+      tabHtml += `<button class="output-tab ${locked}" onclick="showTab('${t.id}', this, ${t.available})">${t.label}${!t.available ? ' 🔒' : ''}</button>`;
+    });
+    document.getElementById('outputTabs').innerHTML = tabHtml;
+
+    showTab('Letter', document.querySelector('.output-tab'), true);
+
+    // Pre-populate delivery email if user entered it in questionnaire
+    const deliveryEmailInput = document.getElementById('deliveryEmail');
+    if (deliveryEmailInput && answers.email) {
+      deliveryEmailInput.value = answers.email;
+    }
+  }
+
+  function showTab(tabId, el, available) {
+    if (!available) {
+      showLockedOverlay(tabId);
+      return;
+    }
+    document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
+    if (el) el.classList.add('active');
+
+    ['tabLetter','tabGuide','tabSMS','tabScript','tabPlanB'].forEach(id => {
+      document.getElementById(id).classList.add('hidden');
+    });
+    document.getElementById('tab' + tabId).classList.remove('hidden');
+
+    // Update action buttons
+    buildActionRow(tabId, available);
+  }
+
+  function showLockedOverlay(tabId) {
+    const lockedTab = document.getElementById('tab' + tabId);
+    ['tabLetter','tabGuide','tabSMS','tabScript','tabPlanB'].forEach(id => document.getElementById(id).classList.add('hidden'));
+    lockedTab.classList.remove('hidden');
+    lockedTab.innerHTML = `
+      <div class="locked-overlay">
+        <div class="lock-icon">🔒</div>
+        <h3 class="lock-title">${lang === 'en' ? 'Unlock this feature' : 'Débloquer cette fonctionnalité'}</h3>
+        <p class="lock-sub">${lang === 'en' ? 'Upgrade to the Complete plan ($29) to access the Plan B strategy — and every other feature.' : 'Passez au plan Complet (29$) pour accéder à la stratégie Plan B — et toutes les autres fonctionnalités.'}</p>
+        <button class="btn-unlock" onclick="restart()">${lang === 'en' ? 'Upgrade My Plan' : 'Mettre à niveau mon plan'}</button>
+      </div>
+    `;
+  }
+
+  function buildActionRow(tabId, available) {
+    if (!available) { document.getElementById('actionRow').innerHTML = ''; return; }
+    const hasPDF = ['Letter','Guide','Script'].includes(tabId);
+    const hasCopy = ['Letter','Guide','SMS','Script','PlanB'].includes(tabId);
+    let html = '';
+    if (hasCopy) html += `<button class="btn-action" onclick="copyTab('${tabId}')">${lang === 'en' ? '📋 Copy' : '📋 Copier'}</button>`;
+    if (hasPDF) html += `<button class="btn-action btn-action-pdf" onclick="downloadPDF('${tabId}')">${lang === 'en' ? '📄 Download PDF' : '📄 Télécharger PDF'}</button>`;
+    document.getElementById('actionRow').innerHTML = html;
+  }
+
+  function copyTab(tabId) {
+    const map = { Letter: 'letterBody', Guide: 'guideBody', SMS: 'smsBody', Script: 'scriptBody', PlanB: 'planbBody' };
+    const text = document.getElementById(map[tabId])?.textContent || '';
+    navigator.clipboard.writeText(text);
+  }
+
+  // ─── PLAN B ───────────────────────────────────────────────────────────────
+  async function generatePlanB() {
+    const whatHappened = (document.getElementById('planbInput')?.value || document.getElementById('planbInputFr')?.value || '').trim();
+    if (!whatHappened) { alert(lang === 'en' ? 'Please describe what happened.' : 'Veuillez décrire ce qui s\'est passé.'); return; }
+    const senderName = answers.senderName || 'the family';
+    const patientName = answers.patientName || 'their loved one';
+    const prompt = `You are a professional interventionist at TheFirstWord.
+
+A family intervention was attempted but did NOT work. Generate a completely different Plan B strategy.
+
+SENDER: ${senderName}
+PATIENT: ${patientName}
+ORIGINAL CONTEXT: Substance: ${answers.substance}, Duration: ${answers.duration}, Attitude: ${answers.attitude}
+WHAT HAPPENED: ${whatHappened}
+LANGUAGE: ${lang === 'en' ? 'Write entirely in English.' : 'Write entirely in natural, Québécois-friendly French.'}
+
+Include:
+1. Why the first attempt likely didn't work
+2. The new strategy — completely different angle
+3. Who should deliver it and why
+4. New talking points
+5. Boundaries to set now
+6. When to consider a professional interventionist
+7. Encouragement for ${senderName}
+
+Return ONLY the Plan B guide.`;
+
+    document.querySelector('.btn-planb').disabled = true;
+    try {
+      const res = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt }) });
+      const data = await res.json();
+      if (data.letter) {
+        document.getElementById('planbBody').textContent = data.letter;
+        document.getElementById('planbOutput').classList.remove('hidden');
+        buildActionRow('PlanB', true);
+      }
+    } catch(e) { alert(lang === 'en' ? 'Error. Please try again.' : 'Erreur. Veuillez réessayer.'); }
+    document.querySelector('.btn-planb').disabled = false;
+  }
+
+  // ─── PDF ──────────────────────────────────────────────────────────────────
+  function downloadPDF(tabId) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const map = {
+      Letter: { el: 'letterBody', title: lang === 'en' ? 'Intervention Letter' : 'Lettre d\'intervention', file: 'letter-' + (answers.patientName || 'loved-one') + '.pdf' },
+      Guide: { el: 'guideBody', title: lang === 'en' ? 'Conversation Guide' : 'Guide de conversation', file: 'guide-' + (answers.senderName || 'family') + '.pdf' },
+      Script: { el: 'scriptBody', title: lang === 'en' ? 'Spoken Script' : 'Script parlé', file: 'script-' + (answers.senderName || 'family') + '.pdf' },
+    };
+    const cfg = map[tabId];
+    if (!cfg) return;
+    const rawText = document.getElementById(cfg.el)?.textContent || '';
+    const date = new Date().toLocaleDateString(lang === 'fr' ? 'fr-CA' : 'en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+    const margin = 22, pw = 210, uw = pw - margin * 2, ph = 297, bm = 22;
+
+    function parseMarkdown(text) {
+      const segs = [];
+      text.split('\n').forEach(line => {
+        if (line.startsWith('## ')) segs.push({ type: 'h2', text: line.replace(/^## /, '') });
+        else if (line.startsWith('# ')) segs.push({ type: 'h1', text: line.replace(/^# /, '') });
+        else if (line.match(/^\*\*(.+)\*\*$/)) segs.push({ type: 'bold', text: line.replace(/\*\*/g, '') });
+        else if (line.startsWith('- ') || line.startsWith('• ')) segs.push({ type: 'bullet', text: line.replace(/^[-•] /, '') });
+        else if (line.match(/^---+$/)) segs.push({ type: 'divider' });
+        else if (line.trim() === '') segs.push({ type: 'space' });
+        else segs.push({ type: 'body', text: line.replace(/\*\*(.+?)\*\*/g, '$1') });
+      });
+      return segs;
+    }
+
+    function addHeader() {
+      doc.setFillColor(28, 43, 58); doc.rect(0, 0, 210, 28, 'F');
+      doc.setTextColor(42, 127, 127); doc.setFontSize(7); doc.setFont('helvetica', 'bold');
+      doc.text('THEFIRSTWORD', margin, 10);
+      doc.setTextColor(248, 245, 240); doc.setFontSize(15); doc.text(cfg.title, margin, 21);
+      doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(180, 180, 180);
+      doc.text(date, pw - margin, 21, { align: 'right' });
+      doc.setDrawColor(42, 127, 127); doc.setLineWidth(0.5); doc.line(margin, 32, pw - margin, 32);
+    }
+    function addFooter() {
+      doc.setFontSize(7.5); doc.setFont('helvetica', 'italic'); doc.setTextColor(140, 140, 140);
+      const disc = lang === 'en'
+        ? 'TheFirstWord is a communication support tool. Not a substitute for professional medical or psychological advice. TheFirstWord is not responsible for the outcome of any conversation based on this content.'
+        : 'TheFirstWord est un outil de soutien à la communication. Ne remplace pas un avis médical ou psychologique professionnel.';
+      const dlines = doc.splitTextToSize(disc, uw);
+      let dy = ph - 18;
+      dlines.forEach(l => { doc.text(l, margin, dy); dy += 4; });
+    }
+    function checkPage(y, n) {
+      if (y + n > ph - bm) { addFooter(); doc.addPage(); addHeader(); return 40; } return y;
+    }
+
+    addHeader();
+    let y = 40;
+    parseMarkdown(rawText).forEach(seg => {
+      switch(seg.type) {
+        case 'h1': y = checkPage(y, 14); doc.setFontSize(16); doc.setFont('helvetica', 'bold'); doc.setTextColor(28, 43, 58); doc.splitTextToSize(seg.text, uw).forEach(l => { doc.text(l, margin, y); y += 8; }); y += 2; break;
+        case 'h2': y = checkPage(y, 14); y += 3; doc.setFillColor(42, 127, 127); doc.rect(margin, y - 5, 3, 8, 'F'); doc.setFontSize(13); doc.setFont('helvetica', 'bold'); doc.setTextColor(28, 43, 58); doc.splitTextToSize(seg.text, uw - 6).forEach(l => { doc.text(l, margin + 6, y); y += 7; }); y += 3; break;
+        case 'bold': y = checkPage(y, 8); doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(30, 30, 30); doc.splitTextToSize(seg.text, uw).forEach(l => { doc.text(l, margin, y); y += 6; }); y += 1; break;
+        case 'bullet': y = checkPage(y, 7); doc.setFontSize(10.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(50, 50, 50); doc.setFillColor(42, 127, 127); doc.circle(margin + 1.5, y - 1.5, 1, 'F'); const bl = doc.splitTextToSize(seg.text, uw - 8); bl.forEach((l, i) => { doc.text(l, margin + 6, y + (i * 5.5)); }); y += bl.length * 5.5 + 1; break;
+        case 'divider': y += 3; doc.setDrawColor(200, 200, 200); doc.setLineWidth(0.3); doc.line(margin, y, pw - margin, y); y += 5; break;
+        case 'space': y += 3; break;
+        case 'body': y = checkPage(y, 7); doc.setFontSize(10.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(50, 50, 50); doc.splitTextToSize(seg.text, uw).forEach(l => { doc.text(l, margin, y); y += 5.5; }); break;
+      }
+    });
+    addFooter();
+    doc.save(cfg.file);
+  }
+
+  // ─── CHECKIN ──────────────────────────────────────────────────────────────
+  // ─── EMAIL DELIVERY ───────────────────────────────────────────────────────
+  async function sendByEmail() {
+    const emailInput = document.getElementById('deliveryEmail');
+    const email = (emailInput?.value || '').trim();
+    if (!email || !email.includes('@')) {
+      emailInput.style.borderColor = 'var(--cta)';
+      emailInput.placeholder = lang === 'en' ? 'Please enter a valid email' : 'Veuillez entrer un courriel valide';
+      return;
+    }
+    const btn = document.querySelector('.btn-checkin');
+    btn.disabled = true;
+    btn.textContent = lang === 'en' ? 'Sending...' : 'Envoi...';
+
+    // Store the email in answers for reference
+    answers.deliveryEmail = email;
+
+    // Simulate send (replace with real API call when email backend is ready)
+    setTimeout(() => {
+      document.getElementById('checkinCard').innerHTML = `
+        <div class="checkin-title" style="color:var(--teal);">✅ ${lang === 'en' ? 'On its way!' : 'En route!'}</div>
+        <p class="checkin-sub">${lang === 'en'
+          ? 'Your personalized kit has been sent to <strong>' + email + '</strong>. Check your inbox in the next few minutes.'
+          : 'Votre kit personnalisé a été envoyé à <strong>' + email + '</strong>. Vérifiez votre boîte de réception dans les prochaines minutes.'
+        }</p>
+        <p style="font-size:12px;color:var(--text-light);margin-top:8px;">${lang === 'en'
+          ? 'Need ongoing support? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Upgrade to the monthly plan →</a>'
+          : 'Besoin d\'un soutien continu? <a href="index.html#pricing" style="color:var(--teal);font-weight:600;">Passez au plan mensuel →</a>'
+        }</p>
+      `;
+    }, 1200);
+  }
+
+  function restart() {
+    currentQ = 0;
+    answers = {};
+    outputs = {};
+    selectedPlan = 'essential';
+    document.getElementById('outputView').classList.add('hidden');
+    document.getElementById('pricingView').classList.add('hidden');
+    document.getElementById('loadingView').classList.add('hidden');
+    document.getElementById('questionnaireView').classList.remove('hidden');
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ─── INIT ─────────────────────────────────────────────────────────────────
+  renderQuestion();
+</script>
+</body>
+</html>
