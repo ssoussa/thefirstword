@@ -1176,6 +1176,16 @@ Return ONLY the Plan B guide.`;
           name: (answers.senderName || '').charAt(0).toUpperCase() + (answers.senderName || '').slice(1),
           lang,
           plan: selectedPlan,
+          answers: {
+            relationship: answers.relationship || '',
+            substance: answers.substance || '',
+            duration: answers.duration || '',
+            treatment: answers.treatment || '',
+            attitude: answers.attitude || '',
+            tone: answers.tone || '',
+            situation: answers.situation || '',
+            patientName: answers.patientName || ''
+          },
           outputs: {
             letter: outputs.letter || '',
             guide: outputs.guide || '',
@@ -1250,9 +1260,19 @@ Return ONLY the Plan B guide.`;
         const data = await res.json();
 
         if (data.found) {
-          // Pre-fill what we know
+          // Restore their full context
           answers.email = returnEmail;
           answers.senderName = data.name || '';
+          if (data.answers) {
+            answers.relationship = data.answers.relationship || '';
+            answers.substance = data.answers.substance || '';
+            answers.duration = data.answers.duration || '';
+            answers.treatment = data.answers.treatment || '';
+            answers.attitude = data.answers.attitude || '';
+            answers.tone = data.answers.tone || '';
+            answers.situation = data.answers.situation || '';
+            answers.patientName = data.answers.patientName || '';
+          }
 
           // Show a returning client welcome screen
           document.getElementById('questionnaireView').innerHTML = `
@@ -1263,8 +1283,8 @@ Return ONLY the Plan B guide.`;
               </h2>
               <p style="font-size:15px;color:var(--text-light);line-height:1.7;margin-bottom:32px;">
                 ${lang === 'en'
-                  ? "We know this road hasn't been easy. You're here because you haven't given up — and that matters. Let's build a new approach together."
-                  : "Nous savons que ce chemin n'a pas été facile. Vous êtes là parce que vous n'avez pas abandonné — et cela compte. Construisons une nouvelle approche ensemble."
+                  ? "We know this road hasn't been easy. You're here because you haven't given up" + (answers.patientName ? " on " + answers.patientName.charAt(0).toUpperCase() + answers.patientName.slice(1) : "") + " — and that matters. Let's build a new approach together."
+                  : "Nous savons que ce chemin n'a pas été facile. Vous êtes là parce que vous n'avez pas abandonné" + (answers.patientName ? " " + answers.patientName.charAt(0).toUpperCase() + answers.patientName.slice(1) : "") + " — et cela compte. Construisons une nouvelle approche ensemble."
                 }
               </p>
               <div style="background:var(--teal-light);border-radius:12px;padding:20px 24px;margin-bottom:24px;text-align:left;">
@@ -1325,22 +1345,36 @@ Return ONLY the Plan B guide.`;
     btn.disabled = true;
     btn.textContent = lang === 'en' ? 'Generating...' : 'Génération en cours...';
 
+    // Build rich context from saved answers
+    const savedContext = answers.substance || answers.relationship ? `
+Original context:
+- Relationship: ${answers.relationship || 'family member'}
+- Substance: ${answers.substance || 'substance addiction'}
+- Duration: ${answers.duration || 'unknown'}
+- Treatment history: ${answers.treatment || 'unknown'}
+- Their attitude toward help: ${answers.attitude || 'resistant'}
+- Tone of first approach: ${answers.tone || 'loving'}
+- Sender name: ${answers.senderName || 'the family'}
+- Loved one name: ${answers.patientName || 'their loved one'}
+- Original situation: ${answers.situation || 'not provided'}` : '';
+
     const prompt = `You are a professional interventionist at TheFirstWord.
 
-A family intervention was attempted but did NOT work. The person reaching out needs a completely different Plan B strategy.
+A family intervention was attempted but did NOT work. Generate a completely different Plan B strategy.
 
-WHAT HAPPENED: ${input}
+${savedContext}
+WHAT HAPPENED WHEN THEY TRIED: ${input}
 LANGUAGE: ${lang === 'en' ? 'Write entirely in English.' : 'Write entirely in natural, Québécois-friendly French.'}
 CANADIAN RESOURCES ONLY: Quebec French: Drogue Aide et Référence — 1-800-265-2626. Quebec English: Drug and Alcohol Helpline — 1-800-565-8603. Never mention SAMHSA or US resources.
 
 Include:
-1. Why the first attempt likely didn't work
-2. The new strategy — completely different angle
+1. Why the first attempt likely didn't work (based on their specific context)
+2. The new strategy — completely different angle tailored to this person and substance
 3. Who should deliver it and how
-4. New talking points
+4. New specific talking points for this situation
 5. Boundaries to set now
 6. When to consider a professional interventionist
-7. Encouragement
+7. Encouragement for ${answers.senderName || 'the family'}
 
 Return ONLY the Plan B guide.`;
 
