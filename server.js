@@ -556,8 +556,8 @@ app.post("/api/send-email", async (req, res) => {
     const emailResult = await sendEmail(email, subject, html);
 
     if (!emailResult.id) {
-      console.error("Resend error:", emailResult);
-      return res.status(500).json({ error: "Failed to send email." });
+      console.error("Resend error:", JSON.stringify(emailResult));
+      return res.status(500).json({ error: `Email failed: ${emailResult.message || emailResult.name || JSON.stringify(emailResult)}` });
     }
 
     res.json({ success: true, id: emailResult.id });
