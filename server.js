@@ -1078,6 +1078,139 @@ app.get("/sitemap.xml", (req, res) => {
 </urlset>`);
 });
 
+// ─── STRIPE ───────────────────────────────────────────────────────────────────
+
+const STRIPE_SECRET = process.env.STRIPE_SECRET_KEY;
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+
+const PRICE_MAP = {
+  starter:   process.env.STRIPE_PRICE_STARTER,
+  essential: process.env.STRIPE_PRICE_ESSENTIAL,
+  complete:  process.env.STRIPE_PRICE_COMPLETE,
+  monthly:   process.env.STRIPE_PRICE_PREMIUM,
+};
+
+// Create Stripe Checkout Session
+app.post("/api/create-checkout-session", async (req, res) => {
+  const { plan, lang } = req.body;
+  if (!plan || !PRICE_MAP[plan]) {
+    return res.status(400).json({ error: "Invalid plan." });
+  }
+  if (!STRIPE_SECRET) {
+    return res.status(500).json({ error: "Stripe not configured." });
+  }
+
+  const priceId = PRICE_MAP[plan];
+  const isMonthly = plan === 'monthly';
+  const successUrl = `https://thefirstword.ca/app.html?session_id={CHECKOUT_SESSION_ID}&lang=${lang || 'en'}`;
+  const cancelUrl = `https://thefirstword.ca/app.html?cancelled=true&lang=${lang || 'en'}`;
+
+  try {
+    const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${STRIPE_SECRET}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        'mode': isMonthly ? 'subscription' : 'payment',
+        'line_items[0][price]': priceId,
+        'line_items[0][quantity]': '1',
+        'success_url': successUrl,
+        'cancel_url': cancelUrl,
+        'metadata[plan]': plan,
+        'metadata[lang]': lang || 'en',
+        'allow_promotion_codes': 'true',
+      }).toString()
+    });
+
+    const session = await response.json();
+    if (session.error) {
+      console.error('Stripe session error:', session.error);
+      return res.status(500).json({ error: session.error.message });
+    }
+    res.json({ url: session.url, sessionId: session.id });
+  } catch(err) {
+    console.error('Stripe create session error:', err);
+    res.status(500).json({ error: "Failed to create checkout session." });
+  }
+});
+
+// Verify Stripe Session (called on return from Stripe)
+app.get("/api/verify-session", async (req, res) => {
+  const { session_id } = req.query;
+  if (!session_id) return res.status(400).json({ error: "Missing session_id." });
+  if (!STRIPE_SECRET) return res.status(500).json({ error: "Stripe not configured." });
+
+  try {
+    const response = await fetch(`https://api.stripe.com/v1/checkout/sessions/${session_id}`, {
+      headers: { 'Authorization': `Bearer ${STRIPE_SECRET}` }
+    });
+    const session = await response.json();
+
+    if (session.error) {
+      return res.status(400).json({ error: "Invalid session." });
+    }
+
+    const paid = session.payment_status === 'paid' || session.status === 'complete';
+    if (!paid) {
+      return res.status(402).json({ error: "Payment not completed." });
+    }
+
+    res.json({
+      success: true,
+      plan: session.metadata?.plan || 'essential',
+      lang: session.metadata?.lang || 'en',
+      sessionId: session.id,
+    });
+  } catch(err) {
+    console.error('Stripe verify error:', err);
+    res.status(500).json({ error: "Verification failed." });
+  }
+});
+
+// Stripe Webhook (for reliable payment confirmation + email backup)
+app.post("/api/stripe-webhook", express.raw({ type: 'application/json' }), async (req, res) => {
+  if (!STRIPE_WEBHOOK_SECRET) return res.status(200).send('ok');
+
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    // Manual HMAC verification without the Stripe SDK
+    const crypto = require('crypto');
+    const payload = req.body.toString('utf8');
+    const parts = sig.split(',').reduce((acc, part) => {
+      const [k, v] = part.split('=');
+      acc[k] = v;
+      return acc;
+    }, {});
+
+    const timestamp = parts['t'];
+    const expectedSig = crypto
+      .createHmac('sha256', STRIPE_WEBHOOK_SECRET)
+      .update(`${timestamp}.${payload}`)
+      .digest('hex');
+
+    if (parts['v1'] !== expectedSig) {
+      return res.status(400).send('Invalid signature');
+    }
+
+    event = JSON.parse(payload);
+  } catch(err) {
+    console.error('Webhook signature error:', err);
+    return res.status(400).send('Webhook error');
+  }
+
+  // Handle events
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    console.log(`Payment confirmed via webhook: ${session.id} plan=${session.metadata?.plan}`);
+  }
+
+  res.status(200).json({ received: true });
+});
+
 // ─── CATCH ALL ────────────────────────────────────────────────────────────────
 
 app.get("*", (req, res) => {
