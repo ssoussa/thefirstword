@@ -859,6 +859,9 @@
   }
 
   async function startGeneration() {
+    // Reset outputs so no previous session data bleeds through
+    outputs = {};
+
     document.getElementById('pricingView').classList.add('hidden');
     document.getElementById('loadingView').classList.remove('hidden');
 
