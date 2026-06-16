@@ -489,95 +489,16 @@ app.post("/api/generate", async (req, res) => {
 // ─── API: SEND KIT EMAIL + SAVE TO SUPABASE ───────────────────────────────────
 
 app.post("/api/send-email", async (req, res) => {
-  const { email, name, lang, outputs, plan } = req.body;
+  const { email, name, lang, outputs, plan, answers: clientAnswers } = req.body;
   if (!email || !outputs) return res.status(400).json({ error: "Missing email or outputs." });
 
   const resendKey = process.env.RESEND_API_KEY;
   if (!resendKey) return res.status(500).json({ error: "Email service not configured." });
 
   try {
-    // 1. Save ALL plans to Supabase (upsert by email)
-    let subscriberId = null;
-    if (SUPABASE_KEY) {
-      try {
-        const clientAnswers = req.body.answers || {};
-        const isMonthly = plan === 'monthly';
-
-        // Check if subscriber already exists so we don't overwrite signed_up_at or week flags
-        let existingRecord = null;
-        try {
-          const existing = await supabaseQuery('subscribers', `email=eq.${encodeURIComponent(email)}&select=id,signed_up_at,week1_sent,week2_sent,week3_sent,week4_sent,active&limit=1`);
-          if (Array.isArray(existing) && existing[0]?.id) existingRecord = existing[0];
-        } catch(e) { /* non-blocking */ }
-
-        const rowData = {
-          email,
-          name: name || '',
-          lang: lang || 'en',
-          plan: plan || 'starter',
-          // Preserve original sign-up date so weekly email timing isn't disrupted
-          signed_up_at: existingRecord ? existingRecord.signed_up_at : new Date().toISOString(),
-          // Only active=true for monthly
-          active: isMonthly ? true : (existingRecord ? existingRecord.active : false),
-          // Preserve week flags for monthly — reset only for brand new monthly subscribers
-          week1_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week1_sent : false),
-          week2_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week2_sent : false),
-          week3_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week3_sent : false),
-          week4_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week4_sent : false),
-          // ALWAYS overwrite client data — every new kit is a fresh generation
-          relationship: clientAnswers.relationship || '',
-          substance: clientAnswers.substance || '',
-          duration: clientAnswers.duration || '',
-          treatment: clientAnswers.treatment || '',
-          attitude: clientAnswers.attitude || '',
-          tone: clientAnswers.tone || '',
-          situation: clientAnswers.situation || '',
-          patient_name: clientAnswers.patientName || '',
-          kit_outputs: {
-            letter: outputs.letter || '',
-            guide: outputs.guide || '',
-            sms: outputs.sms || '',
-            script: outputs.script || '',
-            planB: outputs.planB || ''
-          }
-        };
-
-        const result = await supabaseUpsert('subscribers', rowData);
-        if (Array.isArray(result) && result[0]?.id) {
-          subscriberId = result[0].id;
-          console.log(`Subscriber saved: ${email} (id: ${subscriberId}, plan: ${plan})`);
-        } else if (existingRecord?.id) {
-          subscriberId = existingRecord.id;
-          console.log(`Subscriber upsert fallback to existing id: ${subscriberId}`);
-        }
-
-        // Always explicitly PATCH kit_outputs — upsert merge-duplicates
-        // can silently ignore JSONB columns on conflict in some Supabase versions
-        if (subscriberId) {
-          await supabaseUpdate('subscribers', subscriberId, {
-            kit_outputs: rowData.kit_outputs,
-            lang: rowData.lang,
-            plan: rowData.plan,
-            name: rowData.name,
-            patient_name: rowData.patient_name,
-            relationship: rowData.relationship,
-            substance: rowData.substance,
-            duration: rowData.duration,
-            treatment: rowData.treatment,
-            attitude: rowData.attitude,
-            tone: rowData.tone,
-            situation: rowData.situation,
-          });
-          console.log(`kit_outputs PATCH confirmed for ${email}`);
-        }
-      } catch (dbErr) {
-        console.error("Supabase save error:", dbErr);
-        // Don't fail the request if DB save fails
-      }
-    }
-
-    // 2. Send the kit email (with unsubscribe link if we have a subscriber ID)
-    const html = buildKitEmail(outputs, name, lang, subscriberId, email);
+    // 1. SEND EMAIL FIRST — use exactly what client sent, no DB lookup
+    // This guarantees the email always reflects the current session's data
+    const html = buildKitEmail(outputs, name, lang, null, email);
     const subject = lang === 'fr'
       ? "Votre kit d'intervention personnalisé — TheFirstWord"
       : "Your personalized intervention kit — TheFirstWord";
@@ -587,6 +508,68 @@ app.post("/api/send-email", async (req, res) => {
     if (!emailResult.id) {
       console.error("Resend error:", JSON.stringify(emailResult));
       return res.status(500).json({ error: `Email failed: ${emailResult.message || emailResult.name || JSON.stringify(emailResult)}` });
+    }
+
+    // 2. SAVE TO SUPABASE AFTER — non-blocking, email already sent
+    let subscriberId = null;
+    if (SUPABASE_KEY) {
+      try {
+        const isMonthly = plan === 'monthly';
+
+        // Check existing record to preserve signed_up_at and week flags
+        let existingRecord = null;
+        try {
+          const existing = await supabaseQuery('subscribers', `email=eq.${encodeURIComponent(email)}&select=id,signed_up_at,week1_sent,week2_sent,week3_sent,week4_sent,active&limit=1`);
+          if (Array.isArray(existing) && existing[0]?.id) existingRecord = existing[0];
+        } catch(e) { /* non-blocking */ }
+
+        const kit_outputs = {
+          letter: outputs.letter || '',
+          guide: outputs.guide || '',
+          sms: outputs.sms || '',
+          script: outputs.script || '',
+          planB: outputs.planB || ''
+        };
+
+        const rowData = {
+          email,
+          name: name || '',
+          lang: lang || 'en',
+          plan: plan || 'starter',
+          signed_up_at: existingRecord ? existingRecord.signed_up_at : new Date().toISOString(),
+          active: isMonthly ? true : (existingRecord ? existingRecord.active : false),
+          week1_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week1_sent : false),
+          week2_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week2_sent : false),
+          week3_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week3_sent : false),
+          week4_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week4_sent : false),
+          // Always overwrite with current session data
+          relationship: (clientAnswers && clientAnswers.relationship) || '',
+          substance: (clientAnswers && clientAnswers.substance) || '',
+          duration: (clientAnswers && clientAnswers.duration) || '',
+          treatment: (clientAnswers && clientAnswers.treatment) || '',
+          attitude: (clientAnswers && clientAnswers.attitude) || '',
+          tone: (clientAnswers && clientAnswers.tone) || '',
+          situation: (clientAnswers && clientAnswers.situation) || '',
+          patient_name: (clientAnswers && clientAnswers.patientName) || '',
+          kit_outputs
+        };
+
+        const result = await supabaseUpsert('subscribers', rowData);
+        if (Array.isArray(result) && result[0]?.id) {
+          subscriberId = result[0].id;
+        } else if (existingRecord?.id) {
+          subscriberId = existingRecord.id;
+        }
+
+        // Explicit PATCH to guarantee kit_outputs saves
+        if (subscriberId) {
+          await supabaseUpdate('subscribers', subscriberId, { kit_outputs, name: name || '', patient_name: (clientAnswers && clientAnswers.patientName) || '', lang: lang || 'en', plan: plan || 'starter' });
+          console.log(`Saved: ${email} id=${subscriberId}`);
+        }
+      } catch (dbErr) {
+        console.error("Supabase save error:", dbErr);
+        // Non-blocking — email already sent successfully
+      }
     }
 
     res.json({ success: true, id: emailResult.id });
