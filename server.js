@@ -540,6 +540,29 @@ app.post("/api/send-email", async (req, res) => {
         if (Array.isArray(result) && result[0]?.id) {
           subscriberId = result[0].id;
           console.log(`Subscriber saved: ${email} (id: ${subscriberId}, plan: ${plan})`);
+        } else if (existingRecord?.id) {
+          subscriberId = existingRecord.id;
+          console.log(`Subscriber upsert fallback to existing id: ${subscriberId}`);
+        }
+
+        // Always explicitly PATCH kit_outputs — upsert merge-duplicates
+        // can silently ignore JSONB columns on conflict in some Supabase versions
+        if (subscriberId) {
+          await supabaseUpdate('subscribers', subscriberId, {
+            kit_outputs: rowData.kit_outputs,
+            lang: rowData.lang,
+            plan: rowData.plan,
+            name: rowData.name,
+            patient_name: rowData.patient_name,
+            relationship: rowData.relationship,
+            substance: rowData.substance,
+            duration: rowData.duration,
+            treatment: rowData.treatment,
+            attitude: rowData.attitude,
+            tone: rowData.tone,
+            situation: rowData.situation,
+          });
+          console.log(`kit_outputs PATCH confirmed for ${email}`);
         }
       } catch (dbErr) {
         console.error("Supabase save error:", dbErr);
