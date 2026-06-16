@@ -766,6 +766,8 @@
     if (currentQ === 0) {
       try { posthog.capture('questionnaire_started'); } catch(e) {}
     }
+
+    document.getElementById('questionCard').innerHTML = html;
   }
 
   function selectOption(qId, value, el) {
