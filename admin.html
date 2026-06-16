@@ -355,7 +355,7 @@
           <div class="stat-sub">${d.last30Days} in the last 30 days</div>
         </div>
         <div class="stat-card green">
-          <div class="stat-label">Monthly Subscribers</div>
+          <div class="stat-label">Premium Subscribers</div>
           <div class="stat-value">${d.planCounts?.monthly || 0}</div>
           <div class="stat-sub">${d.weeklyActive} currently active</div>
         </div>
@@ -384,7 +384,7 @@
         <div class="card">
           <div class="card-title"><span class="card-title-dot"></span>Plan Breakdown</div>
           <div class="breakdown-list">
-            ${breakdownHtml(d.planCounts || {}, { starter:'Starter ($9)', essential:'Essential ($19)', complete:'Complete ($29)', monthly:'Monthly ($19/mo)' }, k => planColors[k] || '#7a8fa6')}
+            ${breakdownHtml(d.planCounts || {}, { starter:'Starter ($9)', essential:'Essential ($19)', complete:'Complete ($29)', monthly:'Premium ($19/mo)' }, k => planColors[k] || '#7a8fa6')}
           </div>
         </div>
       </div>
