@@ -56,11 +56,16 @@ async function supabaseUpdate(table, id, data) {
     headers: {
       'Content-Type': 'application/json',
       'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Prefer': 'return=representation'
     },
     body: JSON.stringify(data)
   });
-  return res.status;
+  const body = await res.json();
+  if (res.status >= 400) {
+    console.error(`supabaseUpdate error ${res.status}:`, JSON.stringify(body));
+  }
+  return body;
 }
 
 // ─── EMAIL TEMPLATES ──────────────────────────────────────────────────────────
@@ -1059,6 +1064,25 @@ app.get("/api/admin/stats", async (req, res) => {
   } catch(err) {
     console.error('Admin stats error:', err);
     res.status(500).json({ error: "Failed to load stats" });
+  }
+});
+
+// ─── DEBUG: CHECK SUPABASE RECORD (remove after fixing) ──────────────────────
+
+app.get("/api/debug-record", async (req, res) => {
+  const { email, secret } = req.query;
+  if (secret !== process.env.CRON_SECRET) return res.status(401).json({ error: "Unauthorized" });
+  if (!email) return res.status(400).json({ error: "Missing email" });
+  try {
+    const rows = await supabaseQuery('subscribers', `email=eq.${encodeURIComponent(email)}&select=id,email,name,lang,plan,patient_name,kit_outputs&limit=1`);
+    res.json({
+      found: rows && rows.length > 0,
+      row: rows?.[0] || null,
+      kit_outputs_is_null: rows?.[0]?.kit_outputs === null,
+      kit_outputs_has_letter: !!(rows?.[0]?.kit_outputs?.letter),
+    });
+  } catch(e) {
+    res.status(500).json({ error: e.message });
   }
 });
 
