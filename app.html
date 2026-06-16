@@ -1368,7 +1368,8 @@ Return ONLY the Plan B guide.`;
       } else {
         btn.disabled = false;
         btn.textContent = lang === 'en' ? 'Send →' : 'Envoyer →';
-        alert(lang === 'en' ? 'Failed to send. Please try again.' : 'Échec de l\'envoi. Veuillez réessayer.');
+        const errMsg = data.error || 'Unknown error';
+        alert((lang === 'en' ? 'Failed to send: ' : 'Échec de l\'envoi: ') + errMsg);
       }
     } catch (err) {
       console.error(err);
