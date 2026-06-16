@@ -1540,10 +1540,11 @@ Return ONLY the Plan B guide.`;
               planB: data.kitOutputs.planB || ''
             };
             selectedPlan = data.plan || 'essential';
-            // Set language from the stored subscriber record — source of truth
-            const kitLang = data.lang || returnLang || lang;
+            // URL lang param is source of truth (user chose it this session)
+            // Fall back to DB lang, then current lang
+            const kitLang = returnLang || data.lang || lang;
             if (kitLang !== lang) setLang(kitLang);
-            const senderName = data.name || (lang === 'en' ? 'there' : '');
+            const senderName = data.name || (kitLang === 'en' ? 'there' : '');
             const patientName = (data.answers && data.answers.patientName) || '';
             document.getElementById('questionnaireView').classList.add('hidden');
             showOutputs(senderName, patientName);
