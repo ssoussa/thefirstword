@@ -515,15 +515,16 @@ app.post("/api/send-email", async (req, res) => {
           name: name || '',
           lang: lang || 'en',
           plan: plan || 'starter',
-          // Only set signed_up_at on new records — preserve existing so weekly email timing isn't disrupted
+          // Preserve original sign-up date so weekly email timing isn't disrupted
           signed_up_at: existingRecord ? existingRecord.signed_up_at : new Date().toISOString(),
-          // Only set active=true for monthly. Non-monthly stays false. Don't reset to false if already monthly.
+          // Only active=true for monthly
           active: isMonthly ? true : (existingRecord ? existingRecord.active : false),
-          // Only reset week flags for new monthly subscribers — preserve for existing
+          // Preserve week flags for monthly — reset only for brand new monthly subscribers
           week1_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week1_sent : false),
           week2_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week2_sent : false),
           week3_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week3_sent : false),
           week4_sent: (isMonthly && !existingRecord) ? false : (existingRecord ? existingRecord.week4_sent : false),
+          // ALWAYS overwrite client data — every new kit is a fresh generation
           relationship: clientAnswers.relationship || '',
           substance: clientAnswers.substance || '',
           duration: clientAnswers.duration || '',
