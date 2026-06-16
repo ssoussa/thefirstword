@@ -951,6 +951,94 @@ app.post("/api/send-planb-email", async (req, res) => {
   }
 });
 
+// ─── API: ADMIN STATS ─────────────────────────────────────────────────────────
+
+app.get("/api/admin/stats", async (req, res) => {
+  const { secret } = req.query;
+  if (!secret || secret !== process.env.CRON_SECRET) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  if (!SUPABASE_KEY) return res.status(500).json({ error: "Database not configured" });
+
+  try {
+    // All subscribers
+    const all = await supabaseQuery('subscribers', 'select=*&order=signed_up_at.desc');
+    const subs = Array.isArray(all) ? all : [];
+
+    // Total kits
+    const total = subs.length;
+
+    // Last 30 days
+    const thirty = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const last30Days = subs.filter(s => s.signed_up_at > thirty).length;
+
+    // Weekly active (monthly plan + active=true)
+    const weeklyActive = subs.filter(s => s.plan === 'monthly' && s.active).length;
+
+    // Plan counts
+    const planCounts = { starter: 0, essential: 0, complete: 0, monthly: 0 };
+    subs.forEach(s => { if (planCounts[s.plan] !== undefined) planCounts[s.plan]++; });
+
+    // Language counts
+    const langCounts = { en: 0, fr: 0 };
+    subs.forEach(s => { if (s.lang === 'fr') langCounts.fr++; else langCounts.en++; });
+
+    // Substance counts
+    const substanceCounts = {};
+    subs.forEach(s => {
+      if (s.substance) substanceCounts[s.substance] = (substanceCounts[s.substance] || 0) + 1;
+    });
+
+    // Relationship counts
+    const relationshipCounts = {};
+    subs.forEach(s => {
+      if (s.relationship) relationshipCounts[s.relationship] = (relationshipCounts[s.relationship] || 0) + 1;
+    });
+
+    // Daily signups — last 14 days
+    const dailySignups = {};
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const key = d.toISOString().split('T')[0];
+      dailySignups[key] = 0;
+    }
+    subs.forEach(s => {
+      if (s.signed_up_at) {
+        const key = s.signed_up_at.split('T')[0];
+        if (dailySignups[key] !== undefined) dailySignups[key]++;
+      }
+    });
+
+    // Recent 25 subscribers
+    const recent = subs.slice(0, 25);
+
+    // Testimonials (all, approved and pending)
+    let testimonials = [];
+    try {
+      const tRows = await supabaseQuery('testimonials', 'select=*&order=created_at.desc&limit=20');
+      testimonials = Array.isArray(tRows) ? tRows : [];
+    } catch(e) { /* non-blocking */ }
+
+    res.json({
+      total,
+      last30Days,
+      weeklyActive,
+      planCounts,
+      langCounts,
+      substanceCounts,
+      relationshipCounts,
+      dailySignups,
+      recent,
+      testimonials
+    });
+
+  } catch(err) {
+    console.error('Admin stats error:', err);
+    res.status(500).json({ error: "Failed to load stats" });
+  }
+});
+
 // ─── HEALTH CHECK ─────────────────────────────────────────────────────────────
 
 app.get("/api/health", (req, res) => {
