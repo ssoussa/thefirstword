@@ -1540,6 +1540,9 @@ Return ONLY the Plan B guide.`;
               planB: data.kitOutputs.planB || ''
             };
             selectedPlan = data.plan || 'essential';
+            // Set language from the stored subscriber record — source of truth
+            const kitLang = data.lang || returnLang || lang;
+            if (kitLang !== lang) setLang(kitLang);
             const senderName = data.name || (lang === 'en' ? 'there' : '');
             const patientName = (data.answers && data.answers.patientName) || '';
             document.getElementById('questionnaireView').classList.add('hidden');
