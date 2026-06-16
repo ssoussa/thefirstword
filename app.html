@@ -403,8 +403,8 @@
         </div>
       </div>
 
-      <button class="btn-generate-main en-text" onclick="startGeneration()">Generate My Personalized Kit →</button>
-      <button class="btn-generate-main fr-text hidden" onclick="startGeneration()">Générer mon kit personnalisé →</button>
+      <button class="btn-generate-main en-text" onclick="goToCheckout()">Continue to Payment →</button>
+      <button class="btn-generate-main fr-text hidden" onclick="goToCheckout()">Continuer vers le paiement →</button>
       <div class="info-box en-text">🔒 100% money-back guarantee if not satisfied. Your information is private and secure.</div>
       <div class="info-box fr-text hidden">🔒 Garantie de remboursement 100% si non satisfait. Vos informations sont privées et sécurisées.</div>
     </div>
@@ -820,6 +820,42 @@
   }
 
   // ─── GENERATION ───────────────────────────────────────────────────────────
+  // ─── STRIPE CHECKOUT ────────────────────────────────────────────────────────
+
+  async function goToCheckout() {
+    const btn = document.querySelector('.btn-generate-main:not(.hidden)');
+    btn.disabled = true;
+    btn.textContent = lang === 'en' ? 'Redirecting to payment...' : 'Redirection vers le paiement...';
+
+    // Save all answers + plan to sessionStorage so they survive the Stripe redirect
+    try {
+      sessionStorage.setItem('tfw_answers', JSON.stringify(answers));
+      sessionStorage.setItem('tfw_plan', selectedPlan);
+      sessionStorage.setItem('tfw_lang', lang);
+    } catch(e) { console.error('sessionStorage error:', e); }
+
+    try {
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: selectedPlan, lang })
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(lang === 'en' ? 'Payment setup failed. Please try again.' : 'Échec du paiement. Veuillez réessayer.');
+        btn.disabled = false;
+        btn.textContent = lang === 'en' ? 'Continue to Payment →' : 'Continuer vers le paiement →';
+      }
+    } catch(err) {
+      console.error('Checkout error:', err);
+      alert(lang === 'en' ? 'Connection error. Please try again.' : 'Erreur de connexion. Veuillez réessayer.');
+      btn.disabled = false;
+      btn.textContent = lang === 'en' ? 'Continue to Payment →' : 'Continuer vers le paiement →';
+    }
+  }
+
   async function startGeneration() {
     document.getElementById('pricingView').classList.add('hidden');
     document.getElementById('loadingView').classList.remove('hidden');
@@ -1374,6 +1410,94 @@ Return ONLY the Plan B guide.`;
     const returnEmail = params.get('email');
     const returnLang = params.get('lang');
     const viewKit = params.get('view') === 'kit';
+    const sessionId = params.get('session_id');
+    const cancelled = params.get('cancelled') === 'true';
+
+    // ── STRIPE RETURN: payment cancelled ──────────────────────────────────────
+    if (cancelled) {
+      // Restore answers and go back to pricing so they can try again
+      try {
+        const savedAnswers = sessionStorage.getItem('tfw_answers');
+        const savedPlan = sessionStorage.getItem('tfw_plan');
+        const savedLang = sessionStorage.getItem('tfw_lang');
+        if (savedAnswers) answers = JSON.parse(savedAnswers);
+        if (savedPlan) selectedPlan = savedPlan;
+        if (savedLang && savedLang !== lang) setLang(savedLang);
+      } catch(e) {}
+
+      document.getElementById('questionnaireView').classList.add('hidden');
+      document.getElementById('pricingView').classList.remove('hidden');
+
+      // Pre-select their previous plan
+      document.querySelectorAll('.price-card').forEach(c => c.classList.remove('selected'));
+      const prevCard = document.querySelector(`.price-card[data-plan="${selectedPlan}"]`);
+      if (prevCard) prevCard.classList.add('selected');
+
+      // Show cancelled notice
+      const notice = document.createElement('div');
+      notice.style.cssText = 'background:rgba(232,101,10,0.08);border:1px solid rgba(232,101,10,0.2);border-radius:8px;padding:12px 16px;text-align:center;margin-bottom:16px;font-size:13px;color:#c4622d;';
+      notice.textContent = lang === 'en'
+        ? 'Payment was cancelled. Your answers are saved — choose a plan and try again.'
+        : 'Paiement annulé. Vos réponses sont sauvegardées — choisissez un plan et réessayez.';
+      document.getElementById('pricingView').insertBefore(notice, document.getElementById('pricingView').firstChild);
+      return;
+    }
+
+    // ── STRIPE RETURN: payment completed ─────────────────────────────────────
+    if (sessionId) {
+      // Restore answers from sessionStorage
+      try {
+        const savedAnswers = sessionStorage.getItem('tfw_answers');
+        const savedPlan = sessionStorage.getItem('tfw_plan');
+        const savedLang = sessionStorage.getItem('tfw_lang');
+        if (savedAnswers) answers = JSON.parse(savedAnswers);
+        if (savedPlan) selectedPlan = savedPlan;
+        if (savedLang && savedLang !== lang) setLang(savedLang);
+      } catch(e) {}
+
+      // Apply lang from URL param (Stripe passes it back)
+      if (returnLang && returnLang !== lang) setLang(returnLang);
+
+      // Show loading immediately
+      document.getElementById('questionnaireView').classList.add('hidden');
+      document.getElementById('loadingView').classList.remove('hidden');
+
+      // Verify payment with server
+      try {
+        const verifyRes = await fetch(`/api/verify-session?session_id=${encodeURIComponent(sessionId)}`);
+        const verifyData = await verifyRes.json();
+
+        if (!verifyData.success) {
+          document.getElementById('loadingView').classList.add('hidden');
+          document.getElementById('questionnaireView').classList.remove('hidden');
+          alert(lang === 'en'
+            ? 'Payment could not be verified. Please contact us at thefirstword.ca@gmail.com'
+            : 'Le paiement n\'a pas pu être vérifié. Veuillez nous contacter à thefirstword.ca@gmail.com');
+          renderQuestion();
+          return;
+        }
+
+        // Payment confirmed — use plan from Stripe metadata as source of truth
+        selectedPlan = verifyData.plan || selectedPlan;
+
+        // Clean up sessionStorage
+        try {
+          sessionStorage.removeItem('tfw_answers');
+          sessionStorage.removeItem('tfw_plan');
+          sessionStorage.removeItem('tfw_lang');
+        } catch(e) {}
+
+        // Now generate the kit
+        await startGeneration();
+
+      } catch(err) {
+        console.error('Verify error:', err);
+        document.getElementById('loadingView').classList.add('hidden');
+        alert(lang === 'en' ? 'Verification error. Please try again.' : 'Erreur de vérification. Veuillez réessayer.');
+        renderQuestion();
+      }
+      return;
+    }
 
     if (isReturning && returnEmail) {
       // Apply language from URL param
