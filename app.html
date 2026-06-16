@@ -60,8 +60,18 @@
       height: auto;
     }
     @media (max-width: 600px) {
-      nav { padding: 8px 20px; }
+      nav { padding: 8px 20px; flex-wrap: wrap; }
       #nav-logo-img { width: 140px; }
+      .nav-tagline {
+        width: 100%;
+        border-left: none;
+        margin-left: 0;
+        padding-left: 0;
+        padding: 6px 0 2px;
+        border-top: 1px solid var(--divider);
+        margin-top: 6px;
+      }
+      .nav-tagline span { font-size: 10px; letter-spacing: 1px; }
     }
 
     /* MAIN LAYOUT */
@@ -291,6 +301,10 @@
   <a href="index.html" style="display:flex;align-items:center;text-decoration:none;line-height:0;">
     <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" />
   </a>
+  <div class="nav-tagline" style="display:flex;flex-direction:column;justify-content:center;margin-left:12px;border-left:1.5px solid var(--divider);padding-left:12px;">
+    <span class="en-text" style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);white-space:nowrap;">Addiction &amp; Mental Health Support</span>
+    <span class="fr-text hidden" style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);white-space:nowrap;">Soutien en Dépendance &amp; Santé Mentale</span>
+  </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
     <button class="lang-btn" onclick="setLang('fr')">FR</button>
