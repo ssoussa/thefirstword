@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — TheFirstWord</title>
+  <meta name="description" content="Privacy Policy for TheFirstWord. Learn how we collect, use, and protect your personal information." />
+  <link rel="canonical" href="https://thefirstword.ca/privacy.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F7F4EF;
+      --text: #1C2B3A;
+      --text-light: #5a6a7a;
+      --teal: #2A7F7F;
+      --teal-light: #e8f4f4;
+      --cta: #C4622D;
+      --divider: #E8E2D9;
+      --white: #FFFFFF;
+    }
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: rgba(247,244,239,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--divider);
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    #nav-logo-img { width: 160px; height: auto; }
+    @media (max-width: 600px) {
+      nav { padding: 10px 20px; }
+      #nav-logo-img { width: 130px; }
+    }
+
+    /* LANG TOGGLE */
+    .lang-toggle {
+      display: flex;
+      gap: 4px;
+      background: rgba(28,43,58,0.08);
+      border-radius: 6px;
+      padding: 4px;
+    }
+    .lang-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-light);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .lang-btn.active {
+      background: white;
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    /* PAGE */
+    .page-container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+    @media (max-width: 600px) {
+      .page-container { padding: 36px 16px 80px; }
+    }
+
+    /* HEADER */
+    .page-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .page-meta {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    /* SECTIONS */
+    .policy-section {
+      margin-bottom: 40px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--teal-light);
+    }
+    .section-title span {
+      color: var(--teal);
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+    }
+    p {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+    ul {
+      margin: 8px 0 14px 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    ul li {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+      padding: 5px 0 5px 22px;
+      position: relative;
+    }
+    ul li::before {
+      content: '•';
+      color: var(--teal);
+      font-weight: 700;
+      position: absolute;
+      left: 6px;
+    }
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* INFO BOX */
+    .info-box {
+      background: var(--teal-light);
+      border-left: 4px solid var(--teal);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* TABLE */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .data-table th {
+      background: var(--teal);
+      color: white;
+      font-weight: 600;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+    .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--divider);
+      vertical-align: top;
+      color: var(--text);
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: rgba(247,244,239,0.6); }
+    @media (max-width: 600px) {
+      .data-table { font-size: 13px; }
+      .data-table th, .data-table td { padding: 8px 10px; }
+    }
+
+    /* CONTACT BOX */
+    .contact-box {
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-top: 48px;
+      text-align: center;
+    }
+    .contact-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .contact-box p { font-size: 14px; color: var(--text-light); margin-bottom: 16px; }
+    .contact-btn {
+      display: inline-block;
+      background: var(--teal);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .contact-btn:hover { background: #1d5f5f; text-decoration: none; }
+
+    /* FOOTER */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,0.7); }
+
+    /* HIDDEN */
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://thefirstword.ca" class="nav-logo">
+    <img id="nav-logo-img"
+      src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png"
+      alt="TheFirstWord" />
+  </a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page-container">
+
+  <!-- ═══════════════════════════════════════════════════════ ENGLISH ════ -->
+  <div id="content-en">
+
+    <p class="page-eyebrow">Legal</p>
+    <h1 class="page-title">Privacy Policy</h1>
+    <p class="page-meta">
+      TheFirstWord &nbsp;·&nbsp; Last updated: June 2025 &nbsp;·&nbsp;
+      <a href="#" onclick="setLang('fr'); return false;">Lire en français →</a>
+    </p>
+
+    <div class="info-box">
+      Your privacy matters to us. This policy explains what information we collect, why we collect it, how we use it, and what rights you have under Quebec's Act respecting the protection of personal information in the private sector (Law 25 / Loi 25).
+    </div>
+
+    <!-- 1 -->
+    <div class="policy-section">
+      <h2 class="section-title">1. Who We Are</h2>
+      <p>TheFirstWord is operated by Sami Soussa, an individual located in Quebec, Canada. We offer an AI-powered tool to help families communicate with loved ones dealing with addiction.</p>
+      <p>
+        <strong>Contact:</strong> <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a><br />
+        <strong>Website:</strong> <a href="https://thefirstword.ca">thefirstword.ca</a>
+      </p>
+    </div>
+
+    <!-- 2 -->
+    <div class="policy-section">
+      <h2 class="section-title">2. What Information We Collect</h2>
+      <p>We collect only the information necessary to provide you with a personalized intervention kit.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Information</th><th>Why We Collect It</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Your first name</strong></td><td>To personalize your kit and email</td></tr>
+          <tr><td><strong>Your loved one's first name</strong></td><td>To personalize your letter, guide, SMS and script</td></tr>
+          <tr><td><strong>Your email address</strong></td><td>To deliver your kit and send optional weekly check-in emails</td></tr>
+          <tr><td><strong>Questionnaire answers</strong> (relationship, substance, duration, attitude, tone, situation description)</td><td>To generate a personalized, context-specific intervention kit via AI</td></tr>
+          <tr><td><strong>Payment information</strong></td><td>Processed securely by Stripe. We never see or store your full card number.</td></tr>
+        </tbody>
+      </table>
+      <p>We do not collect your full name, address, phone number, date of birth, or any government-issued identification.</p>
+    </div>
+
+    <!-- 3 -->
+    <div class="policy-section">
+      <h2 class="section-title">3. How We Use Your Information</h2>
+      <ul>
+        <li>To generate your personalized intervention kit using AI (Anthropic API)</li>
+        <li>To deliver your kit by email (Resend)</li>
+        <li>To send weekly check-in emails if you are on the Premium plan (you can unsubscribe at any time)</li>
+        <li>To allow you to return to your kit using your email address</li>
+        <li>To process your payment securely (Stripe)</li>
+        <li>To improve our service through anonymized usage analytics (Posthog)</li>
+      </ul>
+      <p>We do <strong>not</strong> sell your personal information. We do not use it for advertising. We do not share it with any party except those listed in Section 4.</p>
+    </div>
+
+    <!-- 4 -->
+    <div class="policy-section">
+      <h2 class="section-title">4. Third-Party Service Providers</h2>
+      <p>We use the following trusted service providers. Each processes your data solely to provide their specific service to us:</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Provider</th><th>Purpose</th><th>Location</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Anthropic</strong></td><td>AI generation of your kit content</td><td>United States</td></tr>
+          <tr><td><strong>Supabase</strong></td><td>Secure database storage of your account data</td><td>Canada (Central)</td></tr>
+          <tr><td><strong>Resend</strong></td><td>Transactional email delivery</td><td>United States</td></tr>
+          <tr><td><strong>Stripe</strong></td><td>Payment processing</td><td>United States</td></tr>
+          <tr><td><strong>Posthog</strong></td><td>Anonymized usage analytics</td><td>United States</td></tr>
+          <tr><td><strong>Namecheap</strong></td><td>Domain name registration</td><td>United States</td></tr>
+          <tr><td><strong>Render</strong></td><td>Application hosting</td><td>United States</td></tr>
+        </tbody>
+      </table>
+      <p>Some of these providers are located outside of Quebec and Canada. By using TheFirstWord, you acknowledge that your information may be transferred to and processed in the United States, in accordance with applicable law.</p>
+    </div>
+
+    <!-- 5 -->
+    <div class="policy-section">
+      <h2 class="section-title">5. Data Retention</h2>
+      <p>We retain your personal information for as long as necessary to provide our services. Specifically:</p>
+      <ul>
+        <li>Your name, email, and kit outputs are stored in our database indefinitely to allow you to return to your kit</li>
+        <li>If you unsubscribe from all emails, your data remains stored but you will no longer receive communications</li>
+        <li>You may request deletion of your data at any time — see Section 7</li>
+      </ul>
+    </div>
+
+    <!-- 6 -->
+    <div class="policy-section">
+      <h2 class="section-title">6. Cookies and Analytics</h2>
+      <p>We use Posthog for basic anonymized analytics (page views, feature usage). This helps us understand how people use TheFirstWord so we can improve it.</p>
+      <p>We do not use advertising cookies. We do not build marketing profiles. We do not share analytics data with third parties.</p>
+    </div>
+
+    <!-- 7 -->
+    <div class="policy-section">
+      <h2 class="section-title">7. Your Rights Under Quebec Law 25</h2>
+      <p>As a resident of Quebec (or anywhere in Canada), you have the following rights regarding your personal information:</p>
+      <ul>
+        <li><strong>Right to access</strong> — You can request a copy of the personal information we hold about you</li>
+        <li><strong>Right to correction</strong> — You can ask us to correct inaccurate or incomplete information</li>
+        <li><strong>Right to deletion</strong> — You can request that we delete your personal information from our systems</li>
+        <li><strong>Right to withdraw consent</strong> — You can unsubscribe from all emails at any time using the unsubscribe link in any email we send you</li>
+        <li><strong>Right to portability</strong> — You can request your data in a structured, machine-readable format</li>
+      </ul>
+      <p>To exercise any of these rights, contact us at <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a>. We will respond within 30 days.</p>
+    </div>
+
+    <!-- 8 -->
+    <div class="policy-section">
+      <h2 class="section-title">8. Security</h2>
+      <p>We take reasonable measures to protect your personal information, including:</p>
+      <ul>
+        <li>HTTPS encryption on all data in transit</li>
+        <li>Secure database storage (Supabase, Canada Central)</li>
+        <li>Payment data handled exclusively by Stripe — we never store card details</li>
+        <li>Access to our database and administrative systems is restricted to authorized personnel only</li>
+      </ul>
+      <p>No method of transmission over the internet is 100% secure. While we strive to protect your information, we cannot guarantee absolute security.</p>
+    </div>
+
+    <!-- 9 -->
+    <div class="policy-section">
+      <h2 class="section-title">9. Sensitive Information</h2>
+      <p>The nature of our service means that some information you provide — such as a loved one's substance use, your relationship, and your personal situation — is sensitive in nature.</p>
+      <p>We treat this information with the utmost care. It is used <strong>only</strong> to generate your personalized kit via AI. It is not shared, sold, or used for any other purpose.</p>
+      <p>We strongly encourage you to use only first names when completing the questionnaire and to avoid including identifying information (such as full names, addresses, or health card numbers) in your free-text responses.</p>
+    </div>
+
+    <!-- 10 -->
+    <div class="policy-section">
+      <h2 class="section-title">10. Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time. When we do, we will update the "Last updated" date at the top of this page. Continued use of TheFirstWord after any changes constitutes your acceptance of the updated policy.</p>
+      <p>For material changes, we will notify active users by email.</p>
+    </div>
+
+    <!-- 11 -->
+    <div class="policy-section">
+      <h2 class="section-title">11. Contact & Privacy Complaints</h2>
+      <p>If you have a question, concern, or complaint about how your personal information is handled, please contact us:</p>
+      <p><strong>Email:</strong> <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
+      <p>If you are not satisfied with our response, you have the right to file a complaint with the Commission d'accès à l'information du Québec (CAI) at <a href="https://www.cai.gouv.qc.ca" target="_blank" rel="noopener">cai.gouv.qc.ca</a>.</p>
+    </div>
+
+    <div class="contact-box">
+      <h3>Questions about your privacy?</h3>
+      <p>We're a small team and we take your privacy seriously. Reach out anytime.</p>
+      <a href="mailto:thefirstword.ca@gmail.com" class="contact-btn">Contact Us →</a>
+    </div>
+
+  </div><!-- /content-en -->
+
+
+  <!-- ═══════════════════════════════════════════════════════ FRANÇAIS ════ -->
+  <div id="content-fr" class="hidden">
+
+    <p class="page-eyebrow">Légal</p>
+    <h1 class="page-title">Politique de confidentialité</h1>
+    <p class="page-meta">
+      TheFirstWord &nbsp;·&nbsp; Dernière mise à jour : juin 2025 &nbsp;·&nbsp;
+      <a href="#" onclick="setLang('en'); return false;">Read in English →</a>
+    </p>
+
+    <div class="info-box">
+      Votre vie privée nous importe. Cette politique explique quelles informations nous collectons, pourquoi nous les collectons, comment nous les utilisons et quels droits vous avez en vertu de la Loi sur la protection des renseignements personnels dans le secteur privé du Québec (Loi 25).
+    </div>
+
+    <!-- 1 -->
+    <div class="policy-section">
+      <h2 class="section-title">1. Qui sommes-nous</h2>
+      <p>TheFirstWord est exploité par Sami Soussa, un particulier situé au Québec, Canada. Nous offrons un outil alimenté par l'intelligence artificielle pour aider les familles à communiquer avec un proche aux prises avec une dépendance.</p>
+      <p>
+        <strong>Contact :</strong> <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a><br />
+        <strong>Site web :</strong> <a href="https://thefirstword.ca">thefirstword.ca</a>
+      </p>
+    </div>
+
+    <!-- 2 -->
+    <div class="policy-section">
+      <h2 class="section-title">2. Informations que nous collectons</h2>
+      <p>Nous ne collectons que les informations nécessaires pour vous fournir un kit d'intervention personnalisé.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Information</th><th>Pourquoi nous la collectons</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Votre prénom</strong></td><td>Pour personnaliser votre kit et votre courriel</td></tr>
+          <tr><td><strong>Le prénom de votre proche</strong></td><td>Pour personnaliser votre lettre, guide, SMS et script</td></tr>
+          <tr><td><strong>Votre adresse courriel</strong></td><td>Pour livrer votre kit et envoyer des suivis hebdomadaires optionnels</td></tr>
+          <tr><td><strong>Réponses au questionnaire</strong> (relation, substance, durée, attitude, ton, description de la situation)</td><td>Pour générer un kit d'intervention personnalisé et contextuel via l'IA</td></tr>
+          <tr><td><strong>Informations de paiement</strong></td><td>Traitées de façon sécurisée par Stripe. Nous ne voyons ni ne stockons jamais votre numéro de carte complet.</td></tr>
+        </tbody>
+      </table>
+      <p>Nous ne collectons pas votre nom complet, adresse, numéro de téléphone, date de naissance ou toute pièce d'identité gouvernementale.</p>
+    </div>
+
+    <!-- 3 -->
+    <div class="policy-section">
+      <h2 class="section-title">3. Comment nous utilisons vos informations</h2>
+      <ul>
+        <li>Pour générer votre kit d'intervention personnalisé via l'IA (API Anthropic)</li>
+        <li>Pour livrer votre kit par courriel (Resend)</li>
+        <li>Pour envoyer des suivis hebdomadaires si vous êtes abonné au plan Premium (vous pouvez vous désabonner en tout temps)</li>
+        <li>Pour vous permettre de revenir à votre kit en utilisant votre adresse courriel</li>
+        <li>Pour traiter votre paiement de façon sécurisée (Stripe)</li>
+        <li>Pour améliorer notre service grâce à des analyses d'utilisation anonymisées (Posthog)</li>
+      </ul>
+      <p>Nous ne <strong>vendons pas</strong> vos renseignements personnels. Nous ne les utilisons pas à des fins publicitaires. Nous ne les partageons pas avec des tiers, sauf ceux listés à la section 4.</p>
+    </div>
+
+    <!-- 4 -->
+    <div class="policy-section">
+      <h2 class="section-title">4. Fournisseurs de services tiers</h2>
+      <p>Nous faisons appel aux fournisseurs de confiance suivants. Chacun traite vos données uniquement pour fournir leur service spécifique :</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Fournisseur</th><th>Rôle</th><th>Emplacement</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Anthropic</strong></td><td>Génération IA du contenu de votre kit</td><td>États-Unis</td></tr>
+          <tr><td><strong>Supabase</strong></td><td>Stockage sécurisé des données de votre compte</td><td>Canada (Centre)</td></tr>
+          <tr><td><strong>Resend</strong></td><td>Livraison des courriels transactionnels</td><td>États-Unis</td></tr>
+          <tr><td><strong>Stripe</strong></td><td>Traitement des paiements</td><td>États-Unis</td></tr>
+          <tr><td><strong>Posthog</strong></td><td>Analyses d'utilisation anonymisées</td><td>États-Unis</td></tr>
+          <tr><td><strong>Namecheap</strong></td><td>Enregistrement du nom de domaine</td><td>États-Unis</td></tr>
+          <tr><td><strong>Render</strong></td><td>Hébergement de l'application</td><td>États-Unis</td></tr>
+        </tbody>
+      </table>
+      <p>Certains de ces fournisseurs sont situés à l'extérieur du Québec et du Canada. En utilisant TheFirstWord, vous reconnaissez que vos informations pourraient être transférées et traitées aux États-Unis, conformément aux lois applicables.</p>
+    </div>
+
+    <!-- 5 -->
+    <div class="policy-section">
+      <h2 class="section-title">5. Conservation des données</h2>
+      <p>Nous conservons vos renseignements personnels aussi longtemps que nécessaire pour fournir nos services. Plus précisément :</p>
+      <ul>
+        <li>Votre nom, votre courriel et les résultats de votre kit sont stockés dans notre base de données afin que vous puissiez y revenir en tout temps</li>
+        <li>Si vous vous désabonnez de tous les courriels, vos données restent stockées mais nous ne vous enverrons plus de communications</li>
+        <li>Vous pouvez demander la suppression de vos données en tout temps — voir la section 7</li>
+      </ul>
+    </div>
+
+    <!-- 6 -->
+    <div class="policy-section">
+      <h2 class="section-title">6. Témoins (cookies) et analyses</h2>
+      <p>Nous utilisons Posthog pour des analyses d'utilisation de base et anonymisées (pages vues, utilisation des fonctionnalités). Cela nous aide à comprendre comment les gens utilisent TheFirstWord afin de l'améliorer.</p>
+      <p>Nous n'utilisons pas de témoins publicitaires. Nous ne créons pas de profils marketing. Nous ne partageons pas les données analytiques avec des tiers.</p>
+    </div>
+
+    <!-- 7 -->
+    <div class="policy-section">
+      <h2 class="section-title">7. Vos droits en vertu de la Loi 25</h2>
+      <p>En tant que résident du Québec (ou du Canada), vous disposez des droits suivants concernant vos renseignements personnels :</p>
+      <ul>
+        <li><strong>Droit d'accès</strong> — Vous pouvez demander une copie des renseignements personnels que nous détenons à votre sujet</li>
+        <li><strong>Droit de correction</strong> — Vous pouvez nous demander de corriger des informations inexactes ou incomplètes</li>
+        <li><strong>Droit à la suppression</strong> — Vous pouvez demander que nous supprimions vos renseignements personnels de nos systèmes</li>
+        <li><strong>Droit de retirer votre consentement</strong> — Vous pouvez vous désabonner de tous les courriels en tout temps via le lien de désabonnement présent dans chaque courriel</li>
+        <li><strong>Droit à la portabilité</strong> — Vous pouvez demander vos données dans un format structuré et lisible par machine</li>
+      </ul>
+      <p>Pour exercer l'un de ces droits, contactez-nous à <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a>. Nous répondrons dans un délai de 30 jours.</p>
+    </div>
+
+    <!-- 8 -->
+    <div class="policy-section">
+      <h2 class="section-title">8. Sécurité</h2>
+      <p>Nous prenons des mesures raisonnables pour protéger vos renseignements personnels, notamment :</p>
+      <ul>
+        <li>Chiffrement HTTPS sur toutes les données en transit</li>
+        <li>Stockage sécurisé dans notre base de données (Supabase, Canada Centre)</li>
+        <li>Les données de paiement sont traitées exclusivement par Stripe — nous ne stockons jamais les détails de votre carte</li>
+        <li>L'accès à notre base de données et à nos systèmes d'administration est restreint au personnel autorisé uniquement</li>
+      </ul>
+      <p>Aucune méthode de transmission sur internet n'est sécurisée à 100 %. Bien que nous nous efforcions de protéger vos informations, nous ne pouvons garantir une sécurité absolue.</p>
+    </div>
+
+    <!-- 9 -->
+    <div class="policy-section">
+      <h2 class="section-title">9. Informations sensibles</h2>
+      <p>La nature de notre service fait que certaines informations que vous fournissez — comme la consommation de substances d'un proche, votre relation et votre situation personnelle — sont de nature sensible.</p>
+      <p>Nous traitons ces informations avec le plus grand soin. Elles sont utilisées <strong>uniquement</strong> pour générer votre kit personnalisé via l'IA. Elles ne sont pas partagées, vendues ou utilisées à d'autres fins.</p>
+      <p>Nous vous encourageons fortement à n'utiliser que des prénoms lors du questionnaire et à éviter d'inclure des informations permettant l'identification (nom complet, adresse, numéro de carte santé) dans vos réponses libres.</p>
+    </div>
+
+    <!-- 10 -->
+    <div class="policy-section">
+      <h2 class="section-title">10. Modifications de cette politique</h2>
+      <p>Nous pouvons mettre à jour cette politique de confidentialité de temps à autre. Lorsque nous le faisons, nous mettons à jour la date de « Dernière mise à jour » en haut de cette page. L'utilisation continue de TheFirstWord après tout changement constitue votre acceptation de la politique mise à jour.</p>
+      <p>Pour les changements importants, nous en informerons les utilisateurs actifs par courriel.</p>
+    </div>
+
+    <!-- 11 -->
+    <div class="policy-section">
+      <h2 class="section-title">11. Contact et plaintes</h2>
+      <p>Si vous avez une question, une préoccupation ou une plainte concernant la façon dont vos renseignements personnels sont traités, veuillez nous contacter :</p>
+      <p><strong>Courriel :</strong> <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
+      <p>Si vous n'êtes pas satisfait de notre réponse, vous avez le droit de déposer une plainte auprès de la Commission d'accès à l'information du Québec (CAI) à l'adresse <a href="https://www.cai.gouv.qc.ca" target="_blank" rel="noopener">cai.gouv.qc.ca</a>.</p>
+    </div>
+
+    <div class="contact-box">
+      <h3>Des questions sur votre vie privée ?</h3>
+      <p>Nous sommes une petite équipe et nous prenons votre vie privée au sérieux. Contactez-nous en tout temps.</p>
+      <a href="mailto:thefirstword.ca@gmail.com" class="contact-btn">Nous contacter →</a>
+    </div>
+
+  </div><!-- /content-fr -->
+
+</div><!-- /page-container -->
+
+<footer>
+  <p>© <span id="footer-year"></span> TheFirstWord &nbsp;·&nbsp; <a href="https://thefirstword.ca">thefirstword.ca</a> &nbsp;·&nbsp; <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
+</footer>
+
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  let lang = 'en';
+
+  function setLang(l) {
+    lang = l;
+
+    // Toggle content blocks
+    document.getElementById('content-en').classList.toggle('hidden', l !== 'en');
+    document.getElementById('content-fr').classList.toggle('hidden', l !== 'fr');
+
+    // Toggle lang buttons
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    // Swap logo
+    const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
+    const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
+    const navLogo = document.getElementById('nav-logo-img');
+    if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
+
+    // Update html lang attribute
+    document.documentElement.lang = l;
+
+    // Scroll to top when switching language
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Auto-detect browser language on load
+  window.addEventListener('DOMContentLoaded', () => {
+    const browserLang = navigator.language || navigator.userLanguage || 'en';
+    if (browserLang.toLowerCase().startsWith('fr')) {
+      setLang('fr');
+    }
+  });
+</script>
+</body>
+</html>
