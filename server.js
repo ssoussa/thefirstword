@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const PDFDocument = require("pdfkit");
 
 const app = express();
 app.use(cors());
@@ -390,23 +391,165 @@ function buildWeeklyEmail(weekNumber, recipientName, lang, subscriberId, recipie
   };
 }
 
+// ─── INVOICE PDF GENERATOR ────────────────────────────────────────────────────
+
+const PLAN_PRICES = {
+  starter:   { en: 'Starter',   fr: 'Débutant',  price: '$9.00',  desc_en: 'Intervention Letter + Conversation Guide', desc_fr: "Lettre d'intervention + Guide de conversation" },
+  essential: { en: 'Essential', fr: 'Essentiel',  price: '$19.00', desc_en: 'Letter + Guide + SMS + Spoken Script',     desc_fr: 'Lettre + Guide + SMS + Script parlé' },
+  complete:  { en: 'Complete',  fr: 'Complet',    price: '$29.00', desc_en: 'Letter + Guide + SMS + Script + Plan B',   desc_fr: 'Lettre + Guide + SMS + Script + Plan B' },
+  monthly:   { en: 'Premium',   fr: 'Premium',    price: '$19.00', desc_en: 'Premium — Monthly Subscription',           desc_fr: 'Premium — Abonnement mensuel' },
+};
+
+function generateInvoicePDF(email, name, plan, lang) {
+  return new Promise((resolve, reject) => {
+    try {
+      const isEn = lang !== 'fr';
+      const planInfo = PLAN_PRICES[plan] || PLAN_PRICES.essential;
+      const invoiceNum = 'TFW-' + Date.now();
+      const dateStr = new Date().toLocaleDateString(isEn ? 'en-CA' : 'fr-CA', {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+
+      const doc = new PDFDocument({ margin: 50, size: 'A4' });
+      const chunks = [];
+      doc.on('data', chunk => chunks.push(chunk));
+      doc.on('end', () => resolve(Buffer.concat(chunks)));
+      doc.on('error', reject);
+
+      // ── HEADER ──────────────────────────────────────────────────────────────
+      // Brand name
+      doc.font('Helvetica-Bold').fontSize(22).fillColor('#1C2B3A').text('TheFirstWord', 50, 50);
+      doc.font('Helvetica').fontSize(10).fillColor('#2A7F7F').text('thefirstword.ca', 50, 76);
+      doc.font('Helvetica').fontSize(10).fillColor('#5a6a7a').text('hello@thefirstword.ca', 50, 90);
+
+      // Invoice label (top right)
+      doc.font('Helvetica-Bold').fontSize(28).fillColor('#C4622D')
+        .text(isEn ? 'INVOICE' : 'FACTURE', 350, 50, { align: 'right', width: 195 });
+
+      // Divider line
+      doc.moveTo(50, 120).lineTo(545, 120).strokeColor('#E8E2D9').lineWidth(1).stroke();
+
+      // ── INVOICE DETAILS ──────────────────────────────────────────────────────
+      doc.font('Helvetica-Bold').fontSize(10).fillColor('#5a6a7a')
+        .text(isEn ? 'INVOICE NUMBER' : 'NUMÉRO DE FACTURE', 50, 140);
+      doc.font('Helvetica').fontSize(11).fillColor('#1C2B3A').text(invoiceNum, 50, 155);
+
+      doc.font('Helvetica-Bold').fontSize(10).fillColor('#5a6a7a')
+        .text(isEn ? 'DATE' : 'DATE', 220, 140);
+      doc.font('Helvetica').fontSize(11).fillColor('#1C2B3A').text(dateStr, 220, 155);
+
+      doc.font('Helvetica-Bold').fontSize(10).fillColor('#5a6a7a')
+        .text(isEn ? 'PAYMENT STATUS' : 'STATUT DU PAIEMENT', 390, 140);
+      doc.font('Helvetica-Bold').fontSize(11).fillColor('#2A7F7F')
+        .text(isEn ? '✓ PAID' : '✓ PAYÉ', 390, 155);
+
+      // ── BILLED TO ────────────────────────────────────────────────────────────
+      doc.moveTo(50, 185).lineTo(545, 185).strokeColor('#E8E2D9').lineWidth(0.5).stroke();
+
+      doc.font('Helvetica-Bold').fontSize(10).fillColor('#5a6a7a')
+        .text(isEn ? 'BILLED TO' : 'FACTURÉ À', 50, 200);
+      if (name) {
+        doc.font('Helvetica-Bold').fontSize(12).fillColor('#1C2B3A').text(name, 50, 215);
+        doc.font('Helvetica').fontSize(11).fillColor('#5a6a7a').text(email, 50, 231);
+      } else {
+        doc.font('Helvetica').fontSize(11).fillColor('#1C2B3A').text(email, 50, 215);
+      }
+
+      doc.font('Helvetica-Bold').fontSize(10).fillColor('#5a6a7a')
+        .text(isEn ? 'SOLD BY' : 'VENDU PAR', 350, 200);
+      doc.font('Helvetica-Bold').fontSize(12).fillColor('#1C2B3A').text('TheFirstWord', 350, 215);
+      doc.font('Helvetica').fontSize(11).fillColor('#5a6a7a').text('Québec, Canada', 350, 231);
+
+      // ── LINE ITEMS TABLE ─────────────────────────────────────────────────────
+      const tableTop = 280;
+
+      // Table header background
+      doc.rect(50, tableTop, 495, 28).fill('#1C2B3A');
+
+      doc.font('Helvetica-Bold').fontSize(10).fillColor('#FFFFFF')
+        .text(isEn ? 'DESCRIPTION' : 'DESCRIPTION', 62, tableTop + 9)
+        .text(isEn ? 'PLAN' : 'PLAN', 340, tableTop + 9)
+        .text(isEn ? 'AMOUNT' : 'MONTANT', 460, tableTop + 9);
+
+      // Table row
+      doc.rect(50, tableTop + 28, 495, 40).fill('#F7F4EF');
+
+      const planLabel = isEn ? planInfo.en : planInfo.fr;
+      const planDesc = isEn ? planInfo.desc_en : planInfo.desc_fr;
+
+      doc.font('Helvetica').fontSize(10).fillColor('#1C2B3A')
+        .text(planDesc, 62, tableTop + 37, { width: 265 });
+      doc.font('Helvetica-Bold').fontSize(10).fillColor('#1C2B3A')
+        .text(planLabel, 340, tableTop + 37);
+      doc.font('Helvetica-Bold').fontSize(11).fillColor('#C4622D')
+        .text(planInfo.price, 460, tableTop + 37);
+
+      // ── TOTALS ───────────────────────────────────────────────────────────────
+      const totTop = tableTop + 88;
+
+      doc.moveTo(350, totTop).lineTo(545, totTop).strokeColor('#E8E2D9').lineWidth(0.5).stroke();
+
+      doc.font('Helvetica').fontSize(10).fillColor('#5a6a7a')
+        .text(isEn ? 'Subtotal' : 'Sous-total', 350, totTop + 10)
+        .text(planInfo.price, 490, totTop + 10, { align: 'right', width: 55 });
+
+      doc.font('Helvetica').fontSize(10).fillColor('#5a6a7a')
+        .text(isEn ? 'QST / GST' : 'TVQ / TPS', 350, totTop + 28)
+        .text(isEn ? 'N/A' : 'S/O', 490, totTop + 28, { align: 'right', width: 55 });
+
+      doc.moveTo(350, totTop + 48).lineTo(545, totTop + 48).strokeColor('#1C2B3A').lineWidth(1).stroke();
+
+      doc.font('Helvetica-Bold').fontSize(13).fillColor('#1C2B3A')
+        .text(isEn ? 'TOTAL' : 'TOTAL', 350, totTop + 56)
+        .text(planInfo.price, 490, totTop + 56, { align: 'right', width: 55 });
+
+      // ── NOTE ─────────────────────────────────────────────────────────────────
+      doc.rect(50, totTop + 100, 495, 36).fill('#e8f4f4');
+      doc.font('Helvetica').fontSize(9).fillColor('#2A7F7F')
+        .text(
+          isEn
+            ? 'Payment processed securely by Stripe. TheFirstWord is not currently registered for QST/GST. No tax applies to this transaction.'
+            : 'Paiement traité de façon sécurisée par Stripe. TheFirstWord n\'est pas actuellement inscrit aux fins de la TVQ/TPS. Aucune taxe ne s\'applique à cette transaction.',
+          62, totTop + 111, { width: 471 }
+        );
+
+      // ── FOOTER ───────────────────────────────────────────────────────────────
+      doc.font('Helvetica').fontSize(9).fillColor('#9b9390')
+        .text(
+          isEn
+            ? 'Thank you for using TheFirstWord. This receipt confirms your purchase. For any questions: thefirstword.ca@gmail.com'
+            : 'Merci d\'utiliser TheFirstWord. Ce reçu confirme votre achat. Pour toute question : thefirstword.ca@gmail.com',
+          50, 720, { align: 'center', width: 495 }
+        );
+
+      doc.end();
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
 // ─── RESEND HELPER ────────────────────────────────────────────────────────────
 
-async function sendEmail(to, subject, html) {
+async function sendEmail(to, subject, html, attachments = []) {
   const resendKey = process.env.RESEND_API_KEY;
+  const payload = {
+    from: "TheFirstWord <hello@thefirstword.ca>",
+    reply_to: "thefirstword.ca@gmail.com",
+    to: [to],
+    subject,
+    html,
+  };
+  if (attachments && attachments.length > 0) {
+    payload.attachments = attachments;
+  }
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${resendKey}`,
     },
-    body: JSON.stringify({
-      from: "TheFirstWord <hello@thefirstword.ca>",
-      reply_to: "thefirstword.ca@gmail.com",
-      to: [to],
-      subject,
-      html,
-    }),
+    body: JSON.stringify(payload),
   });
   return response.json();
 }
@@ -503,7 +646,21 @@ app.post("/api/send-email", async (req, res) => {
       ? "Votre kit d'intervention personnalisé — TheFirstWord"
       : "Your personalized intervention kit — TheFirstWord";
 
-    const emailResult = await sendEmail(email, subject, html);
+    // Generate invoice PDF — non-blocking: if it fails, email still sends
+    let invoiceAttachments = [];
+    try {
+      const invoicePdf = await generateInvoicePDF(email, name, plan || 'essential', lang || 'en');
+      const invoiceFilename = lang === 'fr' ? 'facture-thefirstword.pdf' : 'invoice-thefirstword.pdf';
+      invoiceAttachments = [{
+        filename: invoiceFilename,
+        content: invoicePdf.toString('base64'),
+        type: 'application/pdf',
+      }];
+    } catch (invoiceErr) {
+      console.error('Invoice generation failed (non-blocking):', invoiceErr.message);
+    }
+
+    const emailResult = await sendEmail(email, subject, html, invoiceAttachments);
 
     if (!emailResult.id) {
       console.error("Resend error:", JSON.stringify(emailResult));
