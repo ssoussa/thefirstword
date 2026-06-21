@@ -725,6 +725,35 @@
       border: 1px solid var(--divider);
       border-bottom-left-radius: 4px;
     }
+    .fw-chat-msg.bot p {
+      margin: 0 0 10px;
+    }
+    .fw-chat-msg.bot p:last-child {
+      margin-bottom: 0;
+    }
+    .fw-chat-msg.bot br {
+      content: '';
+      display: block;
+      height: 4px;
+    }
+    .fw-chat-msg.bot strong {
+      font-weight: 600;
+      color: var(--bg-dark);
+    }
+    .fw-chat-msg.bot ul {
+      margin: 4px 0 10px;
+      padding-left: 18px;
+    }
+    .fw-chat-msg.bot ul:last-child {
+      margin-bottom: 0;
+    }
+    .fw-chat-msg.bot li {
+      margin-bottom: 6px;
+      padding-left: 2px;
+    }
+    .fw-chat-msg.bot li:last-child {
+      margin-bottom: 0;
+    }
     .fw-chat-msg.user {
       background: var(--teal);
       color: white;
@@ -1485,11 +1514,50 @@
     scrollToBottom();
   }
 
+  function fwEscapeHtml(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function fwFormatMessage(text) {
+    // All HTML is escaped FIRST — this is what keeps it XSS-safe regardless of
+    // what the AI or anyone else puts in the text. Only after escaping do we
+    // re-introduce a tiny, fixed set of safe tags (<strong>, <ul>/<li>, <p>, <br>)
+    // for **bold** and "- " list lines, so the AI's natural formatting renders
+    // instead of showing literal asterisks and dashes.
+    let safe = fwEscapeHtml(text);
+    safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+    const lines = safe.split('\n');
+    let html = '';
+    let inList = false;
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (/^-\s+/.test(trimmed)) {
+        if (!inList) { html += '<ul>'; inList = true; }
+        html += '<li>' + trimmed.replace(/^-\s+/, '') + '</li>';
+      } else {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += trimmed === '' ? '<br>' : '<p>' + line + '</p>';
+      }
+    }
+    if (inList) html += '</ul>';
+    return html;
+  }
+
   function appendBubble(type, text, doScroll) {
     const container = el('fw-chat-messages');
     const div = document.createElement('div');
     div.className = 'fw-chat-msg ' + type;
-    div.textContent = text;
+    if (type === 'bot') {
+      div.innerHTML = fwFormatMessage(text);
+    } else {
+      div.textContent = text;
+    }
     container.appendChild(div);
     if (doScroll !== false) scrollToBottom();
   }
