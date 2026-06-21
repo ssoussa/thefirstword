@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Son or Daughter Won't Go to Rehab — What Now? | TheFirstWord</title>
+  <meta name="description" content="You brought it up. They said no. Here's what to actually do next when your child refuses treatment — and why 'no' today isn't the end of it." />
+  <link rel="canonical" href="https://thefirstword.ca/son-wont-go-to-rehab.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F7F4EF;
+      --text: #1C2B3A;
+      --text-light: #5a6a7a;
+      --teal: #2A7F7F;
+      --teal-light: #e8f4f4;
+      --cta: #C4622D;
+      --divider: #E8E2D9;
+      --white: #FFFFFF;
+    }
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: rgba(247,244,239,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--divider);
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    #nav-logo-img { width: 160px; height: auto; }
+    @media (max-width: 600px) {
+      nav { padding: 10px 20px; }
+      #nav-logo-img { width: 130px; }
+    }
+
+    /* LANG TOGGLE */
+    .lang-toggle {
+      display: flex;
+      gap: 4px;
+      background: rgba(28,43,58,0.08);
+      border-radius: 6px;
+      padding: 4px;
+    }
+    .lang-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-light);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .lang-btn.active {
+      background: white;
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    /* PAGE */
+    .page-container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+    @media (max-width: 600px) {
+      .page-container { padding: 36px 16px 80px; }
+    }
+
+    /* HEADER */
+    .page-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .page-meta {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    /* SECTIONS */
+    .guide-section {
+      margin-bottom: 32px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    p {
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+    .intro-p {
+      font-size: 17px;
+    }
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* INFO BOX */
+    .info-box {
+      background: var(--teal-light);
+      border-left: 4px solid var(--teal);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+      font-weight: 500;
+    }
+
+    /* CTA BOX */
+    .contact-box {
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-top: 48px;
+      text-align: center;
+    }
+    .contact-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .contact-box p { font-size: 14px; color: var(--text-light); margin-bottom: 16px; }
+    .contact-btn {
+      display: inline-block;
+      background: var(--cta);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .contact-btn:hover { background: #a8501f; text-decoration: none; }
+
+    /* FOOTER */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,0.7); }
+
+    /* HIDDEN */
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://thefirstword.ca" class="nav-logo">
+    <img id="nav-logo-img"
+      src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png"
+      alt="TheFirstWord" />
+  </a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page-container">
+
+  <!-- ═══════════════════════════════════════════════════════ ENGLISH ════ -->
+  <div id="content-en">
+
+    <p class="page-eyebrow">Family Guide</p>
+    <h1 class="page-title">My Son or Daughter Won't Go to Rehab — What Now?</h1>
+    <p class="page-meta">
+      TheFirstWord &nbsp;·&nbsp;
+      <a href="#" onclick="setLang('fr'); return false;">Lire en français →</a>
+    </p>
+
+    <p class="intro-p">You finally said it. You brought up rehab, treatment, getting help — and they said no. Maybe they got angry. Maybe they shut down. Maybe they just walked away.</p>
+
+    <div class="info-box">
+      This is normal, and it doesn't mean you failed. Refusal isn't the end of the conversation — it's usually just the first round of it.
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Don't escalate into an ultimatum you're not ready to keep</h2>
+      <p>"Get help or I'm done with you" only works if you actually mean it and are prepared to follow through. An empty ultimatum teaches them your boundaries aren't real, which makes the next conversation harder, not easier.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Separate the relationship from the behavior</h2>
+      <p>You can keep loving your child while refusing to fund, excuse, or clean up after the addiction. This isn't contradictory — it's actually the most stable position you can hold long-term.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Figure out what "no" actually means</h2>
+      <p>"No" to a 28-day inpatient program is different from "no" to all forms of help. Sometimes the real no is about cost, about fear of withdrawal, about not wanting to lose their job, or about not trusting treatment programs in general. Find the specific no underneath the general no — it's usually more workable.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Have a Plan B ready, not just a Plan A you keep repeating</h2>
+      <p>If "go to rehab" didn't land, the next move isn't repeating the same ask louder. It's a different, smaller ask — outpatient counselling, a single call to a helpline, attending one Al-Anon-adjacent meeting, or simply agreeing to talk to a doctor about it. Smaller asks get said yes to far more often.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Don't go it alone</h2>
+      <p>Whatever you decide to say or do next, having an actual support structure — even just one person who understands what you're dealing with — matters more than most families expect.</p>
+    </div>
+
+    <p>This is exactly the situation TheFirstWord's Plan B tool was built for: when the first attempt doesn't land, you get a follow-up script tailored to what actually happened, not a generic "try again" script.</p>
+
+    <div class="contact-box">
+      <h3>Get your Plan B script</h3>
+      <p>A follow-up script built around what actually happened, not a generic restart.</p>
+      <a href="https://thefirstword.ca/app.html" class="contact-btn">Start now →</a>
+    </div>
+
+  </div><!-- /content-en -->
+
+  <!-- ═══════════════════════════════════════════════════════ FRANÇAIS ════ -->
+  <div id="content-fr" class="hidden">
+
+    <p class="page-eyebrow">Guide pour les familles</p>
+    <h1 class="page-title">Mon enfant refuse l'aide — quoi faire maintenant?</h1>
+    <p class="page-meta">
+      TheFirstWord &nbsp;·&nbsp;
+      <a href="#" onclick="setLang('en'); return false;">Read in English →</a>
+    </p>
+
+    <p class="intro-p">Vous avez finalement osé. Vous avez parlé de thérapie, de traitement, d'aller chercher de l'aide — et la réponse a été non. Peut-être qu'il/elle s'est fâché(e). Peut-être qu'il/elle s'est refermé(e). Peut-être qu'il/elle est simplement parti(e).</p>
+
+    <div class="info-box">
+      C'est normal, et ça ne veut pas dire que vous avez échoué. Un refus n'est pas la fin de la conversation — c'est habituellement juste le premier round.
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Ne lancez pas un ultimatum que vous n'êtes pas prêt(e) à tenir</h2>
+      <p>« Va chercher de l'aide ou j'arrête de t'aider » ne fonctionne que si vous le pensez vraiment et êtes prêt(e) à le maintenir. Un ultimatum vide enseigne à l'autre que vos limites ne sont pas réelles — ce qui complique la prochaine conversation au lieu de la faciliter.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Séparez la relation du comportement</h2>
+      <p>Vous pouvez continuer à aimer votre enfant tout en refusant de financer, d'excuser ou de nettoyer les dégâts causés par la dépendance. Ce n'est pas contradictoire — c'est en fait la position la plus stable à tenir à long terme.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Cherchez à comprendre ce que le « non » signifie vraiment</h2>
+      <p>Un « non » à un programme résidentiel de 28 jours est différent d'un « non » à toute forme d'aide. Parfois, le vrai refus concerne le coût, la peur du sevrage, la peur de perdre son emploi, ou un manque de confiance envers les programmes de traitement en général. Trouvez le « non » précis derrière le « non » général — il est habituellement plus facile à travailler.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Ayez un Plan B prêt, pas seulement un Plan A que vous répétez</h2>
+      <p>Si « va en thérapie » n'a pas fonctionné, la prochaine étape n'est pas de répéter la même demande plus fort. C'est une demande différente, plus petite — counseling externe, un seul appel à une ligne d'aide, assister à une rencontre de type Al-Anon, ou simplement accepter de consulter un médecin à ce sujet. Les petites demandes obtiennent un oui beaucoup plus souvent.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Ne traversez pas ça seul(e)</h2>
+      <p>Quoi que vous décidiez de dire ou de faire ensuite, avoir un vrai soutien — même une seule personne qui comprend ce que vous vivez — compte plus que la plupart des familles ne le pensent.</p>
+    </div>
+
+    <p>C'est exactement la situation pour laquelle l'outil Plan B de TheFirstWord a été conçu : quand la première tentative ne fonctionne pas, vous obtenez un script de suivi adapté à ce qui s'est réellement passé, pas un script générique de « réessaie ».</p>
+
+    <div class="contact-box">
+      <h3>Obtenez votre Plan B</h3>
+      <p>Un script de suivi basé sur ce qui s'est réellement passé, pas un redémarrage générique.</p>
+      <a href="https://thefirstword.ca/app.html" class="contact-btn">Commencer →</a>
+    </div>
+
+  </div><!-- /content-fr -->
+
+</div><!-- /page-container -->
+
+<footer>
+  <p>© <span id="footer-year"></span> TheFirstWord &nbsp;·&nbsp; <a href="https://thefirstword.ca">thefirstword.ca</a> &nbsp;·&nbsp; <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
+</footer>
+
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  let lang = 'en';
+
+  function setLang(l) {
+    lang = l;
+
+    document.getElementById('content-en').classList.toggle('hidden', l !== 'en');
+    document.getElementById('content-fr').classList.toggle('hidden', l !== 'fr');
+
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
+    const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
+    const navLogo = document.getElementById('nav-logo-img');
+    if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
+
+    document.documentElement.lang = l;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const browserLang = navigator.language || navigator.userLanguage || 'en';
+    if (browserLang.toLowerCase().startsWith('fr')) {
+      setLang('fr');
+    }
+  });
+</script>
+</body>
+</html>
