@@ -1079,6 +1079,32 @@ app.get("/api/returning-client", async (req, res) => {
   }
 });
 
+// ─── API: LOG KIT OPENED (for refund-eligibility verification) ───────────────
+// Called from the browser the moment a kit is actually displayed on screen —
+// NOT when the email is sent. Only sets kit_opened_at if it isn't already set,
+// so refreshing or reopening the kit never overwrites the original open time.
+// This is what lets us verify a 7-day refund request's "kit not yet opened"
+// condition instead of just taking the customer's word for it.
+app.post("/api/log-kit-opened", async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: "Missing email" });
+  if (!SUPABASE_KEY) return res.status(200).json({ logged: false }); // non-blocking — never breaks kit viewing
+
+  try {
+    const rows = await supabaseQuery('subscribers', `email=eq.${encodeURIComponent(email)}&select=id,kit_opened_at&limit=1`);
+    if (Array.isArray(rows) && rows[0]?.id) {
+      const sub = rows[0];
+      if (!sub.kit_opened_at) {
+        await supabaseUpdate('subscribers', sub.id, { kit_opened_at: new Date().toISOString() });
+      }
+    }
+    res.status(200).json({ logged: true });
+  } catch (err) {
+    console.error('log-kit-opened error (non-blocking):', err);
+    res.status(200).json({ logged: false }); // never block kit display on this failing
+  }
+});
+
 // ─── API: TESTIMONIALS ────────────────────────────────────────────────────────
 
 app.get("/api/testimonials", async (req, res) => {
@@ -1389,6 +1415,18 @@ app.get("/sitemap.xml", (req, res) => {
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+  <url>
+    <loc>https://thefirstword.ca/privacy.html</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://thefirstword.ca/terms.html</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
 </urlset>`);
 });
 
@@ -1471,11 +1509,43 @@ app.get("/api/verify-session", async (req, res) => {
       return res.status(402).json({ error: "Payment not completed." });
     }
 
+    const plan = session.metadata?.plan || 'essential';
+    const lang = session.metadata?.lang || 'en';
+    // Stripe's hosted checkout page collects the customer's email by default,
+    // even though we never explicitly request it via customer_email or metadata.
+    // It's available here on customer_details.email.
+    const customerEmail = session.customer_details?.email || null;
+
+    // Create a minimal subscriber record right now, immediately after payment,
+    // rather than waiting for the customer to click "Send to my email" on the
+    // kit screen. Previously, a customer who paid and viewed their kit but never
+    // clicked that button had NO database record at all — meaning they were
+    // invisible to admin stats and to refund-eligibility (kit_opened_at) tracking.
+    // This is non-blocking: if it fails, payment verification still succeeds and
+    // the later /api/send-email call will still create/complete the record as before.
+    if (customerEmail && SUPABASE_KEY) {
+      try {
+        const existing = await supabaseQuery('subscribers', `email=eq.${encodeURIComponent(customerEmail)}&select=id&limit=1`);
+        if (!Array.isArray(existing) || existing.length === 0) {
+          await supabaseUpsert('subscribers', {
+            email: customerEmail,
+            plan,
+            lang,
+            signed_up_at: new Date().toISOString(),
+            active: plan === 'monthly',
+          });
+        }
+      } catch (dbErr) {
+        console.error('verify-session: non-blocking pre-record creation failed:', dbErr);
+      }
+    }
+
     res.json({
       success: true,
-      plan: session.metadata?.plan || 'essential',
-      lang: session.metadata?.lang || 'en',
+      plan,
+      lang,
       sessionId: session.id,
+      email: customerEmail,
     });
   } catch(err) {
     console.error('Stripe verify error:', err);
