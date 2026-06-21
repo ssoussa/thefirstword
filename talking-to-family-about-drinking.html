@@ -202,24 +202,15 @@
       src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png"
       alt="TheFirstWord" />
   </a>
-  <div class="lang-toggle">
-    <button class="lang-btn active" onclick="setLang('en')">EN</button>
-    <button class="lang-btn" onclick="setLang('fr')">FR</button>
-  </div>
+  <a href="https://thefirstword.ca/comment-parler-a-un-proche-alcool.html" style="font-size:13px; font-weight:600; color:var(--text-light); text-decoration:none;">Français →</a>
 </nav>
 
 <!-- PAGE -->
 <div class="page-container">
 
-  <!-- ═══════════════════════════════════════════════════════ ENGLISH ════ -->
-  <div id="content-en">
-
     <p class="page-eyebrow">Family Guide</p>
     <h1 class="page-title">How to Talk to a Family Member About Their Drinking (Without It Blowing Up)</h1>
-    <p class="page-meta">
-      TheFirstWord &nbsp;·&nbsp;
-      <a href="#" onclick="setLang('fr'); return false;">Lire en français →</a>
-    </p>
+    <p class="page-meta">TheFirstWord</p>
 
     <p class="intro-p">You've noticed it. Maybe it's the empty bottles, the missed calls, the excuses that don't quite add up. You want to say something — but every time you picture the conversation, it ends in a fight, or silence, or them walking out.</p>
 
@@ -265,101 +256,13 @@
       <a href="https://thefirstword.ca/app.html" class="contact-btn">Start now →</a>
     </div>
 
-  </div><!-- /content-en -->
-
-  <!-- ═══════════════════════════════════════════════════════ FRANÇAIS ════ -->
-  <div id="content-fr" class="hidden">
-
-    <p class="page-eyebrow">Guide pour les familles</p>
-    <h1 class="page-title">Comment parler à un proche de sa consommation d'alcool</h1>
-    <p class="page-meta">
-      TheFirstWord &nbsp;·&nbsp;
-      <a href="#" onclick="setLang('en'); return false;">Read in English →</a>
-    </p>
-
-    <p class="intro-p">Vous l'avez remarqué. Les bouteilles vides, les appels manqués, les excuses qui ne tiennent plus la route. Vous voulez en parler — mais chaque fois que vous imaginez la conversation, elle finit en chicane, en silence, ou la personne s'en va.</p>
-
-    <div class="info-box">
-      L'essentiel : la façon dont vous ouvrez la conversation compte plus que ce que vous dites réellement.
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Choisissez le moment, pas la crise</h2>
-      <p>Ne jamais aborder le sujet quand la personne a bu, quand vous êtes en colère, ou devant d'autres personnes. Attendez un moment calme, privé et sobre — même si ça veut dire attendre quelques jours pour la bonne occasion.</p>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Partez de ce que vous avez observé, pas de ce que vous en avez conclu</h2>
-      <p>Il y a une différence entre « j'ai remarqué que tu bois plus souvent au souper dernièrement » et « tu as un problème d'alcool ». La première phrase décrit un fait difficile à contester. La deuxième est un diagnostic — et on se défend contre un diagnostic.</p>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Utilisez le « je », pas le « tu »</h2>
-      <p>« Je m'inquiète » résonne très différemment de « t'es toujours saoul ». L'un parle de votre vécu. L'autre est une accusation — et une accusation, on la défend, on ne l'entend pas.</p>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Nommez précisément ce qui vous fait peur</h2>
-      <p>Pas « je m'inquiète pour toi » (trop vague, trop facile à balayer), mais « j'ai peur que tu conduises après avoir bu » ou « j'ai peur que les enfants commencent à s'en rendre compte ». Une peur précise est plus difficile à ignorer qu'une inquiétude générale.</p>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Attendez-vous au déni, et ne le confrontez pas directement</h2>
-      <p>Presque tout le monde nie au début — ce n'est pas un signe que vous avez mal fait, c'est simplement ce qui arrive. Votre rôle dans cette première conversation n'est pas de gagner un débat. C'est de planter quelque chose qui va rester avec la personne après que vous ayez quitté la pièce.</p>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Ayez une demande claire, même petite</h2>
-      <p>« J'aimerais que tu penses à parler à quelqu'un » est plus utile qu'un vague « va chercher de l'aide ». Une demande petite et concrète est plus facile à considérer pour quelqu'un en plein déni.</p>
-    </div>
-
-    <p>Ce que vous dites lors de cette première conversation ne peut pas être générique — ça doit correspondre à votre relation, à la personnalité de l'autre, et à ce qui se passe vraiment. C'est exactement ce que TheFirstWord construit pour vous : un script et une lettre personnalisés selon votre situation, pour que vous n'arriviez pas les mains vides, juste avec de l'inquiétude.</p>
-
-    <div class="contact-box">
-      <h3>Créez votre script de conversation</h3>
-      <p>Obtenez un script et une lettre personnalisés pour votre situation exacte, en quelques minutes.</p>
-      <a href="https://thefirstword.ca/app.html" class="contact-btn">Commencer →</a>
-    </div>
-
-  </div><!-- /content-fr -->
-
 </div><!-- /page-container -->
-
 <footer>
   <p>© <span id="footer-year"></span> TheFirstWord &nbsp;·&nbsp; <a href="https://thefirstword.ca">thefirstword.ca</a> &nbsp;·&nbsp; <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
 </footer>
 
 <script>
   document.getElementById('footer-year').textContent = new Date().getFullYear();
-
-  let lang = 'en';
-
-  function setLang(l) {
-    lang = l;
-
-    document.getElementById('content-en').classList.toggle('hidden', l !== 'en');
-    document.getElementById('content-fr').classList.toggle('hidden', l !== 'fr');
-
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    const activeBtn = document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`);
-    if (activeBtn) activeBtn.classList.add('active');
-
-    const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
-    const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
-    const navLogo = document.getElementById('nav-logo-img');
-    if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
-
-    document.documentElement.lang = l;
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const browserLang = navigator.language || navigator.userLanguage || 'en';
-    if (browserLang.toLowerCase().startsWith('fr')) {
-      setLang('fr');
-    }
-  });
 </script>
 </body>
 </html>
