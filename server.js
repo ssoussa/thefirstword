@@ -1442,8 +1442,14 @@ app.get("/sitemap.xml", (req, res) => {
 
 // ─── STRIPE ───────────────────────────────────────────────────────────────────
 
+const Stripe = require('stripe');
 const STRIPE_SECRET = process.env.STRIPE_SECRET_KEY;
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+// Used specifically for webhook signature verification via stripe.webhooks.constructEvent,
+// which handles raw-body HMAC comparison correctly (constant-time, proper header parsing,
+// timestamp tolerance) — replacing a hand-rolled implementation that proved unreliable.
+// All other Stripe interactions in this file continue using direct fetch() calls, unchanged.
+const stripeClient = STRIPE_SECRET ? new Stripe(STRIPE_SECRET) : null;
 
 const PRICE_MAP = {
   starter:   process.env.STRIPE_PRICE_STARTER,
@@ -1568,10 +1574,8 @@ app.post("/api/stripe-webhook", express.raw({ type: 'application/json' }), async
   // SECURITY: fail CLOSED, not open. If the webhook secret isn't configured,
   // we cannot verify the request actually came from Stripe — so we reject it
   // rather than silently accepting an unverified payload as a valid event.
-  // (Previously this returned 200 'ok' here, which would have let anyone POST
-  // a fake checkout.session.completed payload through unverified.)
-  if (!STRIPE_WEBHOOK_SECRET) {
-    console.error('Stripe webhook called but STRIPE_WEBHOOK_SECRET is not configured — rejecting unverifiable request.');
+  if (!STRIPE_WEBHOOK_SECRET || !stripeClient) {
+    console.error('Stripe webhook called but STRIPE_WEBHOOK_SECRET/STRIPE_SECRET_KEY is not configured — rejecting unverifiable request.');
     return res.status(500).send('Webhook not configured');
   }
 
@@ -1583,29 +1587,16 @@ app.post("/api/stripe-webhook", express.raw({ type: 'application/json' }), async
   let event;
 
   try {
-    // Manual HMAC verification without the Stripe SDK
-    const crypto = require('crypto');
-    const payload = req.body.toString('utf8');
-    const parts = sig.split(',').reduce((acc, part) => {
-      const [k, v] = part.split('=');
-      acc[k] = v;
-      return acc;
-    }, {});
-
-    const timestamp = parts['t'];
-    const expectedSig = crypto
-      .createHmac('sha256', STRIPE_WEBHOOK_SECRET)
-      .update(`${timestamp}.${payload}`)
-      .digest('hex');
-
-    if (parts['v1'] !== expectedSig) {
-      return res.status(400).send('Invalid signature');
-    }
-
-    event = JSON.parse(payload);
+    // Use Stripe's official SDK for signature verification rather than hand-rolled
+    // HMAC comparison. The SDK correctly handles raw-body byte comparison, constant-time
+    // comparison (avoids timing attacks), and the exact signature header parsing format —
+    // a hand-rolled version of this previously failed verification in production despite
+    // looking correct on inspection, which is exactly the failure mode official docs warn
+    // hand-rolled implementations are prone to.
+    event = stripeClient.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET);
   } catch(err) {
-    console.error('Webhook signature error:', err);
-    return res.status(400).send('Webhook error');
+    console.error('Webhook signature verification failed:', err.message);
+    return res.status(400).send(`Webhook error: ${err.message}`);
   }
 
   // Handle events
