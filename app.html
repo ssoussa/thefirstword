@@ -1433,6 +1433,13 @@ Return ONLY the Plan B guide.`;
     const sessionId = params.get('session_id');
     const cancelled = params.get('cancelled') === 'true';
 
+    // Apply ?lang= immediately for a brand-new visit (e.g. clicking "Commencer" from the
+    // French homepage). Without this, a first-time visitor always saw English regardless
+    // of the URL, since the other branches below only apply it inside specific return flows.
+    if ((returnLang === 'en' || returnLang === 'fr') && returnLang !== lang) {
+      setLang(returnLang);
+    }
+
     // ── STRIPE RETURN: payment cancelled ──────────────────────────────────────
     if (cancelled) {
       // Restore answers and go back to pricing so they can try again
