@@ -12,7 +12,7 @@
   <!-- Analytics: Posthog -->
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-    posthog.init('phc_vhx9nKj5jE5ZTjQDugMuTfJfvaSionohP4CXBWWQuF5r', {api_host:'https://app.posthog.com'});
+    posthog.init('phc_REPLACE_WITH_YOUR_POSTHOG_KEY', {api_host:'https://app.posthog.com'});
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -331,8 +331,8 @@
       <p style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px;" class="fr-text hidden">Choisissez votre plan</p>
       <h2 class="pricing-title en-text">Choose your plan.</h2>
       <h2 class="pricing-title fr-text hidden">Choisissez votre plan.</h2>
-      <p class="pricing-subtitle en-text">One-time payment or Premium plan. No hidden fees. 100% money-back guarantee.</p>
-      <p class="pricing-subtitle fr-text hidden">Paiement unique ou plan Premium. Pas de frais cachés. Garantie de remboursement 100%.</p>
+      <p class="pricing-subtitle en-text">One-time payment or Premium plan. No hidden fees. 7-day money-back guarantee.</p>
+      <p class="pricing-subtitle fr-text hidden">Paiement unique ou plan Premium. Pas de frais cachés. Garantie de remboursement de 7 jours.</p>
 
       <div class="pricing-grid">
         <!-- STARTER -->
@@ -405,8 +405,8 @@
 
       <button class="btn-generate-main en-text" onclick="goToCheckout()">Continue to Payment →</button>
       <button class="btn-generate-main fr-text hidden" onclick="goToCheckout()">Continuer vers le paiement →</button>
-      <div class="info-box en-text">🔒 100% money-back guarantee if not satisfied. Your information is private and secure.</div>
-      <div class="info-box fr-text hidden">🔒 Garantie de remboursement 100% si non satisfait. Vos informations sont privées et sécurisées.</div>
+      <div class="info-box en-text">🔒 7-day money-back guarantee if your kit hasn't been opened yet. <a href="/terms.html" style="color:inherit;text-decoration:underline;" target="_blank" rel="noopener">See full terms</a>. Your information is private and secure.</div>
+      <div class="info-box fr-text hidden">🔒 Garantie de remboursement de 7 jours si votre kit n'a pas encore été ouvert. <a href="/terms.html" style="color:inherit;text-decoration:underline;" target="_blank" rel="noopener">Voir les conditions complètes</a>. Vos informations sont privées et sécurisées.</div>
     </div>
   </div>
 
@@ -1047,6 +1047,20 @@ Return ONLY the script.`;
 
   // ─── SHOW OUTPUTS ─────────────────────────────────────────────────────────
   function showOutputs(senderName, patientName) {
+    // Log that the kit was actually opened/viewed — used to verify the 7-day
+    // refund policy's "kit not yet opened" condition. Fire-and-forget: this
+    // must never block or interfere with the kit actually displaying, so we
+    // don't await it and we swallow any errors silently.
+    try {
+      if (answers.email) {
+        fetch('/api/log-kit-opened', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: answers.email })
+        }).catch(() => {});
+      }
+    } catch(e) {}
+
     document.getElementById('loadingView').classList.add('hidden');
     document.getElementById('questionnaireView').classList.add('hidden');
     document.getElementById('pricingView').classList.add('hidden');
@@ -1485,6 +1499,13 @@ Return ONLY the Plan B guide.`;
 
         // Payment confirmed — use plan from Stripe metadata as source of truth
         selectedPlan = verifyData.plan || selectedPlan;
+
+        // Use the email Stripe actually has on file as the source of truth if
+        // our own sessionStorage copy is missing (e.g. cleared by the browser
+        // during the round-trip to Stripe's hosted checkout page).
+        if (verifyData.email && !answers.email) {
+          answers.email = verifyData.email;
+        }
 
         // Clean up sessionStorage
         try {
