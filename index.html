@@ -1716,6 +1716,18 @@
     if (t) t.remove();
   }
 
+  function fwChatAdjustHeight() {
+    const panel = el('fw-chat-panel');
+    if (!panel || !panel.classList.contains('open')) return;
+    if (window.innerWidth > 600) return; // only the full-screen mobile takeover needs this
+    if (window.visualViewport) {
+      panel.style.height = window.visualViewport.height + 'px';
+    }
+  }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', fwChatAdjustHeight);
+  }
+
   window.fwChatToggle = function(forceOpen) {
     const panel = el('fw-chat-panel');
     const isOpen = panel.classList.contains('open');
@@ -1729,9 +1741,11 @@
         renderStaticText();
         renderMessages();
       }
+      fwChatAdjustHeight();
       setTimeout(() => { try { el('fw-chat-input').focus(); } catch(e){} }, 50);
     } else {
       panel.classList.remove('open');
+      panel.style.height = '';
     }
   };
 
@@ -1805,6 +1819,9 @@
     input.addEventListener('input', function() {
       input.style.height = 'auto';
       input.style.height = Math.min(input.scrollHeight, 90) + 'px';
+    });
+    input.addEventListener('focus', function() {
+      setTimeout(fwChatAdjustHeight, 300);
     });
 
     // Show a subtle attention dot after a short delay if the user hasn't opened the chat yet.
