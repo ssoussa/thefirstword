@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Talk to a Family Member About Their Drinking (Without It Blowing Up) | TheFirstWord</title>
+  <meta name="description" content="Worried about a family member's drinking but scared the conversation will end in a fight? Here's how to bring it up in a way they can actually hear." />
+  <link rel="canonical" href="https://thefirstword.ca/talking-to-family-about-drinking.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F7F4EF;
+      --text: #1C2B3A;
+      --text-light: #5a6a7a;
+      --teal: #2A7F7F;
+      --teal-light: #e8f4f4;
+      --cta: #C4622D;
+      --divider: #E8E2D9;
+      --white: #FFFFFF;
+    }
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: rgba(247,244,239,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--divider);
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    #nav-logo-img { width: 160px; height: auto; }
+    @media (max-width: 600px) {
+      nav { padding: 10px 20px; }
+      #nav-logo-img { width: 130px; }
+    }
+
+    /* LANG TOGGLE */
+    .lang-toggle {
+      display: flex;
+      gap: 4px;
+      background: rgba(28,43,58,0.08);
+      border-radius: 6px;
+      padding: 4px;
+    }
+    .lang-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-light);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .lang-btn.active {
+      background: white;
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    /* PAGE */
+    .page-container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+    @media (max-width: 600px) {
+      .page-container { padding: 36px 16px 80px; }
+    }
+
+    /* HEADER */
+    .page-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .page-meta {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    /* SECTIONS */
+    .guide-section {
+      margin-bottom: 32px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    p {
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+    .intro-p {
+      font-size: 17px;
+    }
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* INFO BOX */
+    .info-box {
+      background: var(--teal-light);
+      border-left: 4px solid var(--teal);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+      font-weight: 500;
+    }
+
+    /* CTA BOX */
+    .contact-box {
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-top: 48px;
+      text-align: center;
+    }
+    .contact-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .contact-box p { font-size: 14px; color: var(--text-light); margin-bottom: 16px; }
+    .contact-btn {
+      display: inline-block;
+      background: var(--cta);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .contact-btn:hover { background: #a8501f; text-decoration: none; }
+
+    /* FOOTER */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,0.7); }
+
+    /* HIDDEN */
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://thefirstword.ca" class="nav-logo">
+    <img id="nav-logo-img"
+      src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png"
+      alt="TheFirstWord" />
+  </a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page-container">
+
+  <!-- ═══════════════════════════════════════════════════════ ENGLISH ════ -->
+  <div id="content-en">
+
+    <p class="page-eyebrow">Family Guide</p>
+    <h1 class="page-title">How to Talk to a Family Member About Their Drinking (Without It Blowing Up)</h1>
+    <p class="page-meta">
+      TheFirstWord &nbsp;·&nbsp;
+      <a href="#" onclick="setLang('fr'); return false;">Lire en français →</a>
+    </p>
+
+    <p class="intro-p">You've noticed it. Maybe it's the empty bottles, the missed calls, the excuses that don't quite add up. You want to say something — but every time you picture the conversation, it ends in a fight, or silence, or them walking out.</p>
+
+    <div class="info-box">
+      The short version: the way you open the conversation matters more than what you actually say.
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Pick the moment, not the crisis</h2>
+      <p>Never bring it up when they've been drinking, when you're angry, or in front of other people. Wait for a calm, private, sober moment — even if that means waiting a few days for the right window.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Lead with what you've noticed, not what you've concluded</h2>
+      <p>There's a difference between "I noticed you've been drinking more at dinner lately" and "you have a drinking problem." The first is an observation they can't easily argue with. The second is a diagnosis, and people defend themselves against diagnoses.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Use "I," not "you"</h2>
+      <p>"I've been worried" lands very differently than "you're always drunk." One is about your experience. The other is an accusation — and accusations get defended, not heard.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Say what you're afraid of, specifically</h2>
+      <p>Not "I'm worried about you" (too vague, too easy to brush off), but "I'm afraid of what happens if you drive after drinking" or "I'm afraid our kids are starting to notice." Specific fears are harder to dismiss than general concern.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Expect denial, and don't argue with it</h2>
+      <p>Almost everyone denies it at first — that's not a sign you did it wrong, it's just what happens. Your job in this first conversation isn't to win the argument. It's to plant something that sits with them after you leave the room.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Have a clear ask, even if it's small</h2>
+      <p>"I want you to think about talking to someone" is more useful than a vague "please get help." Small, concrete asks are easier for someone in denial to actually consider.</p>
+    </div>
+
+    <p>What you say in that first conversation can't be generic — it has to fit your relationship, their personality, and what's actually been happening. That's exactly what TheFirstWord builds for you: a personalized script and letter based on your specific situation, so you're not walking in with nothing but worry.</p>
+
+    <div class="contact-box">
+      <h3>Build your conversation script</h3>
+      <p>Get a personalized script and letter for your exact situation, in minutes.</p>
+      <a href="https://thefirstword.ca/app.html" class="contact-btn">Start now →</a>
+    </div>
+
+  </div><!-- /content-en -->
+
+  <!-- ═══════════════════════════════════════════════════════ FRANÇAIS ════ -->
+  <div id="content-fr" class="hidden">
+
+    <p class="page-eyebrow">Guide pour les familles</p>
+    <h1 class="page-title">Comment parler à un proche de sa consommation d'alcool</h1>
+    <p class="page-meta">
+      TheFirstWord &nbsp;·&nbsp;
+      <a href="#" onclick="setLang('en'); return false;">Read in English →</a>
+    </p>
+
+    <p class="intro-p">Vous l'avez remarqué. Les bouteilles vides, les appels manqués, les excuses qui ne tiennent plus la route. Vous voulez en parler — mais chaque fois que vous imaginez la conversation, elle finit en chicane, en silence, ou la personne s'en va.</p>
+
+    <div class="info-box">
+      L'essentiel : la façon dont vous ouvrez la conversation compte plus que ce que vous dites réellement.
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Choisissez le moment, pas la crise</h2>
+      <p>Ne jamais aborder le sujet quand la personne a bu, quand vous êtes en colère, ou devant d'autres personnes. Attendez un moment calme, privé et sobre — même si ça veut dire attendre quelques jours pour la bonne occasion.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Partez de ce que vous avez observé, pas de ce que vous en avez conclu</h2>
+      <p>Il y a une différence entre « j'ai remarqué que tu bois plus souvent au souper dernièrement » et « tu as un problème d'alcool ». La première phrase décrit un fait difficile à contester. La deuxième est un diagnostic — et on se défend contre un diagnostic.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Utilisez le « je », pas le « tu »</h2>
+      <p>« Je m'inquiète » résonne très différemment de « t'es toujours saoul ». L'un parle de votre vécu. L'autre est une accusation — et une accusation, on la défend, on ne l'entend pas.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Nommez précisément ce qui vous fait peur</h2>
+      <p>Pas « je m'inquiète pour toi » (trop vague, trop facile à balayer), mais « j'ai peur que tu conduises après avoir bu » ou « j'ai peur que les enfants commencent à s'en rendre compte ». Une peur précise est plus difficile à ignorer qu'une inquiétude générale.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Attendez-vous au déni, et ne le confrontez pas directement</h2>
+      <p>Presque tout le monde nie au début — ce n'est pas un signe que vous avez mal fait, c'est simplement ce qui arrive. Votre rôle dans cette première conversation n'est pas de gagner un débat. C'est de planter quelque chose qui va rester avec la personne après que vous ayez quitté la pièce.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Ayez une demande claire, même petite</h2>
+      <p>« J'aimerais que tu penses à parler à quelqu'un » est plus utile qu'un vague « va chercher de l'aide ». Une demande petite et concrète est plus facile à considérer pour quelqu'un en plein déni.</p>
+    </div>
+
+    <p>Ce que vous dites lors de cette première conversation ne peut pas être générique — ça doit correspondre à votre relation, à la personnalité de l'autre, et à ce qui se passe vraiment. C'est exactement ce que TheFirstWord construit pour vous : un script et une lettre personnalisés selon votre situation, pour que vous n'arriviez pas les mains vides, juste avec de l'inquiétude.</p>
+
+    <div class="contact-box">
+      <h3>Créez votre script de conversation</h3>
+      <p>Obtenez un script et une lettre personnalisés pour votre situation exacte, en quelques minutes.</p>
+      <a href="https://thefirstword.ca/app.html" class="contact-btn">Commencer →</a>
+    </div>
+
+  </div><!-- /content-fr -->
+
+</div><!-- /page-container -->
+
+<footer>
+  <p>© <span id="footer-year"></span> TheFirstWord &nbsp;·&nbsp; <a href="https://thefirstword.ca">thefirstword.ca</a> &nbsp;·&nbsp; <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
+</footer>
+
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  let lang = 'en';
+
+  function setLang(l) {
+    lang = l;
+
+    document.getElementById('content-en').classList.toggle('hidden', l !== 'en');
+    document.getElementById('content-fr').classList.toggle('hidden', l !== 'fr');
+
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
+    const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
+    const navLogo = document.getElementById('nav-logo-img');
+    if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
+
+    document.documentElement.lang = l;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const browserLang = navigator.language || navigator.userLanguage || 'en';
+    if (browserLang.toLowerCase().startsWith('fr')) {
+      setLang('fr');
+    }
+  });
+</script>
+</body>
+</html>
