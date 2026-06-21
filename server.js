@@ -5,7 +5,17 @@ const PDFDocument = require("pdfkit");
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+// IMPORTANT: the Stripe webhook route (/api/stripe-webhook) needs the raw,
+// unmodified request body to verify Stripe's signature. express.json() below
+// runs globally and would parse/re-serialize the body before the webhook
+// route's own express.raw() middleware ever sees it — and once the body is
+// re-serialized, its bytes no longer match what Stripe originally signed,
+// so signature verification always fails. We skip the global JSON parser
+// specifically for that one path so its raw bytes survive intact.
+app.use((req, res, next) => {
+  if (req.path === '/api/stripe-webhook') return next();
+  express.json()(req, res, next);
+});
 app.use(express.static(path.join(__dirname)));
 
 // ─── SUPABASE CONFIG ──────────────────────────────────────────────────────────
