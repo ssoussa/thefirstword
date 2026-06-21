@@ -629,6 +629,147 @@ app.post("/api/generate", async (req, res) => {
   }
 });
 
+// ─── API: CHAT WIDGET ──────────────────────────────────────────────────────────
+// Bilingual support/screening chatbot. Separate rate limiter from /api/generate
+// so kit generation and chat usage don't compete for the same quota.
+
+const chatRateLimitMap = new Map();
+const CHAT_RATE_LIMIT_MAX = 20;        // max messages
+const CHAT_RATE_LIMIT_WINDOW = 60 * 60 * 1000; // per hour
+
+function checkChatRateLimit(ip) {
+  const now = Date.now();
+  const entry = chatRateLimitMap.get(ip);
+  if (!entry || now - entry.start > CHAT_RATE_LIMIT_WINDOW) {
+    chatRateLimitMap.set(ip, { count: 1, start: now });
+    return true;
+  }
+  if (entry.count >= CHAT_RATE_LIMIT_MAX) return false;
+  entry.count++;
+  return true;
+}
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of chatRateLimitMap.entries()) {
+    if (now - entry.start > CHAT_RATE_LIMIT_WINDOW) chatRateLimitMap.delete(ip);
+  }
+}, CHAT_RATE_LIMIT_WINDOW);
+
+const CHAT_SYSTEM_PROMPT_EN = `You are the support chat assistant on TheFirstWord (thefirstword.ca), a bilingual platform that helps families start a conversation with a loved one struggling with addiction.
+
+Your role has two parts:
+
+1. PRODUCT SUPPORT: Answer questions about how TheFirstWord works, pricing ($9 Starter, $19 Essential, $29 Complete one-time, $19/month Premium), what the kits contain (personalized letter, conversation guide, SMS message, spoken script, Plan B strategy, weekly support emails for Premium), privacy, and how to get started. When relevant, encourage the person to start their kit at app.html.
+
+2. PATTERN REFLECTION (NOT DIAGNOSIS): When someone describes a loved one's behavior and asks whether it's "really" addiction, help them think it through using well-known behavioral indicators used in the addiction field — for example: impact on work or finances, strain on relationships, increased tolerance, failed attempts to cut back, loss of interest in other activities, using to cope with stress, secrecy or lying about use, withdrawal symptoms, continuing despite negative consequences. Ask a few clarifying questions if helpful, and reflect back what they describe in relation to these patterns.
+
+CRITICAL RULES — NEVER BREAK THESE:
+- You are NOT a doctor, therapist, or addiction counselor. NEVER diagnose. NEVER say "your loved one is an addict" or "this is definitely addiction." Instead say things like "what you're describing — especially X and Y — is a pattern that's commonly associated with substance use concerns" and let them draw their own conclusion.
+- Always make clear, at least once per conversation, that you cannot provide a diagnosis and that a doctor, addiction counselor, or treatment professional can give a real assessment.
+- If the person mentions anything suggesting danger — suicidal thoughts, self-harm, violence, a medical emergency, or that someone is in immediate danger — STOP the product/screening conversation immediately and tell them clearly to contact emergency services (911 in Canada) or a crisis line right away. Mention the resources already on this page: Drogue Aide et Référence 1-800-265-2626 (FR) or the Drug and Alcohol Helpline 1-800-565-8603 (EN), both free and available 24/7. Do not continue normal conversation until you've addressed this.
+- Never give specific medical advice (dosing, withdrawal management, medication interactions). Redirect to a medical professional.
+- Keep responses concise — 2-4 short paragraphs max. This is a chat widget, not an essay.
+- Be warm, direct, and human. No corporate jargon, no therapy-speak clichés, no excessive hedging.
+- If asked something totally unrelated to addiction or the product, gently redirect to what you're here to help with.
+- Never claim to remember the person between sessions or know personal details they haven't told you in this conversation.
+
+Respond in English.`;
+
+const CHAT_SYSTEM_PROMPT_FR = `Tu es l'assistant de clavardage sur TheFirstWord (thefirstword.ca), une plateforme bilingue qui aide les familles à entamer une conversation avec un proche aux prises avec une dépendance.
+
+Ton rôle a deux volets :
+
+1. SOUTIEN PRODUIT : Réponds aux questions sur le fonctionnement de TheFirstWord, les prix (9$ Starter, 19$ Essential, 29$ Complete paiement unique, 19$/mois Premium), le contenu des kits (lettre personnalisée, guide de conversation, message texte, script parlé, stratégie Plan B, courriels de suivi hebdomadaires pour Premium), la confidentialité, et comment commencer. Quand c'est pertinent, encourage la personne à commencer son kit sur app.html.
+
+2. REFLET DE PATTERNS (PAS UN DIAGNOSTIC) : Quand quelqu'un décrit le comportement d'un proche et demande si c'est "vraiment" de la dépendance, aide-le à y réfléchir en utilisant des indicateurs comportementaux reconnus dans le domaine de la dépendance — par exemple : impact sur le travail ou les finances, tension dans les relations, tolérance accrue, tentatives infructueuses de réduire, perte d'intérêt pour d'autres activités, consommation pour gérer le stress, secret ou mensonges au sujet de la consommation, symptômes de sevrage, poursuite malgré les conséquences négatives. Pose quelques questions de clarification si utile, et reflète ce qu'on te décrit en lien avec ces patterns.
+
+RÈGLES CRITIQUES — À NE JAMAIS ENFREINDRE :
+- Tu n'es PAS un médecin, thérapeute ou intervenant en dépendance. Ne diagnostique JAMAIS. Ne dis JAMAIS « votre proche est dépendant » ou « c'est définitivement de la dépendance ». Dis plutôt des choses comme « ce que vous décrivez — surtout X et Y — est un pattern souvent associé à des préoccupations liées à la consommation » et laisse la personne tirer ses propres conclusions.
+- Précise clairement, au moins une fois dans la conversation, que tu ne peux pas fournir de diagnostic et qu'un médecin, un intervenant en dépendance ou un professionnel du traitement peut faire une vraie évaluation.
+- Si la personne mentionne quoi que ce soit suggérant un danger — idées suicidaires, automutilation, violence, urgence médicale, ou que quelqu'un est en danger immédiat — ARRÊTE immédiatement la conversation sur le produit ou le dépistage et dis clairement de contacter les services d'urgence (911 au Canada) ou une ligne de crise sans attendre. Mentionne les ressources déjà présentes sur cette page : Drogue Aide et Référence 1-800-265-2626 (FR) ou la Drug and Alcohol Helpline 1-800-565-8603 (EN), gratuites et disponibles 24h/24, 7j/7. Ne reprends pas la conversation normale avant d'avoir adressé ceci.
+- Ne donne jamais de conseil médical précis (dosage, gestion du sevrage, interactions médicamenteuses). Redirige vers un professionnel de la santé.
+- Garde les réponses concises — 2 à 4 courts paragraphes maximum. C'est un widget de clavardage, pas un essai.
+- Sois chaleureux, direct et humain. Pas de jargon corporatif, pas de clichés de style thérapeutique, pas d'hésitation excessive.
+- Si on te demande quelque chose de totalement hors sujet par rapport à la dépendance ou au produit, redirige gentiment vers ce pour quoi tu es là.
+- Ne prétends jamais te souvenir de la personne entre les sessions ni connaître des détails personnels qu'elle ne t'a pas donnés dans cette conversation.
+
+Réponds en français, dans un français naturel et québécois, pas traduit de l'anglais.`;
+
+app.post("/api/chat", async (req, res) => {
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress || 'unknown';
+  if (!checkChatRateLimit(ip)) {
+    return res.status(429).json({ error: "Too many messages. Please wait a bit before continuing." });
+  }
+
+  const { message, history, lang } = req.body;
+  if (!message || typeof message !== "string") {
+    return res.status(400).json({ error: "Missing message" });
+  }
+  if (message.length > 2000) {
+    return res.status(400).json({ error: "Message too long" });
+  }
+
+  const useLang = lang === "fr" ? "fr" : "en";
+  const systemPrompt = useLang === "fr" ? CHAT_SYSTEM_PROMPT_FR : CHAT_SYSTEM_PROMPT_EN;
+
+  // Build message history: last 6 messages max, validated shape
+  let messages = [];
+  if (Array.isArray(history)) {
+    const trimmed = history.slice(-6);
+    for (const m of trimmed) {
+      if (
+        m && typeof m === "object" &&
+        (m.role === "user" || m.role === "assistant") &&
+        typeof m.content === "string" &&
+        m.content.length > 0 && m.content.length <= 2000
+      ) {
+        messages.push({ role: m.role, content: m.content });
+      }
+    }
+  }
+  messages.push({ role: "user", content: message });
+
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return res.status(500).json({ error: "API key not configured." });
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 600,
+        system: systemPrompt,
+        messages: messages,
+      }),
+    });
+
+    const data = await response.json();
+    if (data.content?.[0]?.text) {
+      res.json({ reply: data.content[0].text });
+    } else {
+      console.error("Unexpected chat API response:", JSON.stringify(data).slice(0, 500));
+      res.status(500).json({
+        error: useLang === "fr"
+          ? "Désolé, une erreur est survenue. Veuillez réessayer."
+          : "Sorry, something went wrong. Please try again."
+      });
+    }
+  } catch (err) {
+    console.error("Chat API error:", err);
+    res.status(500).json({
+      error: useLang === "fr"
+        ? "Impossible de se connecter au service. Veuillez réessayer."
+        : "Failed to connect to the service. Please try again."
+    });
+  }
+});
+
 // ─── API: SEND KIT EMAIL + SAVE TO SUPABASE ───────────────────────────────────
 
 app.post("/api/send-email", async (req, res) => {
