@@ -142,26 +142,25 @@
     .hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     .mobile-menu-panel {
+      position: fixed;
+      left: 16px;
+      right: 16px;
       max-height: 0;
       overflow: hidden;
-      width: calc(100% - 32px);
-      margin: 0 auto;
-      margin-top: 8px;
       background: var(--white);
       border-radius: 14px;
       box-shadow: 0 12px 28px rgba(28,43,58,0.14);
       transition: max-height 0.3s ease;
-      position: relative;
-      z-index: 50;
+      z-index: 99;
     }
     .mobile-menu-panel.open { max-height: 420px; }
     .mobile-menu-panel-inner { display: flex; flex-direction: column; padding: 8px; }
     .mobile-menu-panel a {
-      display: block !important;
+      display: block;
       padding: 15px 16px;
       font-size: 16px;
       font-weight: 500;
-      color: var(--text) !important;
+      color: var(--text);
       text-decoration: none;
       border-bottom: 1px solid var(--divider);
     }
@@ -1424,7 +1423,10 @@
 
   // MOBILE MENU
   function toggleMobileMenu() {
-    document.getElementById('mobileMenuPanel').classList.toggle('open');
+    const panel = document.getElementById('mobileMenuPanel');
+    const navRect = document.querySelector('nav').getBoundingClientRect();
+    panel.style.top = (navRect.bottom + 8) + 'px';
+    panel.classList.toggle('open');
     document.querySelector('.hamburger-btn').classList.toggle('open');
   }
   function closeMobileMenu() {
