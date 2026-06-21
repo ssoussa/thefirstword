@@ -754,6 +754,16 @@
     .fw-chat-msg.bot li:last-child {
       margin-bottom: 0;
     }
+    .fw-chat-msg.bot a.fw-chat-link {
+      color: var(--cta);
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: rgba(196,98,45,0.4);
+      transition: color 0.15s;
+    }
+    .fw-chat-msg.bot a.fw-chat-link:hover {
+      color: var(--cta-hover);
+    }
     .fw-chat-msg.user {
       background: var(--teal);
       color: white;
@@ -1526,11 +1536,28 @@
   function fwFormatMessage(text) {
     // All HTML is escaped FIRST — this is what keeps it XSS-safe regardless of
     // what the AI or anyone else puts in the text. Only after escaping do we
-    // re-introduce a tiny, fixed set of safe tags (<strong>, <ul>/<li>, <p>, <br>)
-    // for **bold** and "- " list lines, so the AI's natural formatting renders
-    // instead of showing literal asterisks and dashes.
+    // re-introduce a tiny, fixed set of safe tags (<strong>, <ul>/<li>, <p>, <br>,
+    // and now <a> for [text](url) links) so the AI's natural formatting renders
+    // instead of showing literal asterisks, dashes, and bracket syntax.
     let safe = fwEscapeHtml(text);
     safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+    // Links: [text](url) -> <a>. Restricted to safe-looking targets only —
+    // relative paths (/app.html), bare filenames (app.html), or our own domain.
+    // Never javascript:, data:, or arbitrary external hosts, since this text
+    // is AI-generated and we can't fully control what URL it might produce.
+    // Anything that doesn't match falls back to plain link text (no <a> tag).
+    safe = safe.replace(/\[([^\[\]]+)\]\(([^()]+)\)/g, function(match, linkText, url) {
+      const cleanUrl = url.trim();
+      const isSafe = /^\/[a-zA-Z0-9_\-\.\/?=&]*$/.test(cleanUrl) ||
+                     /^[a-zA-Z0-9_\-]+\.html([?#][a-zA-Z0-9_\-\.\/?=&]*)?$/.test(cleanUrl) ||
+                     /^https:\/\/thefirstword\.ca[a-zA-Z0-9_\-\.\/?=&]*$/.test(cleanUrl);
+      if (!isSafe) return linkText;
+      const href = (cleanUrl.startsWith('/') || cleanUrl.startsWith('https://'))
+        ? cleanUrl
+        : '/' + cleanUrl;
+      return '<a href="' + href + '" class="fw-chat-link">' + linkText + '</a>';
+    });
 
     const lines = safe.split('\n');
     let html = '';
