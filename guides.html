@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Family Guides — Practical Help for Talking About Addiction | TheFirstWord</title>
+  <meta name="description" content="Free, practical guides for families dealing with a loved one's addiction — what to say, how to handle denial, and what to do when the first conversation doesn't work." />
+  <link rel="canonical" href="https://thefirstword.ca/guides.html" />
+  <link rel="alternate" hreflang="en" href="https://thefirstword.ca/guides.html" />
+  <link rel="alternate" hreflang="fr" href="https://thefirstword.ca/guides.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F7F4EF;
+      --text: #1C2B3A;
+      --text-light: #5a6a7a;
+      --teal: #2A7F7F;
+      --teal-light: #e8f4f4;
+      --cta: #C4622D;
+      --divider: #E8E2D9;
+      --white: #FFFFFF;
+    }
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: rgba(247,244,239,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--divider);
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    #nav-logo-img { width: 160px; height: auto; }
+    @media (max-width: 600px) {
+      nav { padding: 10px 20px; }
+      #nav-logo-img { width: 130px; }
+    }
+
+    /* LANG TOGGLE */
+    .lang-toggle { display: flex; gap: 4px; background: rgba(28,43,58,0.08); border-radius: 6px; padding: 4px; }
+    .lang-btn {
+      font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 4px;
+      border: none; cursor: pointer; background: transparent; color: var(--text-light);
+      font-family: inherit; transition: all 0.15s;
+    }
+    .lang-btn.active { background: white; color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+    /* PAGE */
+    .page-container { max-width: 880px; margin: 0 auto; padding: 60px 24px 100px; }
+    @media (max-width: 600px) { .page-container { padding: 36px 16px 80px; } }
+
+    .page-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; }
+    .page-title { font-family: 'Playfair Display', serif; font-size: clamp(28px, 5vw, 42px); font-weight: 700; line-height: 1.2; margin-bottom: 16px; }
+    .page-intro { font-size: 17px; color: var(--text-light); margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--divider); max-width: 640px; }
+
+    /* CARDS */
+    .guide-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    .guide-card {
+      display: block;
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: 14px;
+      padding: 24px 28px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .guide-card:hover { border-color: var(--teal); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+    .guide-card-title { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+    .guide-card-desc { font-size: 14px; color: var(--text-light); margin-bottom: 0; }
+    .guide-card-arrow { font-size: 13px; font-weight: 600; color: var(--teal); margin-top: 10px; display: inline-block; }
+
+    /* CTA BOX */
+    .contact-box { background: white; border: 1px solid var(--divider); border-radius: 14px; padding: 28px 32px; margin-top: 48px; text-align: center; }
+    .contact-box h3 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 10px; }
+    .contact-box p { font-size: 14px; color: var(--text-light); margin-bottom: 16px; }
+    .contact-btn {
+      display: inline-block; background: var(--cta); color: white; font-weight: 700; font-size: 14px;
+      padding: 12px 28px; border-radius: 8px; text-decoration: none; transition: background 0.2s;
+    }
+    .contact-btn:hover { background: #a8501f; text-decoration: none; }
+
+    footer { background: var(--text); color: rgba(255,255,255,0.6); text-align: center; padding: 24px; font-size: 13px; }
+    footer a { color: rgba(255,255,255,0.7); }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://thefirstword.ca" class="nav-logo">
+    <img id="nav-logo-img"
+      src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png"
+      alt="TheFirstWord" />
+  </a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page-container">
+
+  <!-- ═══════════════════════════════════════════════════════ ENGLISH ════ -->
+  <div id="content-en">
+
+    <p class="page-eyebrow">Family Guides</p>
+    <h1 class="page-title">Practical Help for the Hardest Conversation</h1>
+    <p class="page-intro">Free guides for families dealing with a loved one's addiction — what to actually say, how to handle denial, and what to do when the first attempt doesn't work.</p>
+
+    <div class="guide-grid">
+
+      <a href="https://thefirstword.ca/talking-to-family-about-drinking.html" class="guide-card">
+        <div class="guide-card-title">How to Talk to a Family Member About Their Drinking</div>
+        <div class="guide-card-desc">Worried the conversation will end in a fight? Here's how to bring it up in a way they can actually hear.</div>
+        <span class="guide-card-arrow">Read the guide →</span>
+      </a>
+
+      <a href="https://thefirstword.ca/wont-admit-they-have-a-problem.html" class="guide-card">
+        <div class="guide-card-title">What to Say When They Won't Admit They Have a Problem</div>
+        <div class="guide-card-desc">Denial is the first wall most families hit. Here's how to respond without it turning into a standoff.</div>
+        <span class="guide-card-arrow">Read the guide →</span>
+      </a>
+
+      <a href="https://thefirstword.ca/son-wont-go-to-rehab.html" class="guide-card">
+        <div class="guide-card-title">My Son or Daughter Won't Go to Rehab — What Now?</div>
+        <div class="guide-card-desc">You brought it up. They said no. Here's what to actually do next.</div>
+        <span class="guide-card-arrow">Read the guide →</span>
+      </a>
+
+    </div>
+
+    <div class="contact-box">
+      <h3>Need something more personal?</h3>
+      <p>TheFirstWord builds a script and letter tailored to your exact situation in minutes.</p>
+      <a href="https://thefirstword.ca/app.html" class="contact-btn">Start now →</a>
+    </div>
+
+  </div><!-- /content-en -->
+
+  <!-- ═══════════════════════════════════════════════════════ FRANÇAIS ════ -->
+  <div id="content-fr" class="hidden">
+
+    <p class="page-eyebrow">Guides pour les familles</p>
+    <h1 class="page-title">De l'aide concrète pour la conversation la plus difficile</h1>
+    <p class="page-intro">Des guides gratuits pour les familles aux prises avec la dépendance d'un proche — quoi dire concrètement, comment gérer le déni, et quoi faire quand la première tentative ne fonctionne pas.</p>
+
+    <div class="guide-grid">
+
+      <a href="https://thefirstword.ca/comment-parler-a-un-proche-alcool.html" class="guide-card">
+        <div class="guide-card-title">Comment parler à un proche de sa consommation d'alcool</div>
+        <div class="guide-card-desc">Vous craignez que la conversation dégénère? Voici comment aborder le sujet d'une façon qu'il/elle peut vraiment entendre.</div>
+        <span class="guide-card-arrow">Lire le guide →</span>
+      </a>
+
+      <a href="https://thefirstword.ca/refuse-admettre-probleme.html" class="guide-card">
+        <div class="guide-card-title">Quoi dire quand il/elle refuse d'admettre le problème</div>
+        <div class="guide-card-desc">Le déni est le premier mur que la plupart des familles frappent. Voici comment réagir sans que ça devienne une impasse.</div>
+        <span class="guide-card-arrow">Lire le guide →</span>
+      </a>
+
+      <a href="https://thefirstword.ca/mon-enfant-refuse-aide.html" class="guide-card">
+        <div class="guide-card-title">Mon enfant refuse l'aide — quoi faire maintenant?</div>
+        <div class="guide-card-desc">Vous avez abordé le sujet. La réponse a été non. Voici quoi faire concrètement maintenant.</div>
+        <span class="guide-card-arrow">Lire le guide →</span>
+      </a>
+
+    </div>
+
+    <div class="contact-box">
+      <h3>Besoin de quelque chose de plus personnalisé?</h3>
+      <p>TheFirstWord construit un script et une lettre adaptés à votre situation exacte, en quelques minutes.</p>
+      <a href="https://thefirstword.ca/app.html" class="contact-btn">Commencer →</a>
+    </div>
+
+  </div><!-- /content-fr -->
+
+</div><!-- /page-container -->
+
+<footer>
+  <p>© <span id="footer-year"></span> TheFirstWord &nbsp;·&nbsp; <a href="https://thefirstword.ca">thefirstword.ca</a> &nbsp;·&nbsp; <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
+</footer>
+
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  let lang = 'en';
+
+  function setLang(l) {
+    lang = l;
+
+    document.getElementById('content-en').classList.toggle('hidden', l !== 'en');
+    document.getElementById('content-fr').classList.toggle('hidden', l !== 'fr');
+
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
+    const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
+    const navLogo = document.getElementById('nav-logo-img');
+    if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
+
+    document.documentElement.lang = l;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const browserLang = navigator.language || navigator.userLanguage || 'en';
+    if (browserLang.toLowerCase().startsWith('fr')) {
+      setLang('fr');
+    }
+  });
+</script>
+</body>
+</html>
