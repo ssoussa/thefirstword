@@ -605,11 +605,19 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Auto-detect browser language on load
+  // Check URL ?lang= parameter first (set when linked from a specific language page),
+  // then fall back to browser language detection
   window.addEventListener('DOMContentLoaded', () => {
-    const browserLang = navigator.language || navigator.userLanguage || 'en';
-    if (browserLang.toLowerCase().startsWith('fr')) {
-      setLang('fr');
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlLang = urlParams.get('lang');
+
+    if (urlLang === 'fr' || urlLang === 'en') {
+      setLang(urlLang);
+    } else {
+      const browserLang = navigator.language || navigator.userLanguage || 'en';
+      if (browserLang.toLowerCase().startsWith('fr')) {
+        setLang('fr');
+      }
     }
   });
 </script>
