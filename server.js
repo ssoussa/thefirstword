@@ -1265,7 +1265,11 @@ app.post("/api/send-planb-email", async (req, res) => {
 
 app.get("/api/admin/stats", async (req, res) => {
   const { secret } = req.query;
-  if (!secret || secret !== process.env.CRON_SECRET) {
+  // Uses its own ADMIN_SECRET, separate from CRON_SECRET (which authorizes the
+  // GitHub Actions weekly email job). Keeping these separate means rotating
+  // one credential — e.g. if a team member with admin access changes — never
+  // breaks the other system, and a leak of one doesn't compromise the other.
+  if (!secret || secret !== process.env.ADMIN_SECRET) {
     return res.status(401).json({ error: "Unauthorized" });
   }
   if (!SUPABASE_KEY) return res.status(500).json({ error: "Database not configured" });
@@ -1346,25 +1350,6 @@ app.get("/api/admin/stats", async (req, res) => {
   } catch(err) {
     console.error('Admin stats error:', err);
     res.status(500).json({ error: "Failed to load stats" });
-  }
-});
-
-// ─── DEBUG: CHECK SUPABASE RECORD (remove after fixing) ──────────────────────
-
-app.get("/api/debug-record", async (req, res) => {
-  const { email, secret } = req.query;
-  if (secret !== process.env.CRON_SECRET) return res.status(401).json({ error: "Unauthorized" });
-  if (!email) return res.status(400).json({ error: "Missing email" });
-  try {
-    const rows = await supabaseQuery('subscribers', `email=eq.${encodeURIComponent(email)}&select=id,email,name,lang,plan,patient_name,kit_outputs&limit=1`);
-    res.json({
-      found: rows && rows.length > 0,
-      row: rows?.[0] || null,
-      kit_outputs_is_null: rows?.[0]?.kit_outputs === null,
-      kit_outputs_has_letter: !!(rows?.[0]?.kit_outputs?.letter),
-    });
-  } catch(e) {
-    res.status(500).json({ error: e.message });
   }
 });
 
@@ -1500,9 +1485,21 @@ app.get("/api/verify-session", async (req, res) => {
 
 // Stripe Webhook (for reliable payment confirmation + email backup)
 app.post("/api/stripe-webhook", express.raw({ type: 'application/json' }), async (req, res) => {
-  if (!STRIPE_WEBHOOK_SECRET) return res.status(200).send('ok');
+  // SECURITY: fail CLOSED, not open. If the webhook secret isn't configured,
+  // we cannot verify the request actually came from Stripe — so we reject it
+  // rather than silently accepting an unverified payload as a valid event.
+  // (Previously this returned 200 'ok' here, which would have let anyone POST
+  // a fake checkout.session.completed payload through unverified.)
+  if (!STRIPE_WEBHOOK_SECRET) {
+    console.error('Stripe webhook called but STRIPE_WEBHOOK_SECRET is not configured — rejecting unverifiable request.');
+    return res.status(500).send('Webhook not configured');
+  }
 
   const sig = req.headers['stripe-signature'];
+  if (!sig) {
+    return res.status(400).send('Missing signature');
+  }
+
   let event;
 
   try {
