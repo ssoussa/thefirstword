@@ -593,6 +593,233 @@
       line-height: 1.6;
       border-top: 1px solid rgba(255,255,255,0.05);
     }
+
+    /* CHAT WIDGET */
+    #fw-chat-bubble {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 0 4px 20px rgba(28,43,58,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 9998;
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #fw-chat-bubble:hover { transform: scale(1.06); box-shadow: 0 6px 26px rgba(28,43,58,0.32); }
+    #fw-chat-bubble svg { width: 26px; height: 26px; fill: white; }
+    #fw-chat-bubble .fw-chat-dot {
+      position: absolute;
+      top: -3px; right: -3px;
+      width: 14px; height: 14px;
+      background: var(--cta);
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+      display: none;
+    }
+    #fw-chat-bubble .fw-chat-dot.show { display: block; }
+
+    #fw-chat-panel {
+      position: fixed;
+      bottom: 96px;
+      right: 24px;
+      width: 360px;
+      max-width: calc(100vw - 32px);
+      height: 520px;
+      max-height: calc(100vh - 140px);
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 12px 48px rgba(28,43,58,0.28);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 9999;
+      font-family: 'Inter', sans-serif;
+    }
+    #fw-chat-panel.open { display: flex; }
+
+    .fw-chat-header {
+      background: var(--bg-dark);
+      color: white;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .fw-chat-header-title { display: flex; align-items: center; gap: 10px; }
+    .fw-chat-header-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--teal);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .fw-chat-header-text { line-height: 1.3; }
+    .fw-chat-header-text .name { font-size: 14px; font-weight: 600; }
+    .fw-chat-header-text .status { font-size: 11px; color: rgba(255,255,255,0.55); display: flex; align-items: center; gap: 5px; }
+    .fw-chat-header-text .status::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: #4caf6e; display: inline-block;
+    }
+    .fw-chat-header-actions { display: flex; align-items: center; gap: 8px; }
+    .fw-chat-lang-toggle {
+      display: flex; gap: 2px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 5px;
+      padding: 2px;
+    }
+    .fw-chat-lang-btn {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 4px;
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .fw-chat-lang-btn.active { background: rgba(255,255,255,0.95); color: var(--bg-dark); }
+    .fw-chat-close-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.7);
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+      padding: 2px 4px;
+    }
+    .fw-chat-close-btn:hover { color: white; }
+
+    .fw-chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: var(--bg);
+    }
+    .fw-chat-msg {
+      max-width: 84%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .fw-chat-msg.bot {
+      background: white;
+      color: var(--text);
+      align-self: flex-start;
+      border: 1px solid var(--divider);
+      border-bottom-left-radius: 4px;
+    }
+    .fw-chat-msg.user {
+      background: var(--teal);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .fw-chat-msg.error {
+      background: #fdecea;
+      color: #a83a2a;
+      align-self: flex-start;
+      border: 1px solid #f5c6bd;
+      border-bottom-left-radius: 4px;
+    }
+    .fw-chat-typing {
+      align-self: flex-start;
+      display: flex;
+      gap: 4px;
+      padding: 12px 14px;
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: 14px;
+      border-bottom-left-radius: 4px;
+    }
+    .fw-chat-typing span {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--text-light);
+      opacity: 0.5;
+      animation: fwTypingBounce 1.2s infinite ease-in-out;
+    }
+    .fw-chat-typing span:nth-child(2) { animation-delay: 0.15s; }
+    .fw-chat-typing span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes fwTypingBounce { 0%,60%,100% { transform: translateY(0); opacity:0.5; } 30% { transform: translateY(-4px); opacity:1; } }
+
+    .fw-chat-disclaimer {
+      font-size: 10.5px;
+      color: var(--text-light);
+      text-align: center;
+      padding: 6px 14px;
+      background: var(--bg);
+      border-top: 1px solid var(--divider);
+      flex-shrink: 0;
+      line-height: 1.4;
+    }
+
+    .fw-chat-input-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid var(--divider);
+      background: white;
+      flex-shrink: 0;
+    }
+    #fw-chat-input {
+      flex: 1;
+      border: 1.5px solid var(--divider);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13.5px;
+      font-family: inherit;
+      resize: none;
+      max-height: 90px;
+      outline: none;
+      color: var(--text);
+    }
+    #fw-chat-input:focus { border-color: var(--teal); }
+    #fw-chat-send {
+      background: var(--cta);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    #fw-chat-send:hover { background: var(--cta-hover); }
+    #fw-chat-send:disabled { background: var(--divider); cursor: not-allowed; }
+    #fw-chat-send svg { width: 16px; height: 16px; fill: white; }
+
+    @media (max-width: 480px) {
+      #fw-chat-panel {
+        right: 12px;
+        left: 12px;
+        width: auto;
+        bottom: 88px;
+        height: calc(100vh - 170px);
+      }
+      #fw-chat-bubble { right: 16px; bottom: 16px; }
+    }
   </style>
 </head>
 <body>
@@ -1119,6 +1346,307 @@
   function toggleFaq(el) {
     el.classList.toggle('open');
   }
+</script><!-- CHAT WIDGET -->
+<button id="fw-chat-bubble" aria-label="Open chat">
+  <span class="fw-chat-dot" id="fw-chat-dot"></span>
+  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.03 2 11c0 2.36 1.04 4.5 2.74 6.14L4 22l5.06-1.5c.93.25 1.92.39 2.94.39 5.52 0 10-4.03 10-9S17.52 2 12 2z"/></svg>
+</button>
+
+<div id="fw-chat-panel">
+  <div class="fw-chat-header">
+    <div class="fw-chat-header-title">
+      <div class="fw-chat-header-avatar">FW</div>
+      <div class="fw-chat-header-text">
+        <div class="name" id="fw-chat-header-name">TheFirstWord</div>
+        <div class="status" id="fw-chat-header-status">Online</div>
+      </div>
+    </div>
+    <div class="fw-chat-header-actions">
+      <div class="fw-chat-lang-toggle">
+        <button class="fw-chat-lang-btn" id="fw-chat-lang-en" onclick="fwChatSetLang('en')">EN</button>
+        <button class="fw-chat-lang-btn" id="fw-chat-lang-fr" onclick="fwChatSetLang('fr')">FR</button>
+      </div>
+      <button class="fw-chat-close-btn" onclick="fwChatToggle(false)" aria-label="Close chat">&times;</button>
+    </div>
+  </div>
+
+  <div class="fw-chat-messages" id="fw-chat-messages"></div>
+
+  <div class="fw-chat-disclaimer" id="fw-chat-disclaimer"></div>
+
+  <div class="fw-chat-input-row">
+    <textarea id="fw-chat-input" rows="1" placeholder="..."></textarea>
+    <button id="fw-chat-send" aria-label="Send">
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+<script>
+(function() {
+  // ─── CHAT WIDGET LOGIC ───────────────────────────────────────────────
+  // Fully isolated IIFE — does not touch any existing site variables/functions.
+
+  const STORAGE_KEY = 'fw_chat_history_v1';
+  const LANG_OVERRIDE_KEY = 'fw_chat_lang_override_v1';
+
+  const STRINGS = {
+    en: {
+      headerName: 'TheFirstWord',
+      status: 'Online',
+      placeholder: 'Type your message...',
+      disclaimer: 'AI assistant — not medical advice. In a crisis, call 911 or a helpline below.',
+      greeting: "Hi, I'm here to help. Ask me anything about TheFirstWord, or if you're trying to figure out whether what you're seeing in a loved one might be addiction, I can help you think it through.",
+      errorGeneric: 'Sorry, something went wrong. Please try again.',
+      errorRate: 'Too many messages — please wait a moment before continuing.'
+    },
+    fr: {
+      headerName: 'TheFirstWord',
+      status: 'En ligne',
+      placeholder: 'Écrivez votre message...',
+      disclaimer: "Assistant IA — pas un avis médical. En cas de crise, appelez le 911 ou une ligne d'aide ci-dessous.",
+      greeting: "Bonjour, je suis ici pour vous aider. Posez-moi vos questions sur TheFirstWord, ou si vous essayez de comprendre si ce que vous observez chez un proche pourrait être de la dépendance, je peux vous aider à y réfléchir.",
+      errorGeneric: "Désolé, une erreur est survenue. Veuillez réessayer.",
+      errorRate: "Trop de messages — veuillez patienter un moment avant de continuer."
+    }
+  };
+
+  let fwLang = 'en';
+  let fwHistory = []; // [{role, content}]
+  let fwSending = false;
+  let fwHasOpened = false;
+
+  function getPageLang() {
+    // The site's own setLang() declares `let currentLang` at script scope, which is
+    // NOT exposed on window (let/const don't attach to window like var does).
+    // Instead, we probe the nav logo's src, which setLang() explicitly sets to
+    // logo-fr.png or logo-en.png — a single, unambiguous element (unlike .fr-text,
+    // which has ~20 instances visible by default before JS runs, making it unreliable
+    // as a probe).
+    try {
+      const navLogo = document.getElementById('nav-logo-img');
+      if (navLogo && navLogo.src && navLogo.src.indexOf('logo-fr') !== -1) {
+        return 'fr';
+      }
+    } catch (e) {}
+    return 'en';
+  }
+
+  function loadSession() {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) fwHistory = parsed;
+      }
+    } catch (e) { fwHistory = []; }
+
+    try {
+      const override = sessionStorage.getItem(LANG_OVERRIDE_KEY);
+      if (override === 'en' || override === 'fr') {
+        fwLang = override;
+      } else {
+        fwLang = getPageLang();
+      }
+    } catch (e) {
+      fwLang = getPageLang();
+    }
+  }
+
+  function saveSession() {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(fwHistory.slice(-20)));
+    } catch (e) { /* sessionStorage may be unavailable, non-blocking */ }
+  }
+
+  function saveLangOverride(lang) {
+    try { sessionStorage.setItem(LANG_OVERRIDE_KEY, lang); } catch (e) {}
+  }
+
+  function el(id) { return document.getElementById(id); }
+
+  function renderStaticText() {
+    const s = STRINGS[fwLang];
+    el('fw-chat-header-name').textContent = s.headerName;
+    el('fw-chat-header-status').textContent = s.status;
+    el('fw-chat-input').setAttribute('placeholder', s.placeholder);
+    el('fw-chat-disclaimer').textContent = s.disclaimer;
+    el('fw-chat-lang-en').classList.toggle('active', fwLang === 'en');
+    el('fw-chat-lang-fr').classList.toggle('active', fwLang === 'fr');
+  }
+
+  function renderMessages() {
+    const container = el('fw-chat-messages');
+    container.innerHTML = '';
+    if (fwHistory.length === 0) {
+      appendBubble('bot', STRINGS[fwLang].greeting, false);
+    } else {
+      fwHistory.forEach(m => appendBubble(m.role === 'user' ? 'user' : 'bot', m.content, false));
+    }
+    scrollToBottom();
+  }
+
+  function appendBubble(type, text, doScroll) {
+    const container = el('fw-chat-messages');
+    const div = document.createElement('div');
+    div.className = 'fw-chat-msg ' + type;
+    div.textContent = text;
+    container.appendChild(div);
+    if (doScroll !== false) scrollToBottom();
+  }
+
+  function scrollToBottom() {
+    const container = el('fw-chat-messages');
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function showTyping() {
+    const container = el('fw-chat-messages');
+    const div = document.createElement('div');
+    div.className = 'fw-chat-typing';
+    div.id = 'fw-chat-typing-indicator';
+    div.innerHTML = '<span></span><span></span><span></span>';
+    container.appendChild(div);
+    scrollToBottom();
+  }
+
+  function hideTyping() {
+    const t = el('fw-chat-typing-indicator');
+    if (t) t.remove();
+  }
+
+  window.fwChatToggle = function(forceOpen) {
+    const panel = el('fw-chat-panel');
+    const isOpen = panel.classList.contains('open');
+    const shouldOpen = (typeof forceOpen === 'boolean') ? forceOpen : !isOpen;
+    if (shouldOpen) {
+      panel.classList.add('open');
+      el('fw-chat-dot').classList.remove('show');
+      if (!fwHasOpened) {
+        fwHasOpened = true;
+        loadSession();
+        renderStaticText();
+        renderMessages();
+      }
+      setTimeout(() => { try { el('fw-chat-input').focus(); } catch(e){} }, 50);
+    } else {
+      panel.classList.remove('open');
+    }
+  };
+
+  window.fwChatSetLang = function(lang) {
+    if (lang !== 'en' && lang !== 'fr') return;
+    fwLang = lang;
+    saveLangOverride(lang);
+    renderStaticText();
+    renderMessages();
+  };
+
+  async function fwChatSend() {
+    if (fwSending) return;
+    const input = el('fw-chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    fwSending = true;
+    el('fw-chat-send').disabled = true;
+    input.value = '';
+    input.style.height = 'auto';
+
+    appendBubble('user', text);
+    fwHistory.push({ role: 'user', content: text });
+    saveSession();
+    showTyping();
+
+    try {
+      const resp = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: text,
+          history: fwHistory.slice(0, -1).slice(-6),
+          lang: fwLang
+        })
+      });
+
+      const data = await resp.json().catch(() => ({}));
+      hideTyping();
+
+      if (resp.ok && data.reply) {
+        appendBubble('bot', data.reply);
+        fwHistory.push({ role: 'assistant', content: data.reply });
+        saveSession();
+      } else if (resp.status === 429) {
+        appendBubble('error', data.error || STRINGS[fwLang].errorRate);
+      } else {
+        appendBubble('error', data.error || STRINGS[fwLang].errorGeneric);
+      }
+    } catch (err) {
+      hideTyping();
+      appendBubble('error', STRINGS[fwLang].errorGeneric);
+    } finally {
+      fwSending = false;
+      el('fw-chat-send').disabled = false;
+    }
+  }
+
+  function init() {
+    el('fw-chat-bubble').addEventListener('click', () => window.fwChatToggle());
+
+    const input = el('fw-chat-input');
+    el('fw-chat-send').addEventListener('click', fwChatSend);
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        fwChatSend();
+      }
+    });
+    input.addEventListener('input', function() {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 90) + 'px';
+    });
+
+    // Show a subtle attention dot after a short delay if the user hasn't opened the chat yet.
+    setTimeout(() => {
+      if (!fwHasOpened) {
+        const dot = el('fw-chat-dot');
+        if (dot) dot.classList.add('show');
+      }
+    }, 15000);
+
+    // Non-invasive hook into the page's existing setLang(), so the chat widget
+    // follows the page toggle live if the user switches language while chat is open.
+    // Does not modify setLang's own behavior in any way — only observes after the fact.
+    // Wrapped in try/catch so if setLang is ever renamed/removed, the site is unaffected.
+    try {
+      if (typeof window.setLang === 'function' && !window.setLang.__fwWrapped) {
+        const originalSetLang = window.setLang;
+        const wrapped = function(lang) {
+          originalSetLang(lang);
+          try {
+            // Only auto-follow if the visitor hasn't manually overridden inside the chat itself.
+            const hasOverride = sessionStorage.getItem(LANG_OVERRIDE_KEY);
+            if (!hasOverride && (lang === 'en' || lang === 'fr')) {
+              fwLang = lang;
+              if (fwHasOpened) {
+                renderStaticText();
+                renderMessages();
+              }
+            }
+          } catch (e) {}
+        };
+        wrapped.__fwWrapped = true;
+        window.setLang = wrapped;
+      }
+    } catch (e) { /* non-blocking — chat widget still works without live sync */ }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
 </script>
+
 </body>
 </html>
