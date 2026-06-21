@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — TheFirstWord</title>
+  <meta name="description" content="Terms of Service for TheFirstWord. Read about our refund policy, disclaimers, and terms of use." />
+  <link rel="canonical" href="https://thefirstword.ca/terms.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F7F4EF;
+      --text: #1C2B3A;
+      --text-light: #5a6a7a;
+      --teal: #2A7F7F;
+      --teal-light: #e8f4f4;
+      --cta: #C4622D;
+      --divider: #E8E2D9;
+      --white: #FFFFFF;
+    }
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: rgba(247,244,239,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--divider);
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    #nav-logo-img { width: 160px; height: auto; }
+    @media (max-width: 600px) {
+      nav { padding: 10px 20px; }
+      #nav-logo-img { width: 130px; }
+    }
+
+    /* LANG TOGGLE */
+    .lang-toggle {
+      display: flex;
+      gap: 4px;
+      background: rgba(28,43,58,0.08);
+      border-radius: 6px;
+      padding: 4px;
+    }
+    .lang-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-light);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .lang-btn.active {
+      background: white;
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    /* PAGE */
+    .page-container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+    @media (max-width: 600px) {
+      .page-container { padding: 36px 16px 80px; }
+    }
+
+    /* HEADER */
+    .page-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .page-meta {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    /* SECTIONS */
+    .policy-section {
+      margin-bottom: 40px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--teal-light);
+    }
+    .section-title span {
+      color: var(--teal);
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+    }
+    p {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+    ul {
+      margin: 8px 0 14px 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    ul li {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+      padding: 5px 0 5px 22px;
+      position: relative;
+    }
+    ul li::before {
+      content: '•';
+      color: var(--teal);
+      font-weight: 700;
+      position: absolute;
+      left: 6px;
+    }
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* INFO BOX */
+    .info-box {
+      background: var(--teal-light);
+      border-left: 4px solid var(--teal);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* WARNING BOX (for disclaimers — amber, distinct from info-box teal) */
+    .warning-box {
+      background: rgba(232,165,75,0.1);
+      border-left: 4px solid #d99a3d;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* TABLE */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .data-table th {
+      background: var(--teal);
+      color: white;
+      font-weight: 600;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+    .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--divider);
+      vertical-align: top;
+      color: var(--text);
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: rgba(247,244,239,0.6); }
+    @media (max-width: 600px) {
+      .data-table { font-size: 13px; }
+      .data-table th, .data-table td { padding: 8px 10px; }
+    }
+
+    /* CONTACT BOX */
+    .contact-box {
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-top: 48px;
+      text-align: center;
+    }
+    .contact-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .contact-box p { font-size: 14px; color: var(--text-light); margin-bottom: 16px; }
+    .contact-btn {
+      display: inline-block;
+      background: var(--teal);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .contact-btn:hover { background: #1d5f5f; text-decoration: none; }
+
+    /* FOOTER */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,0.7); }
+
+    /* HIDDEN */
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://thefirstword.ca" class="nav-logo">
+    <img id="nav-logo-img"
+      src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png"
+      alt="TheFirstWord" />
+  </a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page-container">
+
+  <!-- ═══════════════════════════════════════════════════════ ENGLISH ════ -->
+  <div id="content-en">
+
+    <p class="page-eyebrow">Legal</p>
+    <h1 class="page-title">Terms of Service</h1>
+    <p class="page-meta">
+      TheFirstWord &nbsp;·&nbsp; Last updated: June 2026 &nbsp;·&nbsp;
+      <a href="#" onclick="setLang('fr'); return false;">Lire en français →</a>
+    </p>
+
+    <div class="info-box">
+      Please read these Terms of Service carefully before using TheFirstWord. By accessing or using our service, you agree to be bound by these terms. If you do not agree, please do not use TheFirstWord.
+    </div>
+
+    <!-- 1 -->
+    <div class="policy-section">
+      <h2 class="section-title">1. Who We Are</h2>
+      <p>TheFirstWord is operated by Sami Soussa, an individual located in Quebec, Canada. We provide an AI-powered tool that helps families prepare to communicate with a loved one struggling with addiction.</p>
+      <p>
+        <strong>Contact:</strong> <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a><br />
+        <strong>Website:</strong> <a href="https://thefirstword.ca">thefirstword.ca</a>
+      </p>
+    </div>
+
+    <!-- 2 -->
+    <div class="policy-section">
+      <h2 class="section-title">2. Who Can Use TheFirstWord</h2>
+      <p>TheFirstWord is intended exclusively for adults (18 years of age or older) seeking guidance for another adult struggling with addiction. By using this service, you confirm that you are at least 18 years old.</p>
+      <p>If the person you are seeking help for is under 18, TheFirstWord is not designed for that situation. Please contact a youth addiction specialist or a crisis line directly instead.</p>
+    </div>
+
+    <!-- 3 -->
+    <div class="policy-section">
+      <h2 class="section-title">3. What TheFirstWord Is — and Is Not</h2>
+      <div class="warning-box">
+        TheFirstWord is a communication support tool. It is <strong>not</strong> medical advice, psychological advice, addiction treatment, or a substitute for professional care of any kind.
+      </div>
+      <p>The letters, guides, scripts, and messages generated by TheFirstWord are created by artificial intelligence (the Anthropic API) based on the information you provide. They are intended to help you find words and structure for a difficult conversation — they are not clinical assessments, diagnoses, or guarantees of any outcome.</p>
+      <p>No tool, including ours, can guarantee that a conversation will go a certain way or that a loved one will accept help. Outcomes depend on human relationships, timing, and circumstances entirely outside our control.</p>
+      <p>If you or someone you know is in crisis, in danger, or experiencing a medical emergency, contact emergency services (911 in Canada) or a crisis line immediately. Do not rely on TheFirstWord in an emergency.</p>
+    </div>
+
+    <!-- 4 -->
+    <div class="policy-section">
+      <h2 class="section-title">4. Pricing and Payment</h2>
+      <p>Current pricing is as follows:</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Plan</th><th>Price</th><th>Includes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Starter</strong></td><td>$9 one-time</td><td>Letter + Conversation Guide</td></tr>
+          <tr><td><strong>Essential</strong></td><td>$19 one-time</td><td>Letter + Guide + SMS Message + Spoken Script</td></tr>
+          <tr><td><strong>Complete</strong></td><td>$29 one-time</td><td>Everything in Essential + Plan B strategy</td></tr>
+          <tr><td><strong>Premium</strong></td><td>$19/month</td><td>Everything in Complete + unlimited Plan B + weekly check-in emails</td></tr>
+        </tbody>
+      </table>
+      <p>All payments are processed securely by Stripe. We do not see or store your full card details. Prices are listed in Canadian dollars (CAD) unless otherwise stated, and may change at any time; the price you pay at checkout is the price that applies to your purchase.</p>
+    </div>
+
+    <!-- 5 -->
+    <div class="policy-section">
+      <h2 class="section-title">5. Refund Policy</h2>
+      <p>We offer a <strong>7-day money-back guarantee</strong> on one-time kit purchases (Starter, Essential, Complete), under the following condition:</p>
+      <ul>
+        <li>Your refund request must be made within 7 days of purchase</li>
+        <li><strong>You must not have opened or viewed your generated kit.</strong> Because your kit is delivered instantly and contains the full value of your purchase the moment it is viewed, we cannot offer a refund once it has been opened.</li>
+      </ul>
+      <p>To request a refund under this policy, contact us at <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a> with your order email and purchase date. We will confirm whether your kit was opened and process eligible refunds within 5 business days.</p>
+    </div>
+
+    <!-- 6 -->
+    <div class="policy-section">
+      <h2 class="section-title">6. Premium Subscription — Cancellation</h2>
+      <p>The Premium plan ($19/month) renews automatically each month until cancelled. You may cancel at any time, and your cancellation will take effect at the end of your current billing period.</p>
+      <p>We do not provide refunds or prorated credit for the remaining days of a billing period after cancellation. You will retain access to Premium features until the end of the period you have already paid for.</p>
+    </div>
+
+    <!-- 7 -->
+    <div class="policy-section">
+      <h2 class="section-title">7. Your Responsibilities</h2>
+      <p>When using TheFirstWord, you agree that you will:</p>
+      <ul>
+        <li>Provide information that is accurate to the best of your knowledge, understanding that the AI-generated output is only as useful as the information you provide</li>
+        <li>Use the service for its intended purpose — to help prepare for a conversation with a loved one — and not for any unlawful or harmful purpose</li>
+        <li>Not attempt to misuse, reverse-engineer, or interfere with the technical operation of the service</li>
+        <li>Be at least 18 years of age, as described in Section 2</li>
+      </ul>
+    </div>
+
+    <!-- 8 -->
+    <div class="policy-section">
+      <h2 class="section-title">8. Limitation of Liability</h2>
+      <p>To the fullest extent permitted by law, Sami Soussa and TheFirstWord are not liable for any outcome — positive or negative — resulting from a conversation, intervention, or relationship decision made using content generated by this service.</p>
+      <p>This includes, without limitation, any harm, distress, relationship breakdown, or failure to achieve a desired outcome. TheFirstWord is a communication aid, not a guarantee of any result, and you remain solely responsible for how and whether you use the content we generate.</p>
+      <p>TheFirstWord is provided "as is" without warranties of any kind, express or implied, regarding its accuracy, completeness, or fitness for a particular purpose.</p>
+    </div>
+
+    <!-- 9 -->
+    <div class="policy-section">
+      <h2 class="section-title">9. Intellectual Property</h2>
+      <p>The TheFirstWord name, logo, website design, and underlying technology are the property of Sami Soussa. The content generated specifically for you (your letter, guide, scripts) is yours to use personally for your own situation.</p>
+      <p>You may not resell, redistribute, or use TheFirstWord's branding, website content, or generated templates for any commercial purpose without our written permission.</p>
+    </div>
+
+    <!-- 10 -->
+    <div class="policy-section">
+      <h2 class="section-title">10. Privacy</h2>
+      <p>Your use of TheFirstWord is also governed by our <a href="/privacy.html">Privacy Policy</a>, which explains what information we collect and how we use it, in accordance with Quebec's Law 25.</p>
+    </div>
+
+    <!-- 11 -->
+    <div class="policy-section">
+      <h2 class="section-title">11. Changes to These Terms</h2>
+      <p>We may update these Terms of Service from time to time. When we do, we will update the "Last updated" date at the top of this page. Continued use of TheFirstWord after any changes constitutes your acceptance of the updated terms.</p>
+      <p>For material changes, we will notify active users by email.</p>
+    </div>
+
+    <!-- 12 -->
+    <div class="policy-section">
+      <h2 class="section-title">12. Governing Law</h2>
+      <p>These Terms of Service are governed by the laws of the Province of Quebec and the laws of Canada applicable therein, without regard to conflict of law principles. Any disputes arising from these terms will be subject to the exclusive jurisdiction of the courts of Quebec.</p>
+    </div>
+
+    <!-- 13 -->
+    <div class="policy-section">
+      <h2 class="section-title">13. Contact</h2>
+      <p>If you have a question or concern about these Terms of Service, please contact us:</p>
+      <p><strong>Email:</strong> <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
+    </div>
+
+    <div class="contact-box">
+      <h3>Questions about these terms?</h3>
+      <p>We're a small team and happy to clarify anything. Reach out anytime.</p>
+      <a href="mailto:thefirstword.ca@gmail.com" class="contact-btn">Contact Us →</a>
+    </div>
+
+  </div><!-- /content-en -->
+
+
+  <!-- ═══════════════════════════════════════════════════════ FRANÇAIS ════ -->
+  <div id="content-fr" class="hidden">
+
+    <p class="page-eyebrow">Légal</p>
+    <h1 class="page-title">Conditions d'utilisation</h1>
+    <p class="page-meta">
+      TheFirstWord &nbsp;·&nbsp; Dernière mise à jour : juin 2026 &nbsp;·&nbsp;
+      <a href="#" onclick="setLang('en'); return false;">Read in English →</a>
+    </p>
+
+    <div class="info-box">
+      Veuillez lire attentivement ces conditions d'utilisation avant d'utiliser TheFirstWord. En accédant à notre service ou en l'utilisant, vous acceptez d'être lié par ces conditions. Si vous n'êtes pas d'accord, veuillez ne pas utiliser TheFirstWord.
+    </div>
+
+    <!-- 1 -->
+    <div class="policy-section">
+      <h2 class="section-title">1. Qui sommes-nous</h2>
+      <p>TheFirstWord est exploité par Sami Soussa, un particulier situé au Québec, Canada. Nous offrons un outil alimenté par l'intelligence artificielle pour aider les familles à se préparer à communiquer avec un proche aux prises avec une dépendance.</p>
+      <p>
+        <strong>Contact :</strong> <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a><br />
+        <strong>Site web :</strong> <a href="https://thefirstword.ca">thefirstword.ca</a>
+      </p>
+    </div>
+
+    <!-- 2 -->
+    <div class="policy-section">
+      <h2 class="section-title">2. Qui peut utiliser TheFirstWord</h2>
+      <p>TheFirstWord est conçu exclusivement pour les adultes (18 ans et plus) cherchant à aider un autre adulte aux prises avec une dépendance. En utilisant ce service, vous confirmez avoir au moins 18 ans.</p>
+      <p>Si la personne pour qui vous cherchez de l'aide a moins de 18 ans, TheFirstWord n'est pas conçu pour cette situation. Veuillez plutôt contacter directement un spécialiste en dépendance jeunesse ou une ligne de crise.</p>
+    </div>
+
+    <!-- 3 -->
+    <div class="policy-section">
+      <h2 class="section-title">3. Ce que TheFirstWord est — et n'est pas</h2>
+      <div class="warning-box">
+        TheFirstWord est un outil de soutien à la communication. Il ne constitue <strong>pas</strong> un avis médical, un avis psychologique, un traitement de la dépendance, ni un substitut à des soins professionnels de quelque nature que ce soit.
+      </div>
+      <p>Les lettres, guides, scripts et messages générés par TheFirstWord sont créés par intelligence artificielle (l'API Anthropic) à partir des informations que vous fournissez. Ils visent à vous aider à trouver les mots et la structure pour une conversation difficile — ils ne constituent pas des évaluations cliniques, des diagnostics, ni des garanties de résultat.</p>
+      <p>Aucun outil, y compris le nôtre, ne peut garantir qu'une conversation se déroulera d'une certaine façon ou qu'un proche acceptera de l'aide. Les résultats dépendent des relations humaines, du moment choisi et de circonstances entièrement hors de notre contrôle.</p>
+      <p>Si vous ou une personne que vous connaissez est en crise, en danger, ou vit une urgence médicale, contactez immédiatement les services d'urgence (911 au Canada) ou une ligne de crise. Ne vous fiez pas à TheFirstWord en situation d'urgence.</p>
+    </div>
+
+    <!-- 4 -->
+    <div class="policy-section">
+      <h2 class="section-title">4. Prix et paiement</h2>
+      <p>Les prix actuels sont les suivants :</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Forfait</th><th>Prix</th><th>Inclut</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Starter</strong></td><td>9$ paiement unique</td><td>Lettre + Guide de conversation</td></tr>
+          <tr><td><strong>Essential</strong></td><td>19$ paiement unique</td><td>Lettre + Guide + Message texte + Script parlé</td></tr>
+          <tr><td><strong>Complete</strong></td><td>29$ paiement unique</td><td>Tout d'Essential + stratégie Plan B</td></tr>
+          <tr><td><strong>Premium</strong></td><td>19$/mois</td><td>Tout de Complete + Plan B illimité + courriels de suivi hebdomadaires</td></tr>
+        </tbody>
+      </table>
+      <p>Tous les paiements sont traités de façon sécurisée par Stripe. Nous ne voyons ni ne stockons jamais les détails complets de votre carte. Les prix sont indiqués en dollars canadiens (CAD) sauf indication contraire, et peuvent changer à tout moment; le prix payé au moment de l'achat est celui qui s'applique à votre commande.</p>
+    </div>
+
+    <!-- 5 -->
+    <div class="policy-section">
+      <h2 class="section-title">5. Politique de remboursement</h2>
+      <p>Nous offrons une <strong>garantie de remboursement de 7 jours</strong> sur les achats de kits à paiement unique (Starter, Essential, Complete), sous la condition suivante :</p>
+      <ul>
+        <li>Votre demande de remboursement doit être faite dans les 7 jours suivant l'achat</li>
+        <li><strong>Vous ne devez pas avoir ouvert ou consulté votre kit généré.</strong> Puisque votre kit est livré instantanément et contient toute la valeur de votre achat dès qu'il est consulté, nous ne pouvons offrir de remboursement une fois qu'il a été ouvert.</li>
+      </ul>
+      <p>Pour faire une demande de remboursement selon cette politique, contactez-nous à <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a> avec votre courriel de commande et la date d'achat. Nous confirmerons si votre kit a été ouvert et traiterons les remboursements admissibles dans un délai de 5 jours ouvrables.</p>
+    </div>
+
+    <!-- 6 -->
+    <div class="policy-section">
+      <h2 class="section-title">6. Abonnement Premium — Annulation</h2>
+      <p>Le forfait Premium (19$/mois) se renouvelle automatiquement chaque mois jusqu'à annulation. Vous pouvez annuler à tout moment, et votre annulation prendra effet à la fin de votre période de facturation en cours.</p>
+      <p>Nous n'offrons pas de remboursement ni de crédit proportionnel pour les jours restants d'une période de facturation après l'annulation. Vous conserverez l'accès aux fonctionnalités Premium jusqu'à la fin de la période déjà payée.</p>
+    </div>
+
+    <!-- 7 -->
+    <div class="policy-section">
+      <h2 class="section-title">7. Vos responsabilités</h2>
+      <p>En utilisant TheFirstWord, vous acceptez de :</p>
+      <ul>
+        <li>Fournir des informations exactes au meilleur de votre connaissance, en comprenant que le contenu généré par l'IA n'est utile qu'en fonction des informations que vous fournissez</li>
+        <li>Utiliser le service aux fins prévues — vous préparer à une conversation avec un proche — et non à des fins illégales ou nuisibles</li>
+        <li>Ne pas tenter d'abuser, de rétro-ingénierer ou d'interférer avec le fonctionnement technique du service</li>
+        <li>Avoir au moins 18 ans, comme décrit à la section 2</li>
+      </ul>
+    </div>
+
+    <!-- 8 -->
+    <div class="policy-section">
+      <h2 class="section-title">8. Limitation de responsabilité</h2>
+      <p>Dans toute la mesure permise par la loi, Sami Soussa et TheFirstWord ne sont pas responsables de tout résultat — positif ou négatif — découlant d'une conversation, d'une intervention ou d'une décision relationnelle prise à l'aide du contenu généré par ce service.</p>
+      <p>Cela inclut, sans s'y limiter, tout préjudice, détresse, rupture relationnelle ou incapacité à atteindre un résultat souhaité. TheFirstWord est un outil d'aide à la communication, pas une garantie de résultat, et vous demeurez seul responsable de la façon dont vous utilisez le contenu que nous générons, et de votre décision de l'utiliser ou non.</p>
+      <p>TheFirstWord est fourni « tel quel » sans garantie d'aucune sorte, explicite ou implicite, quant à son exactitude, son exhaustivité ou son adéquation à un usage particulier.</p>
+    </div>
+
+    <!-- 9 -->
+    <div class="policy-section">
+      <h2 class="section-title">9. Propriété intellectuelle</h2>
+      <p>Le nom TheFirstWord, son logo, le design du site web et la technologie sous-jacente sont la propriété de Sami Soussa. Le contenu généré spécifiquement pour vous (votre lettre, guide, scripts) est à votre usage personnel pour votre propre situation.</p>
+      <p>Vous ne pouvez pas revendre, redistribuer ou utiliser l'image de marque, le contenu du site web ou les modèles générés par TheFirstWord à des fins commerciales sans notre permission écrite.</p>
+    </div>
+
+    <!-- 10 -->
+    <div class="policy-section">
+      <h2 class="section-title">10. Vie privée</h2>
+      <p>Votre utilisation de TheFirstWord est également régie par notre <a href="/privacy.html">Politique de confidentialité</a>, qui explique quelles informations nous collectons et comment nous les utilisons, conformément à la Loi 25 du Québec.</p>
+    </div>
+
+    <!-- 11 -->
+    <div class="policy-section">
+      <h2 class="section-title">11. Modifications de ces conditions</h2>
+      <p>Nous pouvons mettre à jour ces conditions d'utilisation de temps à autre. Lorsque nous le faisons, nous mettons à jour la date de « Dernière mise à jour » en haut de cette page. L'utilisation continue de TheFirstWord après tout changement constitue votre acceptation des conditions mises à jour.</p>
+      <p>Pour les changements importants, nous en informerons les utilisateurs actifs par courriel.</p>
+    </div>
+
+    <!-- 12 -->
+    <div class="policy-section">
+      <h2 class="section-title">12. Loi applicable</h2>
+      <p>Ces conditions d'utilisation sont régies par les lois de la province de Québec et les lois du Canada qui s'y appliquent, sans égard aux principes de conflit de lois. Tout litige découlant de ces conditions sera soumis à la compétence exclusive des tribunaux du Québec.</p>
+    </div>
+
+    <!-- 13 -->
+    <div class="policy-section">
+      <h2 class="section-title">13. Contact</h2>
+      <p>Si vous avez une question ou une préoccupation concernant ces conditions d'utilisation, veuillez nous contacter :</p>
+      <p><strong>Courriel :</strong> <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
+    </div>
+
+    <div class="contact-box">
+      <h3>Des questions sur ces conditions ?</h3>
+      <p>Nous sommes une petite équipe et heureux de clarifier quoi que ce soit. Contactez-nous en tout temps.</p>
+      <a href="mailto:thefirstword.ca@gmail.com" class="contact-btn">Nous contacter →</a>
+    </div>
+
+  </div><!-- /content-fr -->
+
+</div><!-- /page-container -->
+
+<footer>
+  <p>© <span id="footer-year"></span> TheFirstWord &nbsp;·&nbsp; <a href="https://thefirstword.ca">thefirstword.ca</a> &nbsp;·&nbsp; <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
+</footer>
+
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  let lang = 'en';
+
+  function setLang(l) {
+    lang = l;
+
+    // Toggle content blocks
+    document.getElementById('content-en').classList.toggle('hidden', l !== 'en');
+    document.getElementById('content-fr').classList.toggle('hidden', l !== 'fr');
+
+    // Toggle lang buttons
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    // Swap logo
+    const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
+    const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
+    const navLogo = document.getElementById('nav-logo-img');
+    if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
+
+    // Update html lang attribute
+    document.documentElement.lang = l;
+
+    // Scroll to top when switching language
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Auto-detect browser language on load
+  window.addEventListener('DOMContentLoaded', () => {
+    const browserLang = navigator.language || navigator.userLanguage || 'en';
+    if (browserLang.toLowerCase().startsWith('fr')) {
+      setLang('fr');
+    }
+  });
+</script>
+</body>
+</html>
