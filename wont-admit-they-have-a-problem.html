@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What to Say When They Won't Admit They Have a Problem | TheFirstWord</title>
+  <meta name="description" content="Denial is the biggest wall families hit first. Here's how to talk to someone who won't admit they have a problem — without it turning into a standoff." />
+  <link rel="canonical" href="https://thefirstword.ca/wont-admit-they-have-a-problem.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F7F4EF;
+      --text: #1C2B3A;
+      --text-light: #5a6a7a;
+      --teal: #2A7F7F;
+      --teal-light: #e8f4f4;
+      --cta: #C4622D;
+      --divider: #E8E2D9;
+      --white: #FFFFFF;
+    }
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: rgba(247,244,239,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--divider);
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    #nav-logo-img { width: 160px; height: auto; }
+    @media (max-width: 600px) {
+      nav { padding: 10px 20px; }
+      #nav-logo-img { width: 130px; }
+    }
+
+    /* LANG TOGGLE */
+    .lang-toggle {
+      display: flex;
+      gap: 4px;
+      background: rgba(28,43,58,0.08);
+      border-radius: 6px;
+      padding: 4px;
+    }
+    .lang-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-light);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .lang-btn.active {
+      background: white;
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    /* PAGE */
+    .page-container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+    @media (max-width: 600px) {
+      .page-container { padding: 36px 16px 80px; }
+    }
+
+    /* HEADER */
+    .page-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .page-meta {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    /* SECTIONS */
+    .guide-section {
+      margin-bottom: 32px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    p {
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+    .intro-p {
+      font-size: 17px;
+    }
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* INFO BOX */
+    .info-box {
+      background: var(--teal-light);
+      border-left: 4px solid var(--teal);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+      font-weight: 500;
+    }
+
+    /* CTA BOX */
+    .contact-box {
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-top: 48px;
+      text-align: center;
+    }
+    .contact-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .contact-box p { font-size: 14px; color: var(--text-light); margin-bottom: 16px; }
+    .contact-btn {
+      display: inline-block;
+      background: var(--cta);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .contact-btn:hover { background: #a8501f; text-decoration: none; }
+
+    /* FOOTER */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,0.7); }
+
+    /* HIDDEN */
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://thefirstword.ca" class="nav-logo">
+    <img id="nav-logo-img"
+      src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png"
+      alt="TheFirstWord" />
+  </a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page-container">
+
+  <!-- ═══════════════════════════════════════════════════════ ENGLISH ════ -->
+  <div id="content-en">
+
+    <p class="page-eyebrow">Family Guide</p>
+    <h1 class="page-title">What to Say When They Won't Admit They Have a Problem</h1>
+    <p class="page-meta">
+      TheFirstWord &nbsp;·&nbsp;
+      <a href="#" onclick="setLang('fr'); return false;">Lire en français →</a>
+    </p>
+
+    <p class="intro-p">You've named it. They've denied it. Now you're stuck — not because you said the wrong thing, but because denial isn't really about the facts. It's about fear.</p>
+
+    <div class="info-box">
+      Admitting "I have a problem" usually means, in someone's head, admitting they're weak, that they might lose their job or family, that they have to give something up that's currently the only thing helping them cope. Denial protects against that fear — it's not stupidity or stubbornness, it's self-protection.
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Stop trying to win the argument with evidence</h2>
+      <p>Lists of incidents, dates, and proof tend to make denial stronger, not weaker — because now it feels like a trial, and people defend themselves in trials. Facts rarely break through denial on their own.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Name the pattern, not the label</h2>
+      <p>"You've missed three family dinners this month" is harder to deny than "you're an alcoholic." Patterns are observable. Labels are arguable. Let them draw their own conclusion from the pattern instead of handing them a label to fight against.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Ask questions instead of making statements</h2>
+      <p>"Have you noticed you've been more irritable lately?" opens a door. "You're always irritable because you're drinking" closes one. Questions can sit with someone in a way that accusations can't.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Drop the rope on this round if it's clearly not landing</h2>
+      <p>If the conversation has turned into a standoff, ending it calmly — "I just wanted you to know I've noticed, that's all" — does more good than pushing further in the moment. You're not giving up. You're letting the seed sit instead of trying to force it to grow on your schedule.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Plan for round two before round one even ends</h2>
+      <p>Denial rarely breaks on the first conversation. What matters is that you have a next move ready — a different angle, a different moment, a different specific concern — instead of having said everything you had in one shot.</p>
+    </div>
+
+    <p>The exact words that work depend entirely on your relationship and what's actually been happening — which is why a generic script rarely lands. TheFirstWord builds a version specific to your situation, so you're not guessing at the right words in the moment.</p>
+
+    <div class="contact-box">
+      <h3>Build your script</h3>
+      <p>Get the right words for your exact situation, in minutes.</p>
+      <a href="https://thefirstword.ca/app.html" class="contact-btn">Start now →</a>
+    </div>
+
+  </div><!-- /content-en -->
+
+  <!-- ═══════════════════════════════════════════════════════ FRANÇAIS ════ -->
+  <div id="content-fr" class="hidden">
+
+    <p class="page-eyebrow">Guide pour les familles</p>
+    <h1 class="page-title">Quoi dire quand il/elle refuse d'admettre le problème</h1>
+    <p class="page-meta">
+      TheFirstWord &nbsp;·&nbsp;
+      <a href="#" onclick="setLang('en'); return false;">Read in English →</a>
+    </p>
+
+    <p class="intro-p">Vous l'avez nommé. La personne l'a nié. Maintenant vous êtes coincé(e) — pas parce que vous avez mal dit les choses, mais parce que le déni n'est pas vraiment une question de faits. C'est une question de peur.</p>
+
+    <div class="info-box">
+      Admettre « j'ai un problème » signifie souvent, dans la tête de la personne, admettre qu'elle est faible, qu'elle pourrait perdre son emploi ou sa famille, qu'elle doit abandonner la seule chose qui l'aide actuellement à fonctionner. Le déni protège contre cette peur — ce n'est pas de la bêtise ou de l'entêtement, c'est de l'autoprotection.
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Arrêtez d'essayer de gagner le débat avec des preuves</h2>
+      <p>Les listes d'incidents, de dates et de preuves ont tendance à renforcer le déni plutôt qu'à le réduire — parce que ça ressemble maintenant à un procès, et qu'on se défend dans un procès. Les faits seuls percent rarement le déni.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Nommez le pattern, pas l'étiquette</h2>
+      <p>« T'as manqué trois soupers de famille ce mois-ci » est plus difficile à nier que « t'es alcoolique ». Un pattern s'observe. Une étiquette se débat. Laissez la personne tirer sa propre conclusion du pattern plutôt que de lui donner une étiquette à combattre.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Posez des questions plutôt que des affirmations</h2>
+      <p>« As-tu remarqué que t'es plus irritable dernièrement? » ouvre une porte. « T'es toujours irritable parce que tu bois » en ferme une. Une question peut rester avec quelqu'un d'une façon qu'une accusation ne peut pas.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Lâchez prise pour cette ronde si ça ne fonctionne clairement pas</h2>
+      <p>Si la conversation tourne en impasse, la terminer calmement — « je voulais juste que tu saches que j'ai remarqué, c'est tout » — fait plus de bien que de pousser davantage sur le moment. Vous n'abandonnez pas. Vous laissez la graine reposer au lieu d'essayer de forcer sa pousse selon votre horaire.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Préparez la ronde deux avant même que la ronde un soit terminée</h2>
+      <p>Le déni se brise rarement à la première conversation. Ce qui compte, c'est d'avoir une prochaine étape prête — un angle différent, un moment différent, une préoccupation précise différente — plutôt que d'avoir tout dit en un seul coup.</p>
+    </div>
+
+    <p>Les mots exacts qui fonctionnent dépendent entièrement de votre relation et de ce qui se passe vraiment — c'est pourquoi un script générique fonctionne rarement. TheFirstWord construit une version adaptée à votre situation, pour que vous n'ayez pas à deviner les bons mots sur le moment.</p>
+
+    <div class="contact-box">
+      <h3>Créez votre script</h3>
+      <p>Obtenez les bons mots pour votre situation exacte, en quelques minutes.</p>
+      <a href="https://thefirstword.ca/app.html" class="contact-btn">Commencer →</a>
+    </div>
+
+  </div><!-- /content-fr -->
+
+</div><!-- /page-container -->
+
+<footer>
+  <p>© <span id="footer-year"></span> TheFirstWord &nbsp;·&nbsp; <a href="https://thefirstword.ca">thefirstword.ca</a> &nbsp;·&nbsp; <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
+</footer>
+
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  let lang = 'en';
+
+  function setLang(l) {
+    lang = l;
+
+    document.getElementById('content-en').classList.toggle('hidden', l !== 'en');
+    document.getElementById('content-fr').classList.toggle('hidden', l !== 'fr');
+
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
+    const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
+    const navLogo = document.getElementById('nav-logo-img');
+    if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
+
+    document.documentElement.lang = l;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const browserLang = navigator.language || navigator.userLanguage || 'en';
+    if (browserLang.toLowerCase().startsWith('fr')) {
+      setLang('fr');
+    }
+  });
+</script>
+</body>
+</html>
