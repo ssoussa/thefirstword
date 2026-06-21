@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
   <title>TheFirstWord — Start the conversation that changes everything</title>
   <!-- SEO -->
   <meta name="description" content="TheFirstWord gives families the exact words, scripts, and tools to start the most important conversation of their loved one's life. AI-powered intervention kits in English and French. From $9." />
@@ -919,14 +919,10 @@
 
     @media (max-width: 600px) {
       #fw-chat-panel {
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
+        inset: 0;
+        width: auto;
         max-width: none;
-        height: 100vh;
-        height: 100dvh;
+        height: auto;
         max-height: none;
         border-radius: 0;
       }
@@ -1716,18 +1712,6 @@
     if (t) t.remove();
   }
 
-  function fwChatAdjustHeight() {
-    const panel = el('fw-chat-panel');
-    if (!panel || !panel.classList.contains('open')) return;
-    if (window.innerWidth > 600) return; // only the full-screen mobile takeover needs this
-    if (window.visualViewport) {
-      panel.style.height = window.visualViewport.height + 'px';
-    }
-  }
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', fwChatAdjustHeight);
-  }
-
   window.fwChatToggle = function(forceOpen) {
     const panel = el('fw-chat-panel');
     const isOpen = panel.classList.contains('open');
@@ -1741,11 +1725,9 @@
         renderStaticText();
         renderMessages();
       }
-      fwChatAdjustHeight();
       setTimeout(() => { try { el('fw-chat-input').focus(); } catch(e){} }, 50);
     } else {
       panel.classList.remove('open');
-      panel.style.height = '';
     }
   };
 
@@ -1819,9 +1801,6 @@
     input.addEventListener('input', function() {
       input.style.height = 'auto';
       input.style.height = Math.min(input.scrollHeight, 90) + 'px';
-    });
-    input.addEventListener('focus', function() {
-      setTimeout(fwChatAdjustHeight, 300);
     });
 
     // Show a subtle attention dot after a short delay if the user hasn't opened the chat yet.
