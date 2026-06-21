@@ -119,45 +119,65 @@
       display: none;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
       gap: 5px;
-      width: 28px;
-      height: 28px;
+      width: 36px;
+      height: 36px;
       background: none;
       border: none;
       cursor: pointer;
       padding: 0;
+      flex-shrink: 0;
     }
     .hamburger-btn span {
       display: block;
-      width: 100%;
+      width: 22px;
       height: 2px;
       background: var(--text);
       border-radius: 2px;
-      transition: transform 0.2s, opacity 0.2s;
+      transition: transform 0.25s ease, opacity 0.2s ease;
     }
+    .hamburger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger-btn.open span:nth-child(2) { opacity: 0; }
+    .hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
     .mobile-menu-panel {
-      display: none;
-      width: 100%;
-      flex-direction: column;
-      background: var(--bg);
-      border-top: 1px solid var(--divider);
-      padding: 12px 4px;
-      gap: 2px;
+      max-height: 0;
+      overflow: hidden;
+      width: calc(100% - 32px);
+      margin: 0 auto;
+      margin-top: 8px;
+      background: var(--white);
+      border-radius: 14px;
+      box-shadow: 0 12px 28px rgba(28,43,58,0.14);
+      transition: max-height 0.3s ease;
+      position: relative;
+      z-index: 50;
     }
-    .mobile-menu-panel.open { display: flex; }
+    .mobile-menu-panel.open { max-height: 420px; }
+    .mobile-menu-panel-inner { display: flex; flex-direction: column; padding: 8px; }
     .mobile-menu-panel a {
-      padding: 12px 8px;
-      font-size: 15px;
+      display: block !important;
+      padding: 15px 16px;
+      font-size: 16px;
       font-weight: 500;
-      color: var(--text);
+      color: var(--text) !important;
       text-decoration: none;
-      border-radius: 6px;
+      border-bottom: 1px solid var(--divider);
     }
-    .mobile-menu-panel a:active { background: rgba(28,43,58,0.06); }
+    .mobile-menu-panel a:last-of-type { border-bottom: none; }
+    .mobile-menu-panel a:active { background: var(--teal-light); }
     .mobile-menu-panel .nav-cta {
-      margin-top: 6px;
+      margin: 8px 0 4px;
+      border-radius: 8px;
       text-align: center;
+      border-bottom: none !important;
+      background: var(--cta) !important;
+      color: white !important;
+      font-weight: 700;
     }
+    .mobile-menu-panel .nav-cta:active { background: var(--cta-hover) !important; }
+
     @media (max-width: 600px) {
       .hamburger-btn { display: flex; }
     }
@@ -944,16 +964,18 @@
 
 <!-- MOBILE MENU PANEL -->
 <div class="mobile-menu-panel" id="mobileMenuPanel">
-  <a href="#how-it-works" class="en-text" onclick="closeMobileMenu()">How it works</a>
-  <a href="#how-it-works" class="fr-text" style="display:none;" onclick="closeMobileMenu()">Comment ça marche</a>
-  <a href="#pricing" class="en-text" onclick="closeMobileMenu()">Pricing</a>
-  <a href="#pricing" class="fr-text" style="display:none;" onclick="closeMobileMenu()">Tarifs</a>
-  <a href="#resources" class="en-text" onclick="closeMobileMenu()">Resources</a>
-  <a href="#resources" class="fr-text" style="display:none;" onclick="closeMobileMenu()">Ressources</a>
-  <a href="/guides.html?lang=en" class="en-text" onclick="closeMobileMenu()">Guides</a>
-  <a href="/guides.html?lang=fr" class="fr-text" style="display:none;" onclick="closeMobileMenu()">Guides</a>
-  <a href="app.html?lang=en" class="nav-cta en-text">Start Now</a>
-  <a href="app.html?lang=fr" class="nav-cta fr-text" style="display:none;">Commencer</a>
+  <div class="mobile-menu-panel-inner">
+    <a href="#how-it-works" class="en-text" onclick="closeMobileMenu()">How it works</a>
+    <a href="#how-it-works" class="fr-text" style="display:none;" onclick="closeMobileMenu()">Comment ça marche</a>
+    <a href="#pricing" class="en-text" onclick="closeMobileMenu()">Pricing</a>
+    <a href="#pricing" class="fr-text" style="display:none;" onclick="closeMobileMenu()">Tarifs</a>
+    <a href="#resources" class="en-text" onclick="closeMobileMenu()">Resources</a>
+    <a href="#resources" class="fr-text" style="display:none;" onclick="closeMobileMenu()">Ressources</a>
+    <a href="/guides.html?lang=en" class="en-text" onclick="closeMobileMenu()">Guides</a>
+    <a href="/guides.html?lang=fr" class="fr-text" style="display:none;" onclick="closeMobileMenu()">Guides</a>
+    <a href="app.html?lang=en" class="nav-cta en-text">Start Now</a>
+    <a href="app.html?lang=fr" class="nav-cta fr-text" style="display:none;">Commencer</a>
+  </div>
 </div>
 
 <!-- HERO -->
@@ -1403,9 +1425,11 @@
   // MOBILE MENU
   function toggleMobileMenu() {
     document.getElementById('mobileMenuPanel').classList.toggle('open');
+    document.querySelector('.hamburger-btn').classList.toggle('open');
   }
   function closeMobileMenu() {
     document.getElementById('mobileMenuPanel').classList.remove('open');
+    document.querySelector('.hamburger-btn').classList.remove('open');
   }
 
   // TYPING ANIMATION
