@@ -202,24 +202,15 @@
       src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png"
       alt="TheFirstWord" />
   </a>
-  <div class="lang-toggle">
-    <button class="lang-btn active" onclick="setLang('en')">EN</button>
-    <button class="lang-btn" onclick="setLang('fr')">FR</button>
-  </div>
+  <a href="https://thefirstword.ca/mon-enfant-refuse-aide.html" style="font-size:13px; font-weight:600; color:var(--text-light); text-decoration:none;">Français →</a>
 </nav>
 
 <!-- PAGE -->
 <div class="page-container">
 
-  <!-- ═══════════════════════════════════════════════════════ ENGLISH ════ -->
-  <div id="content-en">
-
     <p class="page-eyebrow">Family Guide</p>
     <h1 class="page-title">My Son or Daughter Won't Go to Rehab — What Now?</h1>
-    <p class="page-meta">
-      TheFirstWord &nbsp;·&nbsp;
-      <a href="#" onclick="setLang('fr'); return false;">Lire en français →</a>
-    </p>
+    <p class="page-meta">TheFirstWord</p>
 
     <p class="intro-p">You finally said it. You brought up rehab, treatment, getting help — and they said no. Maybe they got angry. Maybe they shut down. Maybe they just walked away.</p>
 
@@ -260,59 +251,6 @@
       <a href="https://thefirstword.ca/app.html" class="contact-btn">Start now →</a>
     </div>
 
-  </div><!-- /content-en -->
-
-  <!-- ═══════════════════════════════════════════════════════ FRANÇAIS ════ -->
-  <div id="content-fr" class="hidden">
-
-    <p class="page-eyebrow">Guide pour les familles</p>
-    <h1 class="page-title">Mon enfant refuse l'aide — quoi faire maintenant?</h1>
-    <p class="page-meta">
-      TheFirstWord &nbsp;·&nbsp;
-      <a href="#" onclick="setLang('en'); return false;">Read in English →</a>
-    </p>
-
-    <p class="intro-p">Vous avez finalement osé. Vous avez parlé de thérapie, de traitement, d'aller chercher de l'aide — et la réponse a été non. Peut-être qu'il/elle s'est fâché(e). Peut-être qu'il/elle s'est refermé(e). Peut-être qu'il/elle est simplement parti(e).</p>
-
-    <div class="info-box">
-      C'est normal, et ça ne veut pas dire que vous avez échoué. Un refus n'est pas la fin de la conversation — c'est habituellement juste le premier round.
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Ne lancez pas un ultimatum que vous n'êtes pas prêt(e) à tenir</h2>
-      <p>« Va chercher de l'aide ou j'arrête de t'aider » ne fonctionne que si vous le pensez vraiment et êtes prêt(e) à le maintenir. Un ultimatum vide enseigne à l'autre que vos limites ne sont pas réelles — ce qui complique la prochaine conversation au lieu de la faciliter.</p>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Séparez la relation du comportement</h2>
-      <p>Vous pouvez continuer à aimer votre enfant tout en refusant de financer, d'excuser ou de nettoyer les dégâts causés par la dépendance. Ce n'est pas contradictoire — c'est en fait la position la plus stable à tenir à long terme.</p>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Cherchez à comprendre ce que le « non » signifie vraiment</h2>
-      <p>Un « non » à un programme résidentiel de 28 jours est différent d'un « non » à toute forme d'aide. Parfois, le vrai refus concerne le coût, la peur du sevrage, la peur de perdre son emploi, ou un manque de confiance envers les programmes de traitement en général. Trouvez le « non » précis derrière le « non » général — il est habituellement plus facile à travailler.</p>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Ayez un Plan B prêt, pas seulement un Plan A que vous répétez</h2>
-      <p>Si « va en thérapie » n'a pas fonctionné, la prochaine étape n'est pas de répéter la même demande plus fort. C'est une demande différente, plus petite — counseling externe, un seul appel à une ligne d'aide, assister à une rencontre de type Al-Anon, ou simplement accepter de consulter un médecin à ce sujet. Les petites demandes obtiennent un oui beaucoup plus souvent.</p>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Ne traversez pas ça seul(e)</h2>
-      <p>Quoi que vous décidiez de dire ou de faire ensuite, avoir un vrai soutien — même une seule personne qui comprend ce que vous vivez — compte plus que la plupart des familles ne le pensent.</p>
-    </div>
-
-    <p>C'est exactement la situation pour laquelle l'outil Plan B de TheFirstWord a été conçu : quand la première tentative ne fonctionne pas, vous obtenez un script de suivi adapté à ce qui s'est réellement passé, pas un script générique de « réessaie ».</p>
-
-    <div class="contact-box">
-      <h3>Obtenez votre Plan B</h3>
-      <p>Un script de suivi basé sur ce qui s'est réellement passé, pas un redémarrage générique.</p>
-      <a href="https://thefirstword.ca/app.html" class="contact-btn">Commencer →</a>
-    </div>
-
-  </div><!-- /content-fr -->
-
 </div><!-- /page-container -->
 
 <footer>
@@ -321,35 +259,6 @@
 
 <script>
   document.getElementById('footer-year').textContent = new Date().getFullYear();
-
-  let lang = 'en';
-
-  function setLang(l) {
-    lang = l;
-
-    document.getElementById('content-en').classList.toggle('hidden', l !== 'en');
-    document.getElementById('content-fr').classList.toggle('hidden', l !== 'fr');
-
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    const activeBtn = document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`);
-    if (activeBtn) activeBtn.classList.add('active');
-
-    const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
-    const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
-    const navLogo = document.getElementById('nav-logo-img');
-    if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
-
-    document.documentElement.lang = l;
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const browserLang = navigator.language || navigator.userLanguage || 'en';
-    if (browserLang.toLowerCase().startsWith('fr')) {
-      setLang('fr');
-    }
-  });
 </script>
 </body>
 </html>
