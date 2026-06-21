@@ -380,7 +380,7 @@
     <!-- 10 -->
     <div class="policy-section">
       <h2 class="section-title">10. Privacy</h2>
-      <p>Your use of TheFirstWord is also governed by our <a href="/privacy.html">Privacy Policy</a>, which explains what information we collect and how we use it, in accordance with Quebec's Law 25.</p>
+      <p>Your use of TheFirstWord is also governed by our <a href="/privacy.html?lang=en">Privacy Policy</a>, which explains what information we collect and how we use it, in accordance with Quebec's Law 25.</p>
     </div>
 
     <!-- 11 -->
@@ -520,7 +520,7 @@
     <!-- 10 -->
     <div class="policy-section">
       <h2 class="section-title">10. Vie privée</h2>
-      <p>Votre utilisation de TheFirstWord est également régie par notre <a href="/privacy.html">Politique de confidentialité</a>, qui explique quelles informations nous collectons et comment nous les utilisons, conformément à la Loi 25 du Québec.</p>
+      <p>Votre utilisation de TheFirstWord est également régie par notre <a href="/privacy.html?lang=fr">Politique de confidentialité</a>, qui explique quelles informations nous collectons et comment nous les utilisons, conformément à la Loi 25 du Québec.</p>
     </div>
 
     <!-- 11 -->
@@ -587,11 +587,19 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Auto-detect browser language on load
+  // Check URL ?lang= parameter first (set when linked from a specific language page),
+  // then fall back to browser language detection
   window.addEventListener('DOMContentLoaded', () => {
-    const browserLang = navigator.language || navigator.userLanguage || 'en';
-    if (browserLang.toLowerCase().startsWith('fr')) {
-      setLang('fr');
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlLang = urlParams.get('lang');
+
+    if (urlLang === 'fr' || urlLang === 'en') {
+      setLang(urlLang);
+    } else {
+      const browserLang = navigator.language || navigator.userLanguage || 'en';
+      if (browserLang.toLowerCase().startsWith('fr')) {
+        setLang('fr');
+      }
     }
   });
 </script>
