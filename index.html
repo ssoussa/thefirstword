@@ -114,6 +114,54 @@
       .nav-tagline span { font-size: 10px; letter-spacing: 1px; }
     }
 
+    /* MOBILE HAMBURGER MENU */
+    .hamburger-btn {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 28px;
+      height: 28px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    .hamburger-btn span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .mobile-menu-panel {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      background: var(--bg);
+      border-top: 1px solid var(--divider);
+      padding: 12px 4px;
+      gap: 2px;
+    }
+    .mobile-menu-panel.open { display: flex; }
+    .mobile-menu-panel a {
+      padding: 12px 8px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: 6px;
+    }
+    .mobile-menu-panel a:active { background: rgba(28,43,58,0.06); }
+    .mobile-menu-panel .nav-cta {
+      margin-top: 6px;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .hamburger-btn { display: flex; }
+    }
+
     /* HERO */
     .hero {
       min-height: 100vh;
@@ -889,7 +937,24 @@
     <a href="app.html?lang=en" class="nav-cta en-text">Start Now</a>
     <a href="app.html?lang=fr" class="nav-cta fr-text" style="display:none;">Commencer</a>
   </div>
+  <button class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU PANEL -->
+<div class="mobile-menu-panel" id="mobileMenuPanel">
+  <a href="#how-it-works" class="en-text" onclick="closeMobileMenu()">How it works</a>
+  <a href="#how-it-works" class="fr-text" style="display:none;" onclick="closeMobileMenu()">Comment ça marche</a>
+  <a href="#pricing" class="en-text" onclick="closeMobileMenu()">Pricing</a>
+  <a href="#pricing" class="fr-text" style="display:none;" onclick="closeMobileMenu()">Tarifs</a>
+  <a href="#resources" class="en-text" onclick="closeMobileMenu()">Resources</a>
+  <a href="#resources" class="fr-text" style="display:none;" onclick="closeMobileMenu()">Ressources</a>
+  <a href="/guides.html?lang=en" class="en-text" onclick="closeMobileMenu()">Guides</a>
+  <a href="/guides.html?lang=fr" class="fr-text" style="display:none;" onclick="closeMobileMenu()">Guides</a>
+  <a href="app.html?lang=en" class="nav-cta en-text">Start Now</a>
+  <a href="app.html?lang=fr" class="nav-cta fr-text" style="display:none;">Commencer</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -1287,13 +1352,13 @@
   </div>
 </div>
 
-<div class="cta-section" id="start" onclick="window.location.href='app.html'">
+<div class="cta-section" id="start" onclick="window.location.href='app.html?lang=' + currentLang">
   <h2 class="en-text">The conversation starts with one word. Let's find it.</h2>
   <h2 class="fr-text" style="display:none;">La conversation commence par un mot. Trouvons-le.</h2>
   <p class="en-text">Join the families who refused to stay silent.</p>
   <p class="fr-text" style="display:none;">Rejoignez les familles qui ont refusé de rester silencieuses.</p>
-  <button class="btn-white en-text" onclick="window.location.href='app.html'">Get Started Now — from $9</button>
-  <button class="btn-white fr-text" style="display:none;" onclick="window.location.href='app.html'">Commencer maintenant — à partir de 9$</button>
+  <button class="btn-white en-text" onclick="window.location.href='app.html?lang=en'">Get Started Now — from $9</button>
+  <button class="btn-white fr-text" style="display:none;" onclick="window.location.href='app.html?lang=fr'">Commencer maintenant — à partir de 9$</button>
 </div>
 
 <!-- FOOTER -->
@@ -1333,6 +1398,14 @@
     document.querySelectorAll('.fr-text').forEach(el => el.style.display = lang === 'fr' ? '' : 'none');
     document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  }
+
+  // MOBILE MENU
+  function toggleMobileMenu() {
+    document.getElementById('mobileMenuPanel').classList.toggle('open');
+  }
+  function closeMobileMenu() {
+    document.getElementById('mobileMenuPanel').classList.remove('open');
   }
 
   // TYPING ANIMATION
