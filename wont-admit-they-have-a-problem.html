@@ -202,24 +202,15 @@
       src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png"
       alt="TheFirstWord" />
   </a>
-  <div class="lang-toggle">
-    <button class="lang-btn active" onclick="setLang('en')">EN</button>
-    <button class="lang-btn" onclick="setLang('fr')">FR</button>
-  </div>
+  <a href="https://thefirstword.ca/refuse-admettre-probleme.html" style="font-size:13px; font-weight:600; color:var(--text-light); text-decoration:none;">Français →</a>
 </nav>
 
 <!-- PAGE -->
 <div class="page-container">
 
-  <!-- ═══════════════════════════════════════════════════════ ENGLISH ════ -->
-  <div id="content-en">
-
     <p class="page-eyebrow">Family Guide</p>
     <h1 class="page-title">What to Say When They Won't Admit They Have a Problem</h1>
-    <p class="page-meta">
-      TheFirstWord &nbsp;·&nbsp;
-      <a href="#" onclick="setLang('fr'); return false;">Lire en français →</a>
-    </p>
+    <p class="page-meta">TheFirstWord</p>
 
     <p class="intro-p">You've named it. They've denied it. Now you're stuck — not because you said the wrong thing, but because denial isn't really about the facts. It's about fear.</p>
 
@@ -260,58 +251,6 @@
       <a href="https://thefirstword.ca/app.html" class="contact-btn">Start now →</a>
     </div>
 
-  </div><!-- /content-en -->
-
-  <!-- ═══════════════════════════════════════════════════════ FRANÇAIS ════ -->
-  <div id="content-fr" class="hidden">
-
-    <p class="page-eyebrow">Guide pour les familles</p>
-    <h1 class="page-title">Quoi dire quand il/elle refuse d'admettre le problème</h1>
-    <p class="page-meta">
-      TheFirstWord &nbsp;·&nbsp;
-      <a href="#" onclick="setLang('en'); return false;">Read in English →</a>
-    </p>
-
-    <p class="intro-p">Vous l'avez nommé. La personne l'a nié. Maintenant vous êtes coincé(e) — pas parce que vous avez mal dit les choses, mais parce que le déni n'est pas vraiment une question de faits. C'est une question de peur.</p>
-
-    <div class="info-box">
-      Admettre « j'ai un problème » signifie souvent, dans la tête de la personne, admettre qu'elle est faible, qu'elle pourrait perdre son emploi ou sa famille, qu'elle doit abandonner la seule chose qui l'aide actuellement à fonctionner. Le déni protège contre cette peur — ce n'est pas de la bêtise ou de l'entêtement, c'est de l'autoprotection.
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Arrêtez d'essayer de gagner le débat avec des preuves</h2>
-      <p>Les listes d'incidents, de dates et de preuves ont tendance à renforcer le déni plutôt qu'à le réduire — parce que ça ressemble maintenant à un procès, et qu'on se défend dans un procès. Les faits seuls percent rarement le déni.</p>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Nommez le pattern, pas l'étiquette</h2>
-      <p>« T'as manqué trois soupers de famille ce mois-ci » est plus difficile à nier que « t'es alcoolique ». Un pattern s'observe. Une étiquette se débat. Laissez la personne tirer sa propre conclusion du pattern plutôt que de lui donner une étiquette à combattre.</p>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Posez des questions plutôt que des affirmations</h2>
-      <p>« As-tu remarqué que t'es plus irritable dernièrement? » ouvre une porte. « T'es toujours irritable parce que tu bois » en ferme une. Une question peut rester avec quelqu'un d'une façon qu'une accusation ne peut pas.</p>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Lâchez prise pour cette ronde si ça ne fonctionne clairement pas</h2>
-      <p>Si la conversation tourne en impasse, la terminer calmement — « je voulais juste que tu saches que j'ai remarqué, c'est tout » — fait plus de bien que de pousser davantage sur le moment. Vous n'abandonnez pas. Vous laissez la graine reposer au lieu d'essayer de forcer sa pousse selon votre horaire.</p>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">Préparez la ronde deux avant même que la ronde un soit terminée</h2>
-      <p>Le déni se brise rarement à la première conversation. Ce qui compte, c'est d'avoir une prochaine étape prête — un angle différent, un moment différent, une préoccupation précise différente — plutôt que d'avoir tout dit en un seul coup.</p>
-    </div>
-
-    <p>Les mots exacts qui fonctionnent dépendent entièrement de votre relation et de ce qui se passe vraiment — c'est pourquoi un script générique fonctionne rarement. TheFirstWord construit une version adaptée à votre situation, pour que vous n'ayez pas à deviner les bons mots sur le moment.</p>
-
-    <div class="contact-box">
-      <h3>Créez votre script</h3>
-      <p>Obtenez les bons mots pour votre situation exacte, en quelques minutes.</p>
-      <a href="https://thefirstword.ca/app.html" class="contact-btn">Commencer →</a>
-    </div>
-
-  </div><!-- /content-fr -->
 
 </div><!-- /page-container -->
 
@@ -321,35 +260,6 @@
 
 <script>
   document.getElementById('footer-year').textContent = new Date().getFullYear();
-
-  let lang = 'en';
-
-  function setLang(l) {
-    lang = l;
-
-    document.getElementById('content-en').classList.toggle('hidden', l !== 'en');
-    document.getElementById('content-fr').classList.toggle('hidden', l !== 'fr');
-
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    const activeBtn = document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`);
-    if (activeBtn) activeBtn.classList.add('active');
-
-    const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
-    const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
-    const navLogo = document.getElementById('nav-logo-img');
-    if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
-
-    document.documentElement.lang = l;
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const browserLang = navigator.language || navigator.userLanguage || 'en';
-    if (browserLang.toLowerCase().startsWith('fr')) {
-      setLang('fr');
-    }
-  });
 </script>
 </body>
 </html>
