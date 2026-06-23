@@ -1524,6 +1524,22 @@ Return ONLY the Plan B guide.`;
         // Payment confirmed — use plan from Stripe metadata as source of truth
         selectedPlan = verifyData.plan || selectedPlan;
 
+        // Report the confirmed purchase to Meta (guarded so a page refresh
+        // on this same success URL doesn't report the same sale twice).
+        try {
+          const purchaseGuardKey = 'fwPurchaseTracked_' + sessionId;
+          if (!localStorage.getItem(purchaseGuardKey) && typeof fbq === 'function') {
+            const planPrices = { starter: 9, essential: 19, complete: 29, monthly: 19 };
+            const purchaseValue = planPrices[selectedPlan] || 0;
+            fbq('track', 'Purchase', {
+              value: purchaseValue,
+              currency: 'CAD',
+              content_name: selectedPlan
+            });
+            localStorage.setItem(purchaseGuardKey, '1');
+          }
+        } catch(e) {}
+
         // Use the email Stripe actually has on file as the source of truth if
         // our own sessionStorage copy is missing (e.g. cleared by the browser
         // during the round-trip to Stripe's hosted checkout page).
