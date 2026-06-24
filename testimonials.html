@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+  <title>Testimonials — Real Families, Real Stories | TheFirstWord</title>
+  <meta name="description" content="Stories from families who found the words to start the conversation. Share your own story with TheFirstWord community." />
+  <link rel="canonical" href="https://thefirstword.ca/testimonials.html" />
+  <link rel="alternate" hreflang="en" href="https://thefirstword.ca/testimonials.html" />
+  <link rel="alternate" hreflang="fr" href="https://thefirstword.ca/testimonials.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F7F4EF;
+      --text: #1C2B3A;
+      --text-light: #5a6a7a;
+      --teal: #2A7F7F;
+      --teal-light: #e8f4f4;
+      --cta: #C4622D;
+      --cta-hover: #a8511f;
+      --divider: #E8E2D9;
+      --white: #FFFFFF;
+    }
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: rgba(247,244,239,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--divider);
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    #nav-logo-img { width: 160px; height: auto; }
+    @media (max-width: 600px) {
+      nav { padding: 10px 20px; }
+      #nav-logo-img { width: 130px; }
+    }
+
+    /* LANG TOGGLE */
+    .lang-toggle { display: flex; gap: 4px; background: rgba(28,43,58,0.08); border-radius: 6px; padding: 4px; }
+    .lang-btn {
+      font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 4px;
+      border: none; cursor: pointer; background: transparent; color: var(--text-light);
+      font-family: inherit; transition: all 0.15s;
+    }
+    .lang-btn.active { background: white; color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+    /* PAGE */
+    .page-container { max-width: 880px; margin: 0 auto; padding: 60px 24px 100px; }
+    @media (max-width: 600px) { .page-container { padding: 36px 16px 80px; } }
+
+    .page-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; text-align: center; }
+    .page-title { font-family: 'Playfair Display', serif; font-size: clamp(28px, 5vw, 42px); font-weight: 700; line-height: 1.2; margin-bottom: 16px; text-align: center; }
+    .page-intro { font-size: 17px; color: var(--text-light); margin-bottom: 48px; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+    /* TESTIMONIAL CARDS */
+    .testimonial-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 56px; }
+    @media (min-width: 700px) { .testimonial-grid { grid-template-columns: 1fr 1fr; } }
+    .testimonial-card {
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: 14px;
+      padding: 26px 28px;
+    }
+    .testimonial-quote-mark { font-family: 'Playfair Display', serif; font-size: 40px; color: var(--teal); line-height: 0.5; margin-bottom: 10px; opacity: 0.6; }
+    .testimonial-message { font-size: 15px; color: var(--text); line-height: 1.7; margin-bottom: 14px; }
+    .testimonial-name { font-size: 13px; font-weight: 700; color: var(--teal); }
+
+    /* EMPTY / "BE THE FIRST" STATE */
+    .empty-state {
+      background: var(--teal-light);
+      border-radius: 16px;
+      padding: 44px 32px;
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .empty-state-icon { font-size: 32px; margin-bottom: 14px; }
+    .empty-state h2 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 10px; }
+    .empty-state p { font-size: 15px; color: var(--text-light); max-width: 480px; margin: 0 auto; }
+
+    /* SUBMIT SECTION */
+    .submit-section {
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: 16px;
+      padding: 36px 32px;
+    }
+    @media (max-width: 600px) { .submit-section { padding: 28px 22px; } }
+    .submit-section h2 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 8px; text-align: center; }
+    .submit-section .submit-intro { font-size: 14px; color: var(--text-light); text-align: center; margin-bottom: 28px; max-width: 480px; margin-left: auto; margin-right: auto; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      border: 1.5px solid var(--divider);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 16px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--teal); }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-privacy-note { font-size: 12px; color: var(--text-light); margin-bottom: 20px; }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      background: var(--cta);
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+    .submit-btn:hover { background: var(--cta-hover); }
+    .submit-btn:disabled { background: var(--divider); cursor: not-allowed; }
+
+    .form-success {
+      display: none;
+      background: var(--teal-light);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+    .form-success.show { display: block; }
+    .form-success h3 { font-family: 'Playfair Display', serif; font-size: 19px; margin-bottom: 8px; }
+    .form-success p { font-size: 14px; color: var(--text-light); }
+
+    .form-error {
+      display: none;
+      background: #fdeeea;
+      color: #b3402a;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    .form-error.show { display: block; }
+
+    /* honeypot — hidden from real visitors, bots tend to fill every field */
+    .hp-field { position: absolute; left: -9999px; opacity: 0; height: 0; overflow: hidden; }
+
+    footer { background: var(--text); color: rgba(255,255,255,0.6); text-align: center; padding: 24px; font-size: 13px; }
+    footer a { color: rgba(255,255,255,0.7); }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://thefirstword.ca" class="nav-logo">
+    <img id="nav-logo-img"
+      src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png"
+      alt="TheFirstWord" />
+  </a>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page-container">
+
+  <!-- ═══════════════════════════════════════════════════════ ENGLISH ════ -->
+  <div id="content-en">
+
+    <p class="page-eyebrow">Testimonials</p>
+    <h1 class="page-title">Stories of the First Word</h1>
+    <p class="page-intro">Every family's situation is different, but the moment of finally saying something out loud is something they all share. Here's what that's looked like for some of them.</p>
+
+    <div id="testimonialGrid-en" class="testimonial-grid hidden"></div>
+
+    <div id="emptyState-en" class="empty-state hidden">
+      <div class="empty-state-icon">🌱</div>
+      <h2>Be the first to share your story</h2>
+      <p>This page is just getting started — which means your story could be the one that gives the next family hope. Scroll down and tell us what happened after you found your first word.</p>
+    </div>
+
+    <div class="submit-section">
+      <h2>Share Your Story</h2>
+      <p class="submit-intro">Tell us what happened after you used TheFirstWord. We'll only ever publish your first name — never any other identifying details — and every story is reviewed before it's added to this page.</p>
+
+      <div class="form-error" id="formError-en"></div>
+
+      <form id="testimonialForm-en">
+        <div class="hp-field">
+          <label>Leave this empty</label>
+          <input type="text" name="company" tabindex="-1" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="name-en">Your first name</label>
+          <input type="text" id="name-en" required maxlength="40" placeholder="e.g. Sarah" />
+        </div>
+        <div class="form-group">
+          <label for="message-en">Your story</label>
+          <textarea id="message-en" required maxlength="1000" placeholder="What was going on, and what happened after you used TheFirstWord?"></textarea>
+        </div>
+        <p class="form-privacy-note">By submitting, you agree we may publish your first name and story on this page after review. No other personal details will ever be shared.</p>
+        <button type="submit" class="submit-btn" id="submitBtn-en">Submit Your Story</button>
+      </form>
+
+      <div class="form-success" id="formSuccess-en">
+        <h3>Thank you for sharing.</h3>
+        <p>Your story has been sent for review. We may publish it here soon — with just your first name, nothing else.</p>
+      </div>
+    </div>
+
+  </div><!-- /content-en -->
+
+  <!-- ═══════════════════════════════════════════════════════ FRANÇAIS ════ -->
+  <div id="content-fr" class="hidden">
+
+    <p class="page-eyebrow">Témoignages</p>
+    <h1 class="page-title">Histoires du premier mot</h1>
+    <p class="page-intro">Chaque situation familiale est différente, mais le moment de finalement dire quelque chose à voix haute, c'est ce qu'elles ont toutes en commun. Voici à quoi ça a ressemblé pour certaines d'entre elles.</p>
+
+    <div id="testimonialGrid-fr" class="testimonial-grid hidden"></div>
+
+    <div id="emptyState-fr" class="empty-state hidden">
+      <div class="empty-state-icon">🌱</div>
+      <h2>Soyez la première personne à partager votre histoire</h2>
+      <p>Cette page ne fait que commencer — ce qui veut dire que votre histoire pourrait être celle qui donne espoir à la prochaine famille. Faites défiler vers le bas et racontez-nous ce qui s'est passé après avoir trouvé votre premier mot.</p>
+    </div>
+
+    <div class="submit-section">
+      <h2>Partagez votre histoire</h2>
+      <p class="submit-intro">Racontez-nous ce qui s'est passé après avoir utilisé TheFirstWord. Nous ne publierons que votre prénom — jamais d'autres détails identifiants — et chaque histoire est révisée avant d'être ajoutée à cette page.</p>
+
+      <div class="form-error" id="formError-fr"></div>
+
+      <form id="testimonialForm-fr">
+        <div class="hp-field">
+          <label>Laissez ce champ vide</label>
+          <input type="text" name="company" tabindex="-1" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="name-fr">Votre prénom</label>
+          <input type="text" id="name-fr" required maxlength="40" placeholder="ex. Sarah" />
+        </div>
+        <div class="form-group">
+          <label for="message-fr">Votre histoire</label>
+          <textarea id="message-fr" required maxlength="1000" placeholder="Que se passait-il, et qu'est-il arrivé après avoir utilisé TheFirstWord?"></textarea>
+        </div>
+        <p class="form-privacy-note">En soumettant, vous acceptez que nous puissions publier votre prénom et votre histoire sur cette page après révision. Aucun autre détail personnel ne sera jamais partagé.</p>
+        <button type="submit" class="submit-btn" id="submitBtn-fr">Soumettre votre histoire</button>
+      </form>
+
+      <div class="form-success" id="formSuccess-fr">
+        <h3>Merci d'avoir partagé.</h3>
+        <p>Votre histoire a été envoyée pour révision. Nous pourrions la publier ici bientôt — avec seulement votre prénom, rien d'autre.</p>
+      </div>
+    </div>
+
+  </div><!-- /content-fr -->
+
+</div><!-- /page-container -->
+
+<footer>
+  <p>© <span id="footer-year"></span> TheFirstWord &nbsp;·&nbsp; <a href="https://thefirstword.ca">thefirstword.ca</a> &nbsp;·&nbsp; <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
+</footer>
+
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  let lang = 'en';
+
+  function setLang(l) {
+    lang = l;
+
+    document.getElementById('content-en').classList.toggle('hidden', l !== 'en');
+    document.getElementById('content-fr').classList.toggle('hidden', l !== 'fr');
+
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    const logoEn = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png';
+    const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
+    const navLogo = document.getElementById('nav-logo-img');
+    if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
+
+    document.documentElement.lang = l;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlLang = urlParams.get('lang');
+
+    if (urlLang === 'fr' || urlLang === 'en') {
+      setLang(urlLang);
+    } else {
+      const browserLang = navigator.language || navigator.userLanguage || 'en';
+      if (browserLang.toLowerCase().startsWith('fr')) {
+        setLang('fr');
+      }
+    }
+
+    loadTestimonials();
+    setupForm('en');
+    setupForm('fr');
+  });
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  async function loadTestimonials() {
+    let testimonials = [];
+    try {
+      const res = await fetch('/api/testimonials');
+      testimonials = await res.json();
+      if (!Array.isArray(testimonials)) testimonials = [];
+    } catch (e) {
+      testimonials = [];
+    }
+
+    ['en', 'fr'].forEach(l => {
+      const grid = document.getElementById('testimonialGrid-' + l);
+      const empty = document.getElementById('emptyState-' + l);
+      const filtered = testimonials.filter(t => (t.lang || 'en') === l);
+
+      if (filtered.length === 0) {
+        empty.classList.remove('hidden');
+        grid.classList.add('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+      grid.classList.remove('hidden');
+      grid.innerHTML = filtered.map(t => `
+        <div class="testimonial-card">
+          <div class="testimonial-quote-mark">"</div>
+          <p class="testimonial-message">${escapeHtml(t.message || '')}</p>
+          <p class="testimonial-name">— ${escapeHtml(t.name || '')}</p>
+        </div>
+      `).join('');
+    });
+  }
+
+  function setupForm(l) {
+    const form = document.getElementById('testimonialForm-' + l);
+    const errorBox = document.getElementById('formError-' + l);
+    const successBox = document.getElementById('formSuccess-' + l);
+    const submitBtn = document.getElementById('submitBtn-' + l);
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      errorBox.classList.remove('show');
+
+      // Honeypot check — if this hidden field has a value, silently drop it as spam
+      const honeypot = form.querySelector('input[name="company"]').value;
+      if (honeypot) return;
+
+      const name = document.getElementById('name-' + l).value.trim();
+      const message = document.getElementById('message-' + l).value.trim();
+
+      if (!name || !message) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = l === 'fr' ? 'Envoi en cours...' : 'Sending...';
+
+      try {
+        const res = await fetch('/api/testimonial', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, message, lang: l })
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          throw new Error('submit failed');
+        }
+
+        form.classList.add('hidden');
+        successBox.classList.add('show');
+
+      } catch (err) {
+        errorBox.textContent = l === 'fr'
+          ? "Une erreur s'est produite. Veuillez réessayer ou nous écrire à thefirstword.ca@gmail.com."
+          : "Something went wrong. Please try again or email us at thefirstword.ca@gmail.com.";
+        errorBox.classList.add('show');
+        submitBtn.disabled = false;
+        submitBtn.textContent = l === 'fr' ? 'Soumettre votre histoire' : 'Submit Your Story';
+      }
+    });
+  }
+</script>
+</body>
+</html>
