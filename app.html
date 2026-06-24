@@ -315,7 +315,7 @@
 <body>
 
 <nav>
-  <a href="index.html" style="display:flex;align-items:center;text-decoration:none;line-height:0;">
+  <a href="index.html" id="nav-logo-link" style="display:flex;align-items:center;text-decoration:none;line-height:0;">
     <img id="nav-logo-img" src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-en.png" alt="TheFirstWord" />
   </a>
   <div class="nav-tagline" style="display:flex;flex-direction:column;justify-content:center;margin-left:12px;border-left:1.5px solid var(--divider);padding-left:12px;">
@@ -422,8 +422,8 @@
 
       <button class="btn-generate-main en-text" onclick="goToCheckout()">Continue to Payment →</button>
       <button class="btn-generate-main fr-text hidden" onclick="goToCheckout()">Continuer vers le paiement →</button>
-      <div class="info-box en-text">🔒 7-day money-back guarantee if your kit hasn't been opened yet. <a href="/terms.html" style="color:inherit;text-decoration:underline;" target="_blank" rel="noopener">See full terms</a>. Your information is private and secure.</div>
-      <div class="info-box fr-text hidden">🔒 Garantie de remboursement de 7 jours si votre kit n'a pas encore été ouvert. <a href="/terms.html" style="color:inherit;text-decoration:underline;" target="_blank" rel="noopener">Voir les conditions complètes</a>. Vos informations sont privées et sécurisées.</div>
+      <div class="info-box en-text">🔒 7-day money-back guarantee if your kit hasn't been opened yet. <a href="/terms.html?lang=en" style="color:inherit;text-decoration:underline;" target="_blank" rel="noopener">See full terms</a>. Your information is private and secure.</div>
+      <div class="info-box fr-text hidden">🔒 Garantie de remboursement de 7 jours si votre kit n'a pas encore été ouvert. <a href="/terms.html?lang=fr" style="color:inherit;text-decoration:underline;" target="_blank" rel="noopener">Voir les conditions complètes</a>. Vos informations sont privées et sécurisées.</div>
     </div>
   </div>
 
@@ -705,6 +705,8 @@
     const logoFr = 'https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png';
     const navLogo = document.getElementById('nav-logo-img');
     if (navLogo) navLogo.src = l === 'fr' ? logoFr : logoEn;
+    const navLogoLink = document.getElementById('nav-logo-link');
+    if (navLogoLink) navLogoLink.href = 'index.html?lang=' + l;
     const outputHeaderLogo = document.getElementById('output-header-logo');
     if (outputHeaderLogo) outputHeaderLogo.src = l === 'fr' ? logoFr : logoEn;
     const letterLogo = document.getElementById('letter-logo');
