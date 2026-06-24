@@ -1144,8 +1144,6 @@ app.post("/api/testimonial", async (req, res) => {
       <p style="font-size:16px;color:#1a1a1a;margin:0 0 16px;">New testimonial submitted:</p>
       <div style="background:#f5f0eb;border-radius:10px;padding:20px;">
         <p style="margin:0 0 8px;font-size:14px;"><strong>Name:</strong> ${name}</p>
-        <p style="margin:0 0 8px;font-size:14px;"><strong>Relationship:</strong> ${relationship || 'N/A'}</p>
-        <p style="margin:0 0 8px;font-size:14px;"><strong>Rating:</strong> ${rating || 5}/5</p>
         <p style="margin:0;font-size:14px;"><strong>Message:</strong> ${message}</p>
       </div>
       <p style="font-size:13px;color:#6b6460;margin-top:16px;">Go to Supabase to approve: set approved=true in the testimonials table.</p>
