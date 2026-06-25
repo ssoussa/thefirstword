@@ -1510,6 +1510,27 @@
   function toggleFaq(el) {
     el.classList.toggle('open');
   }
+
+  // MOBILE HERO SPACING — measure the real nav height live instead of guessing
+  // a fixed pixel value, since nav height changes once the logo image loads.
+  function adjustHeroSpacing() {
+    const hero = document.querySelector('.hero');
+    const nav = document.querySelector('nav');
+    if (!hero || !nav) return;
+    if (window.innerWidth <= 600) {
+      hero.style.paddingTop = (nav.offsetHeight + 24) + 'px';
+    } else {
+      hero.style.paddingTop = '';
+    }
+  }
+  adjustHeroSpacing();
+  window.addEventListener('resize', adjustHeroSpacing);
+  window.addEventListener('load', adjustHeroSpacing);
+  const navLogoImg = document.getElementById('nav-logo-img');
+  if (navLogoImg) {
+    navLogoImg.addEventListener('load', adjustHeroSpacing);
+    navLogoImg.addEventListener('error', adjustHeroSpacing);
+  }
 </script><!-- CHAT WIDGET -->
 <button id="fw-chat-bubble" aria-label="Open chat">
   <span class="fw-chat-dot" id="fw-chat-dot"></span>
