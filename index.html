@@ -1531,6 +1531,27 @@
     navLogoImg.addEventListener('load', adjustHeroSpacing);
     navLogoImg.addEventListener('error', adjustHeroSpacing);
   }
+
+  // ANCHOR SCROLL OFFSET — same problem, different cause: jumping to #how-it-works,
+  // #pricing, or #resources scrolls the section's top under the fixed nav. Measure
+  // the real nav height live and give those sections matching scroll-margin-top,
+  // so the full top of the section (heading + intro) is visible after the jump.
+  function adjustScrollMargins() {
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+    const offset = nav.offsetHeight + 16;
+    ['how-it-works', 'pricing', 'resources'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.scrollMarginTop = offset + 'px';
+    });
+  }
+  adjustScrollMargins();
+  window.addEventListener('resize', adjustScrollMargins);
+  window.addEventListener('load', adjustScrollMargins);
+  if (navLogoImg) {
+    navLogoImg.addEventListener('load', adjustScrollMargins);
+    navLogoImg.addEventListener('error', adjustScrollMargins);
+  }
 </script><!-- CHAT WIDGET -->
 <button id="fw-chat-bubble" aria-label="Open chat">
   <span class="fw-chat-dot" id="fw-chat-dot"></span>
