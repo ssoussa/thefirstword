@@ -939,20 +939,26 @@ Language: ${outputLang}
   }
 
   function buildLetterPrompt(context, sender, patient) {
-    return `You are a professional interventionist at TheFirstWord, an AI-powered family intervention platform.
-
-Generate a powerful, personalized intervention letter from ${sender} to ${patient} encouraging them to seek addiction treatment.
+    return `You are ghostwriting a private letter from ${sender} to ${patient}. ${patient} is struggling with addiction and ${sender} needs to say the thing they haven't been able to say out loud. This letter has one job: make ${patient} feel seen by someone who knows them — and make putting it down without responding feel impossible.
 
 CONTEXT:
 ${context}
 
-RULES:
-- Deeply personal — every paragraph reflects the specific situation
-- Voice matches the relationship type
-- References the substance and its real dangers
-- Ends with a clear call to action to seek help immediately
-- 3-5 paragraphs with proper salutation and closing
-- Do NOT mention AI
+HOW TO WRITE IT:
+- Write like ${sender} actually talks. Contractions. Short sentences next to long ones. A thought that trails off. Real people don't write in balanced paragraphs.
+- Pull at least two concrete, specific moments or details from the situation details and build around them. A remembered Tuesday beats a declaration of love every time. If details are thin, anchor to the relationship and substance specifics — never invent facts.
+- Name the substance plainly. Not "your struggles" or "what you're going through." What it actually is, and what ${sender} has actually watched it do.
+- Let the letter admit hard things: fear, anger, exhaustion, guilt, missing who ${patient} used to be. Love that costs nothing reads as nothing.
+- One clear ask at the end. Not "please consider getting help someday" — a specific next step ${sender} is asking for, and what ${sender} will do alongside them.
+
+DO NOT:
+- Do not use these words or their equivalents in any language: journey, battle, demons, rock bottom, hold space, reach out, support system, "I'm here for you" as a standalone line, "it breaks my heart," "I love you more than words can say."
+- No rule-of-three sentence patterns ("You are kind, you are strong, you are loved"). No sentence that could appear in any intervention letter to anyone.
+- No lecturing about addiction science. No statistics. No "addiction is a disease" speeches. ${sender} is not a counselor.
+- Do not mention AI, TheFirstWord, or how this letter was made.
+
+FORM:
+- Salutation, 3-5 paragraphs, sign-off with ${sender}'s name. Vary paragraph length — one can be a single sentence.
 - CANADIAN RESOURCES ONLY: If you reference a helpline or resource, use ONLY these two:
   * Quebec French: Drogue Aide et Référence — 1-800-265-2626
   * Quebec English: Drug and Alcohol Helpline — 1-800-565-8603
@@ -962,22 +968,23 @@ Return ONLY the letter.`;
   }
 
   function buildGuidePrompt(context, sender, patient) {
-    return `You are a professional family coach at TheFirstWord.
-
-Create a personalized step-by-step conversation guide for ${sender} on how to approach the intervention conversation with ${patient}.
+    return `You are preparing ${sender} for one of the hardest conversations of their life: telling ${patient} the addiction has to stop. Write the guide a seasoned interventionist would give a family member the night before — practical, blunt where it needs to be, built for THIS conversation, not a generic one.
 
 CONTEXT:
 ${context}
 
-Sections:
-1. Before the conversation — preparation, mindset, timing, location
-2. How to open — exact suggested opening words
-3. Key points to address — specific to their situation
-4. If they resist — handling denial, anger, excuses
-5. How to close — with a clear ask to get help now
-6. What to avoid — common mistakes
+SECTIONS (use these six, personalized throughout):
+1. Before the conversation — when and where to do it given their situation (sober moment, private, no audience), what ${sender} should decide in advance, and the one thing to accept going in: ${sender} controls what they say, not how ${patient} reacts.
+2. How to open — 2-3 exact opening lines in ${sender}'s natural voice, tailored to the relationship and ${patient}'s current attitude toward help. No clinical phrasing. No ambush energy.
+3. What to actually say — the 3-4 points that matter most in THIS situation, each with example wording. Ground them in specifics from the context: observed behavior, real consequences, real moments. "I've noticed" beats "you always."
+4. When ${patient} pushes back — the specific deflections most likely from someone with their attitude and history (denial, "I've got it under control," turning it on ${sender}, storming off), and a short, calm response to each. Teach ${sender} not to win the argument — the goal is to plant the message and keep the door open.
+5. How to land it — one concrete ask matched to how ready ${patient} actually is. Someone in denial gets a smaller ask than someone who's tired. Include what ${sender} commits to doing alongside them.
+6. What will backfire — mistakes specific to this relationship and situation, not a generic list. Ultimatums ${sender} won't keep. Old fights. Doing it drunk or high. Bringing an audience.
 
-Make every section specific. End with encouragement for ${sender}.
+VOICE:
+- Direct, warm, zero fluff. Write like someone who has sat in a hundred of these conversations, not like a wellness blog.
+- Banned: journey, hold space, self-care, safe space, "meet them where they're at," "come from a place of," any sentence that works in every guide for every family.
+- Close with 2-3 honest sentences for ${sender}: this may not work the first time, that doesn't mean it failed, and saying it at all is more than most people ever manage.
 - CANADIAN RESOURCES ONLY: If you reference a helpline or resource, use ONLY these two:
   * Quebec French: Drogue Aide et Référence — 1-800-265-2626
   * Quebec English: Drug and Alcohol Helpline — 1-800-565-8603
@@ -986,19 +993,19 @@ Return ONLY the guide.`;
   }
 
   function buildSMSPrompt(context, sender, patient) {
-    return `You are a professional interventionist at TheFirstWord.
-
-Write a SHORT, powerful SMS from ${sender} to ${patient} about their addiction.
+    return `Write the text message ${sender} would send ${patient} at 11pm after finally deciding to say something about the addiction. Not a speech. A text — the kind you type, delete, retype, and finally send.
 
 CONTEXT:
 ${context}
 
 RULES:
-- Maximum 300 characters
-- Raw, human, direct — feels like a real text
-- Ends with an invitation to talk or get help
-- No emojis unless very natural
-- Do NOT mention AI
+- Maximum 300 characters. Every word earns its place.
+- Sounds like ${sender}, typed on a phone: lowercase-casual is fine if it fits the relationship, contractions, no perfect punctuation required.
+- One specific detail or moment from the context if it fits — a real reference lands harder than "I'm worried about you."
+- Ends with a low-pressure opening, not a demand: a door, not a corner. "can we talk this week" beats "you need to get help."
+- Banned: "I'm here for you" alone, "reach out," "journey," "no judgment," anything that reads like a greeting card or a counselor wrote it.
+- No emojis unless the relationship makes one genuinely natural — and then at most one.
+- Do NOT mention AI.
 - CANADIAN RESOURCES ONLY: If you reference a helpline or resource, use ONLY these two:
   * Quebec French: Drogue Aide et Référence — 1-800-265-2626
   * Quebec English: Drug and Alcohol Helpline — 1-800-565-8603
@@ -1008,21 +1015,26 @@ Return ONLY the SMS text.`;
   }
 
   function buildScriptPrompt(context, sender, patient) {
-    return `You are a professional interventionist at TheFirstWord.
-
-Write a word-for-word spoken script for ${sender} to read aloud during the intervention conversation with ${patient}.
+    return `Write the exact words ${sender} will say out loud to ${patient} about the addiction — a script they can hold in shaking hands and read when their mind goes blank. It must sound like ${sender} talking, not like ${sender} reading.
 
 CONTEXT:
 ${context}
 
-FORMAT:
-- Written exactly as they would SPEAK it
-- Natural pauses with "..."
-- Stage directions in [brackets] like [Pause. Look them in the eyes.]
-- Structure: Opening → Observations → How it affects me → The ask
-- 4-6 paragraphs of spoken dialogue
-- Ends with invitation to call for help together
+HOW SPOKEN LANGUAGE WORKS:
+- Short sentences. Fragments are fine. Nobody speaks in subordinate clauses when they're scared.
+- Pauses written as "..." where ${sender} would actually need to breathe or let something land.
+- Stage directions in [brackets] — but only useful ones: [Pause. Let them answer.] [If they look away, keep going.] Not theater blocking.
+- Repetition is human. It's okay for ${sender} to say the important thing twice.
 
+STRUCTURE (roughly 4-6 spoken paragraphs):
+1. Open by disarming, not accusing — why now, why this conversation, said plainly in ${sender}'s voice.
+2. What ${sender} has seen — 2-3 concrete observations pulled from the context. Specific nights, specific changes, specific moments. "I" statements, no "you always."
+3. What it's done to ${sender} — the honest cost: the worry, the checking, the things ${sender} stopped saying. This is where the script is allowed to crack.
+4. The ask — one clear, specific next step, sized to how ready ${patient} actually is, ending with an offer to make the call together, right now, ${sender} sitting beside them.
+
+BANNED: journey, battle, demons, rock bottom, "I need you to hear me," "this is coming from a place of love," "we're all worried about you" (unless others are genuinely named in the context), any line generic enough to read to a stranger.
+
+Do NOT mention AI.
 - CANADIAN RESOURCES ONLY: If you reference a helpline or resource, use ONLY these two:
   * Quebec French: Drogue Aide et Référence — 1-800-265-2626
   * Quebec English: Drug and Alcohol Helpline — 1-800-565-8603
