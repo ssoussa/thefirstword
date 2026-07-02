@@ -62,6 +62,18 @@
   </url>
 
   <url>
+    <loc>https://thefirstword.ca/how-to-talk-to-parent-about-drinking.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://thefirstword.ca/comment-parler-a-un-parent-alcool.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
     <loc>https://thefirstword.ca/privacy.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
