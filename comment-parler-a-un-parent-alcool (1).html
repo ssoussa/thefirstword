@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comment parler à un parent de sa consommation d'alcool | TheFirstWord</title>
+  <meta name="description" content="Vous vous inquiétez de la consommation d'alcool de votre mère ou de votre père, mais vous avez l'impression que ce n'est pas votre place d'en parler? Voici comment le faire, sans manquer de respect." />
+  <link rel="canonical" href="https://thefirstword.ca/comment-parler-a-un-parent-alcool.html" />
+  <link rel="alternate" hreflang="fr" href="https://thefirstword.ca/comment-parler-a-un-parent-alcool.html" />
+  <link rel="alternate" hreflang="en" href="https://thefirstword.ca/how-to-talk-to-parent-about-drinking.html" />
+  <link rel="alternate" hreflang="x-default" href="https://thefirstword.ca/how-to-talk-to-parent-about-drinking.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F7F4EF;
+      --text: #1C2B3A;
+      --text-light: #5a6a7a;
+      --teal: #2A7F7F;
+      --teal-light: #e8f4f4;
+      --cta: #C4622D;
+      --divider: #E8E2D9;
+      --white: #FFFFFF;
+    }
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: rgba(247,244,239,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--divider);
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    #nav-logo-img { width: 160px; height: auto; }
+    @media (max-width: 600px) {
+      nav { padding: 10px 20px; }
+      #nav-logo-img { width: 130px; }
+    }
+
+    /* LANG TOGGLE */
+    .lang-toggle {
+      display: flex;
+      gap: 4px;
+      background: rgba(28,43,58,0.08);
+      border-radius: 6px;
+      padding: 4px;
+    }
+    .lang-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-light);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .lang-btn.active {
+      background: white;
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    /* PAGE */
+    .page-container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+    @media (max-width: 600px) {
+      .page-container { padding: 36px 16px 80px; }
+    }
+
+    /* HEADER */
+    .page-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .page-meta {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    /* SECTIONS */
+    .guide-section {
+      margin-bottom: 32px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    p {
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+    .intro-p {
+      font-size: 17px;
+    }
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* INFO BOX */
+    .info-box {
+      background: var(--teal-light);
+      border-left: 4px solid var(--teal);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+      font-weight: 500;
+    }
+
+    /* CTA BOX */
+    .contact-box {
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-top: 48px;
+      text-align: center;
+    }
+    .contact-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .contact-box p { font-size: 14px; color: var(--text-light); margin-bottom: 16px; }
+    .contact-btn {
+      display: inline-block;
+      background: var(--cta);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .contact-btn:hover { background: #a8501f; text-decoration: none; }
+
+    /* FOOTER */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,0.7); }
+
+    /* HIDDEN */
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://thefirstword.ca" class="nav-logo">
+    <img id="nav-logo-img"
+      src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png"
+      alt="TheFirstWord" />
+  </a>
+  <a href="https://thefirstword.ca/how-to-talk-to-parent-about-drinking.html" style="font-size:13px; font-weight:600; color:var(--text-light); text-decoration:none;">English →</a>
+</nav>
+
+<!-- PAGE -->
+<div class="page-container">
+
+    <p class="page-eyebrow">Guide pour les familles</p>
+    <h1 class="page-title">Comment parler à un parent de sa consommation d'alcool</h1>
+    <p class="page-meta">TheFirstWord</p>
+
+    <p class="intro-p">S'inquiéter pour un ami ou un frère, c'est une chose. Mais là, c'est votre mère ou votre père — la personne qui vous a montré à conduire, qui signait vos bulletins, qui vous reprend encore à table. Vous voyez que la consommation empire. Et chaque fois que vous pensez en parler, la même idée vous arrête : de quel droit je dirais à mon parent comment vivre?</p>
+
+    <div class="info-box">
+      L'essentiel : en parler, ce n'est pas un manque de respect. Regarder la situation empirer sans rien dire, ça non plus, ce n'est pas du respect — c'est de la peur.
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Vous ne dépassez pas les limites — les rôles ont déjà changé</h2>
+      <p>Si cette conversation vous semble impossible, c'est qu'elle brise une règle que vous suivez depuis toujours : ce sont les parents qui s'inquiètent pour les enfants, pas l'inverse. Mais si vous lisez ceci, cette règle est déjà brisée — ça fait des mois que vous vous inquiétez. Le dire tout haut ne crée pas le renversement des rôles. La consommation l'a déjà fait. Vous êtes juste la première personne assez honnête pour le reconnaître.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Attendez-vous à ce que la réplique porte sur le respect, pas sur l'alcool</h2>
+      <p>Quand un conjoint entend « je m'inquiète de ta consommation », il argumente sur la consommation. Quand un parent l'entend, il argumente souvent sur la hiérarchie : « Je suis encore ta mère. » « Je t'élevais avant que tu saches te verser un verre. » Ne mordez pas à l'hameçon. Vous ne réclamez pas d'autorité sur eux — vous réclamez le droit d'avoir peur pour quelqu'un que vous aimez. Essayez : « T'as raison, t'es mon père. C'est exactement pour ça que je peux pas regarder ça sans rien dire. »</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Allez-y seul, ou coordonnés — jamais en jury surprise</h2>
+      <p>Si vous avez des frères et sœurs, décidez ensemble qui parle — une seule voix, choisie exprès, souvent celle avec qui votre parent se met le moins sur la défensive. Trois enfants adultes qui débarquent en même temps, ça ressemble à une embuscade, et un parent coincé défend sa fierté avant d'entendre quoi que ce soit. Jamais au souper de Noël, jamais dans une réunion de famille : être confronté devant la famille qu'on a élevée, c'est humiliant — et une personne humiliée dit non. Et si votre autre parent a tendance à minimiser, ou sert le vin lui-même, ne comptez pas encore sur lui comme allié. Parlez directement à la personne concernée.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Parlez des six derniers mois, pas des trente dernières années</h2>
+      <p>La consommation n'est peut-être pas nouvelle. Elle était peut-être là à tous les soupers de famille depuis votre enfance. Peu importe — ne refaites pas le procès du passé : il y aura une défense prête pour chaque décennie. Ancrez-vous dans ce qui a changé récemment : depuis la retraite, depuis le décès, depuis le diagnostic, depuis les chutes. « Papa, t'as toujours aimé ta bière. Mais depuis que tu travailles plus, c'est pas pareil — pis tu le sais que c'est pas pareil. » Un changement récent est bien plus difficile à nier qu'une habitude que tout le monde a fini par trouver normale.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Nommez les peurs qui viennent avec leur âge</h2>
+      <p>Une inquiétude vague glisse sur un parent — il va vous rappeler qu'il se débrouillait très bien avant votre naissance. Une peur précise, elle, ne glisse pas : le vin mélangé aux médicaments pour la pression. Les escaliers. Le volant après les verres de l'après-midi. Les longues journées seul à la maison. Les petits-enfants qui pourront — ou non — venir dormir. Choisissez les deux qui sont vraies dans votre famille, et dites-les simplement.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Faites une petite demande — et laissez le médecin porter une partie du poids</h2>
+      <p>On ne peut pas envoyer un parent réfléchir dans sa chambre, et un « t'as besoin d'une thérapie » dans la bouche de son enfant, un parent peut le balayer du revers de la main. Mais « peux-tu en parler à ton médecin à ton prochain rendez-vous — ou me laisser t'accompagner? », c'est une autre sorte de demande. C'est petit, c'est concret, et ça remet la prochaine étape entre les mains de quelqu'un dont l'autorité est déjà acceptée. Votre travail, ce n'est pas de tout régler en une seule conversation. C'est de briser le silence autour de la situation.</p>
+    </div>
+
+    <p>Ce que vous direz lors de cette première conversation doit correspondre à votre famille — la fierté de votre parent, votre histoire ensemble, ce qui se passe vraiment dans cette maison. C'est exactement ce que TheFirstWord construit pour vous : un script et une lettre personnalisés selon votre situation, pour que vous n'arriviez pas dans la cuisine de vos parents les mains vides, juste avec de l'inquiétude.</p>
+
+    <div class="contact-box">
+      <h3>Créez votre script de conversation</h3>
+      <p>Obtenez un script et une lettre personnalisés pour votre situation exacte, en quelques minutes.</p>
+      <a href="https://thefirstword.ca/app.html?lang=fr" class="contact-btn">Commencer →</a>
+    </div>
+
+</div><!-- /page-container -->
+
+<footer>
+  <p>© <span id="footer-year"></span> TheFirstWord &nbsp;·&nbsp; <a href="https://thefirstword.ca">thefirstword.ca</a> &nbsp;·&nbsp; <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
+</footer>
+
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
