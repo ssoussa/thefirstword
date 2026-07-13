@@ -18,6 +18,15 @@
   src="https://www.facebook.com/tr?id=1922137091818776&ev=PageView&noscript=1"
   /></noscript>
   <!-- End Meta Pixel Code -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18319920066"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18319920066');
+  </script>
+  <!-- End Google tag -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TheFirstWord — Start the conversation</title>
@@ -1551,6 +1560,23 @@ Return ONLY the Plan B guide.`;
               content_name: selectedPlan
             });
             localStorage.setItem(purchaseGuardKey, '1');
+          }
+        } catch(e) {}
+
+        // Report the confirmed purchase to Google Ads (own guard + Stripe
+        // session id as transaction_id, so Google also dedupes server-side).
+        try {
+          const gadsGuardKey = 'fwGadsPurchaseTracked_' + sessionId;
+          if (!localStorage.getItem(gadsGuardKey) && typeof gtag === 'function') {
+            const gadsPlanPrices = { starter: 9, essential: 19, complete: 29, monthly: 19 };
+            const gadsValue = gadsPlanPrices[selectedPlan] || 19;
+            gtag('event', 'conversion', {
+              'send_to': 'AW-18319920066/hlRACMSI1c8cEMKXz59E',
+              'value': gadsValue,
+              'currency': 'CAD',
+              'transaction_id': sessionId
+            });
+            localStorage.setItem(gadsGuardKey, '1');
           }
         } catch(e) {}
 
