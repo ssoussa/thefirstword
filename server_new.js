@@ -1036,15 +1036,23 @@ app.get("/api/checkin-continue", async (req, res) => {
 });
 
 app.get("/api/unsubscribe", async (req, res) => {
-  const { id } = req.query;
+  const { id, type, lang } = req.query;
   if (!id) return res.status(400).send('Missing id');
   if (!SUPABASE_KEY) return res.status(500).send('Database not configured');
+  const fr = lang === 'fr';
   try {
-    await supabaseUpdate('subscribers', id, { active: false });
-    res.send(`<!DOCTYPE html><html><body style="font-family:Georgia,serif;max-width:500px;margin:80px auto;text-align:center;padding:20px;">
-      <h2 style="color:#1a1a1a;margin-bottom:12px;">You've been unsubscribed.</h2>
-      <p style="color:#6b6460;line-height:1.7;">You won't receive any more emails from TheFirstWord. We wish you and your family well.</p>
-      <a href="https://thefirstword.ca" style="display:inline-block;margin-top:24px;background:#2A7F7F;color:white;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:700;">Return to TheFirstWord</a>
+    if (type === 'lead') {
+      await supabaseUpdate('leads', id, { unsubscribed: true });
+    } else {
+      await supabaseUpdate('subscribers', id, { active: false });
+    }
+    const h2 = fr ? "Vous êtes désinscrit(e)." : "You've been unsubscribed.";
+    const p = fr ? "Vous ne recevrez plus de courriels de TheFirstWord. Nous vous souhaitons le meilleur, à vous et votre famille." : "You won't receive any more emails from TheFirstWord. We wish you and your family well.";
+    const btn = fr ? "Retour à TheFirstWord" : "Return to TheFirstWord";
+    res.send(`<!DOCTYPE html><html lang="${fr ? 'fr' : 'en'}"><body style="font-family:Georgia,serif;max-width:500px;margin:80px auto;text-align:center;padding:20px;">
+      <h2 style="color:#1a1a1a;margin-bottom:12px;">${h2}</h2>
+      <p style="color:#6b6460;line-height:1.7;">${p}</p>
+      <a href="https://thefirstword.ca" style="display:inline-block;margin-top:24px;background:#2A7F7F;color:white;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:700;">${btn}</a>
     </body></html>`);
   } catch(err) {
     res.status(500).send('Something went wrong.');
@@ -1292,6 +1300,203 @@ app.post("/api/send-planb-email", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to send Plan B email." });
+  }
+});
+
+// ─── LEAD CAPTURE & NURTURE ───────────────────────────────────────────────────
+
+const leadRateMap = new Map();
+function checkLeadRate(ip) {
+  const now = Date.now();
+  const entry = leadRateMap.get(ip);
+  if (!entry || now - entry.start > 60 * 60 * 1000) {
+    leadRateMap.set(ip, { count: 1, start: now });
+    return true;
+  }
+  if (entry.count >= 5) return false;
+  entry.count++;
+  return true;
+}
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of leadRateMap.entries()) {
+    if (now - entry.start > 60 * 60 * 1000) leadRateMap.delete(ip);
+  }
+}, 60 * 60 * 1000);
+
+function leadEmailHtml(lang, bodyHtml, ctaText, ctaUrl, leadId) {
+  const fr = lang === 'fr';
+  const unsubUrl = `https://thefirstword.ca/api/unsubscribe?id=${leadId}&type=lead&lang=${fr ? 'fr' : 'en'}`;
+  const unsubText = fr ? 'Se désinscrire' : 'Unsubscribe';
+  const footer = fr
+    ? 'TheFirstWord · thefirstword.ca · Vous recevez ce courriel parce que vous avez demandé notre guide gratuit.'
+    : 'TheFirstWord · thefirstword.ca · You are receiving this email because you requested our free guide.';
+  return `<!DOCTYPE html><html lang="${fr ? 'fr' : 'en'}"><body style="margin:0;padding:0;background:#F7F4EF;">
+  <div style="max-width:560px;margin:0 auto;padding:32px 20px;font-family:Georgia,'Times New Roman',serif;">
+    <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;letter-spacing:2px;color:#C4622D;margin-bottom:24px;">THEFIRSTWORD</div>
+    <div style="background:#FFFFFF;border:1px solid #E8E2D9;border-radius:14px;padding:32px 28px;color:#1C2B3A;font-size:16px;line-height:1.7;">
+      ${bodyHtml}
+      ${ctaText ? `<div style="text-align:center;margin-top:28px;"><a href="${ctaUrl}" style="display:inline-block;background:#C4622D;color:#FFFFFF;text-decoration:none;padding:14px 32px;border-radius:8px;font-family:Arial,Helvetica,sans-serif;font-weight:bold;font-size:15px;">${ctaText}</a></div>` : ''}
+    </div>
+    <div style="text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#5a6a7a;margin-top:24px;line-height:1.6;">
+      ${footer}<br><a href="${unsubUrl}" style="color:#5a6a7a;">${unsubText}</a>
+    </div>
+  </div></body></html>`;
+}
+
+const LEAD_EMAILS = {
+  fr: {
+    e1: {
+      subject: "Votre guide est ici — Les 5 erreurs qui ferment la conversation",
+      body: (pdfUrl) => `<p style="margin:0 0 16px;">Le voici, comme promis :</p>
+        <p style="margin:0 0 16px;"><a href="${pdfUrl}" style="color:#2A7F7F;font-weight:bold;">→ Les 5 erreurs qui ferment la conversation avant qu'elle commence (PDF)</a></p>
+        <p style="margin:0 0 16px;">C'est une lecture de cinq minutes. Chaque erreur vient avec quoi faire à la place — des phrases concrètes, pas de la théorie.</p>
+        <p style="margin:0;">Et quand vous serez prêt(e) à passer du « quoi éviter » au « quoi dire exactement », TheFirstWord construit votre lettre et votre script personnalisés en moins de 60 secondes.</p>`,
+      cta: "Lire le guide (PDF)"
+    },
+    e2: {
+      subject: "L'erreur qui fait le plus de dégâts (et la phrase qui la remplace)",
+      body: () => `<p style="margin:0 0 16px;">Des cinq erreurs du guide, il y en a une qui revient dans presque toutes les familles : poser un diagnostic au lieu de décrire un fait.</p>
+        <p style="margin:0 0 16px;">« T'as un problème » ferme la porte. « J'ai remarqué que tu bois plus souvent au souper depuis quelques mois » la laisse ouverte. La différence n'est pas dans l'intention — elle est dans les mots.</p>
+        <p style="margin:0 0 16px;">Mais voici la vraie difficulté : la bonne phrase pour VOTRE situation dépend de qui est cette personne pour vous, de ce qu'elle consomme, de ce qui s'est déjà passé entre vous. Un guide générique s'arrête là où votre situation commence.</p>
+        <p style="margin:0;">TheFirstWord prend votre histoire — en huit questions — et construit la lettre, le guide de conversation et le script exact pour votre situation. En moins de 60 secondes.</p>`,
+      cta: "Créer mon script personnalisé"
+    },
+    e3: {
+      subject: "Les mots exacts, pour votre situation",
+      body: () => `<p style="margin:0 0 16px;">Vous avez téléchargé le guide il y a quelques jours. Si la conversation n'a pas encore eu lieu, ce n'est pas par manque de volonté — c'est parce que savoir quoi éviter n'est pas la même chose que savoir quoi dire.</p>
+        <p style="margin:0 0 16px;">Voici ce que TheFirstWord construit pour vous, à partir de vos réponses à huit questions :</p>
+        <p style="margin:0 0 16px;">— Une lettre d'intervention personnalisée<br>— Un guide de conversation étape par étape<br>— Un script mot à mot, dans vos mots à vous<br>— Un message texte prêt à envoyer<br>— L'outil Plan B, si la première tentative ne fonctionne pas</p>
+        <p style="margin:0;">À partir de 9 $, garantie 7 jours. La conversation que vous repoussez depuis des mois peut commencer ce soir.</p>`,
+      cta: "Commencer maintenant"
+    }
+  },
+  en: {
+    e1: {
+      subject: "Your guide is here — The 5 Mistakes That Shut Down the Conversation",
+      body: (pdfUrl) => `<p style="margin:0 0 16px;">Here it is, as promised:</p>
+        <p style="margin:0 0 16px;"><a href="${pdfUrl}" style="color:#2A7F7F;font-weight:bold;">→ The 5 Mistakes That Shut Down the Conversation Before It Starts (PDF)</a></p>
+        <p style="margin:0 0 16px;">It's a five-minute read. Every mistake comes with what to do instead — concrete phrases, not theory.</p>
+        <p style="margin:0;">And when you're ready to go from "what to avoid" to "exactly what to say," TheFirstWord builds your personalized letter and script in under 60 seconds.</p>`,
+      cta: "Read the guide (PDF)"
+    },
+    e2: {
+      subject: "The mistake that does the most damage (and the sentence that replaces it)",
+      body: () => `<p style="margin:0 0 16px;">Of the five mistakes in the guide, one shows up in almost every family: diagnosing instead of describing.</p>
+        <p style="margin:0 0 16px;">"You have a problem" closes the door. "I've noticed you've been drinking more at dinner these past few months" leaves it open. The difference isn't in the intention — it's in the words.</p>
+        <p style="margin:0 0 16px;">But here's the real difficulty: the right sentence for YOUR situation depends on who this person is to you, what they're using, and what's already happened between you. A generic guide stops exactly where your situation begins.</p>
+        <p style="margin:0;">TheFirstWord takes your story — through eight questions — and builds the letter, the conversation guide, and the exact script for your situation. In under 60 seconds.</p>`,
+      cta: "Build my personalized script"
+    },
+    e3: {
+      subject: "The exact words, for your situation",
+      body: () => `<p style="margin:0 0 16px;">You downloaded the guide a few days ago. If the conversation hasn't happened yet, it's not a lack of will — it's that knowing what to avoid isn't the same as knowing what to say.</p>
+        <p style="margin:0 0 16px;">Here's what TheFirstWord builds for you, from your answers to eight questions:</p>
+        <p style="margin:0 0 16px;">— A personalized intervention letter<br>— A step-by-step conversation guide<br>— A word-for-word spoken script, in your own words<br>— A ready-to-send text message<br>— The Plan B tool, if the first attempt doesn't land</p>
+        <p style="margin:0;">From $9, 7-day guarantee. The conversation you've been putting off for months can start tonight.</p>`,
+      cta: "Start now"
+    }
+  }
+};
+
+function leadPdfUrl(lang) {
+  return lang === 'fr'
+    ? 'https://thefirstword.ca/les-5-erreurs.pdf'
+    : 'https://thefirstword.ca/the-5-mistakes.pdf';
+}
+
+app.post("/api/capture-lead", async (req, res) => {
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket.remoteAddress || 'unknown';
+  if (!checkLeadRate(ip)) return res.status(429).json({ error: "Too many requests" });
+  if (!SUPABASE_KEY) return res.status(500).json({ error: "Database not configured" });
+
+  const { email, lang, source, website } = req.body || {};
+
+  // Honeypot: real users never fill this hidden field. Pretend success for bots.
+  if (website) return res.json({ ok: true });
+
+  const cleanEmail = (email || '').trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail) || cleanEmail.length > 254) {
+    return res.status(400).json({ error: "Invalid email" });
+  }
+  const cleanLang = lang === 'en' ? 'en' : 'fr';
+  const cleanSource = String(source || '').slice(0, 100);
+
+  try {
+    // Idempotent: if this email already exists, don't resend or reset anything.
+    const existing = await supabaseQuery('leads', `email=eq.${encodeURIComponent(cleanEmail)}&select=id,email1_sent_at`);
+    if (Array.isArray(existing) && existing.length > 0 && existing[0].email1_sent_at) {
+      return res.json({ ok: true });
+    }
+
+    const rows = await supabaseUpsert('leads', { email: cleanEmail, lang: cleanLang, source: cleanSource });
+    const leadRow = Array.isArray(rows) ? rows[0] : rows;
+    if (!leadRow || !leadRow.id) {
+      console.error('capture-lead: unexpected upsert response', JSON.stringify(rows));
+      return res.status(500).json({ error: "Could not save" });
+    }
+
+    const t = LEAD_EMAILS[cleanLang].e1;
+    const html = leadEmailHtml(cleanLang, t.body(leadPdfUrl(cleanLang)), t.cta, leadPdfUrl(cleanLang), leadRow.id);
+    const sent = await sendEmail(cleanEmail, t.subject, html);
+    if (sent && sent.id) {
+      await supabaseUpdate('leads', leadRow.id, { email1_sent_at: new Date().toISOString() });
+    } else {
+      console.error('capture-lead: email send failed', JSON.stringify(sent));
+    }
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('capture-lead error:', err.message);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+app.post("/api/send-nurture-batch", async (req, res) => {
+  const authHeader = req.headers['x-cron-secret'];
+  if (authHeader !== process.env.CRON_SECRET) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  if (!SUPABASE_KEY) return res.status(500).json({ error: "Database not configured." });
+
+  try {
+    const now = new Date();
+    const results = { email2_sent: 0, email3_sent: 0, failed: 0 };
+    const leads = await supabaseQuery('leads', 'unsubscribed=eq.false&select=*');
+    if (!Array.isArray(leads)) {
+      console.error('send-nurture-batch: unexpected query response', JSON.stringify(leads));
+      return res.status(500).json({ error: "Query failed" });
+    }
+
+    for (const lead of leads) {
+      if (!lead.email1_sent_at) continue; // never got the guide; skip
+      const daysSince = Math.floor((now - new Date(lead.created_at)) / (1000 * 60 * 60 * 24));
+      const lang = lead.lang === 'en' ? 'en' : 'fr';
+
+      let toSend = null; // send at most one email per lead per run
+      if (daysSince >= 2 && !lead.email2_sent_at) {
+        toSend = { t: LEAD_EMAILS[lang].e2, stamp: 'email2_sent_at', counter: 'email2_sent' };
+      } else if (daysSince >= 5 && lead.email2_sent_at && !lead.email3_sent_at) {
+        toSend = { t: LEAD_EMAILS[lang].e3, stamp: 'email3_sent_at', counter: 'email3_sent' };
+      }
+      if (!toSend) continue;
+
+      const appUrl = `https://thefirstword.ca/app.html?lang=${lang}`;
+      const html = leadEmailHtml(lang, toSend.t.body(), toSend.t.cta, appUrl, lead.id);
+      const sent = await sendEmail(lead.email, toSend.t.subject, html);
+      if (sent && sent.id) {
+        await supabaseUpdate('leads', lead.id, { [toSend.stamp]: new Date().toISOString() });
+        results[toSend.counter]++;
+      } else {
+        results.failed++;
+        console.error(`send-nurture-batch: failed for lead ${lead.id}`, JSON.stringify(sent));
+      }
+    }
+
+    res.json({ ok: true, ...results });
+  } catch (err) {
+    console.error('send-nurture-batch error:', err.message);
+    res.status(500).json({ error: "Something went wrong" });
   }
 });
 
