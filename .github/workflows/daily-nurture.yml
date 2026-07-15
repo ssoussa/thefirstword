@@ -1,0 +1,25 @@
+name: Send Nurture Emails
+
+on:
+  schedule:
+    # Every day at 9:00 AM Eastern (14:00 UTC during summer time)
+    - cron: '0 14 * * *'
+  workflow_dispatch: # Allow manual trigger for testing
+
+jobs:
+  send-nurture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger nurture email batch
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST https://thefirstword.ca/api/send-nurture-batch \
+            -H "Content-Type: application/json" \
+            -H "x-cron-secret: ${{ secrets.CRON_SECRET }}" \
+            --max-time 60)
+          echo "Response code: $response"
+          if [ "$response" != "200" ]; then
+            echo "Failed with status $response"
+            exit 1
+          fi
+          echo "Nurture emails sent successfully"
