@@ -1367,7 +1367,7 @@ const LEAD_EMAILS = {
       body: () => `<p style="margin:0 0 16px;">Vous avez téléchargé le guide il y a quelques jours. Si la conversation n'a pas encore eu lieu, ce n'est pas par manque de volonté — c'est parce que savoir quoi éviter n'est pas la même chose que savoir quoi dire.</p>
         <p style="margin:0 0 16px;">Voici ce que TheFirstWord construit pour vous, à partir de vos réponses à huit questions :</p>
         <p style="margin:0 0 16px;">— Une lettre d'intervention personnalisée<br>— Un guide de conversation étape par étape<br>— Un script mot à mot, dans vos mots à vous<br>— Un message texte prêt à envoyer<br>— L'outil Plan B, si la première tentative ne fonctionne pas</p>
-        <p style="margin:0;">À partir de 9 $, garantie 7 jours. La conversation que vous repoussez depuis des mois peut commencer ce soir.</p>`,
+        <p style="margin:0;">À partir de 9 $, avec une garantie de remboursement de 7 jours. La conversation que vous repoussez depuis des mois peut commencer ce soir.</p>`,
       cta: "Commencer maintenant"
     }
   },
@@ -1393,7 +1393,7 @@ const LEAD_EMAILS = {
       body: () => `<p style="margin:0 0 16px;">You downloaded the guide a few days ago. If the conversation hasn't happened yet, it's not a lack of will — it's that knowing what to avoid isn't the same as knowing what to say.</p>
         <p style="margin:0 0 16px;">Here's what TheFirstWord builds for you, from your answers to eight questions:</p>
         <p style="margin:0 0 16px;">— A personalized intervention letter<br>— A step-by-step conversation guide<br>— A word-for-word spoken script, in your own words<br>— A ready-to-send text message<br>— The Plan B tool, if the first attempt doesn't land</p>
-        <p style="margin:0;">From $9, 7-day guarantee. The conversation you've been putting off for months can start tonight.</p>`,
+        <p style="margin:0;">From $9, with a 7-day money-back guarantee. The conversation you've been putting off for months can start tonight.</p>`,
       cta: "Start now"
     }
   }
