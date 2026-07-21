@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lettre d'intervention à votre fils : exemple + comment l'écrire | TheFirstWord</title>
+  <meta name="description" content="Un vrai exemple de lettre d'intervention à un fils aux prises avec la drogue ou l'alcool — et la structure qui fait qu'une lettre passe au lieu de partir une chicane." />
+  <link rel="canonical" href="https://thefirstword.ca/lettre-intervention-a-votre-fils.html" />
+  <link rel="alternate" hreflang="fr" href="https://thefirstword.ca/lettre-intervention-a-votre-fils.html" />
+  <link rel="alternate" hreflang="en" href="https://thefirstword.ca/intervention-letter-to-your-son.html" />
+  <link rel="alternate" hreflang="x-default" href="https://thefirstword.ca/intervention-letter-to-your-son.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #F7F4EF;
+      --text: #1C2B3A;
+      --text-light: #5a6a7a;
+      --teal: #2A7F7F;
+      --teal-light: #e8f4f4;
+      --cta: #C4622D;
+      --divider: #E8E2D9;
+      --white: #FFFFFF;
+    }
+    body {
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: rgba(247,244,239,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--divider);
+      padding: 12px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    #nav-logo-img { width: 160px; height: auto; }
+    @media (max-width: 600px) {
+      nav { padding: 10px 20px; }
+      #nav-logo-img { width: 130px; }
+    }
+
+    /* LANG TOGGLE */
+    .lang-toggle {
+      display: flex;
+      gap: 4px;
+      background: rgba(28,43,58,0.08);
+      border-radius: 6px;
+      padding: 4px;
+    }
+    .lang-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-light);
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .lang-btn.active {
+      background: white;
+      color: var(--text);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    /* PAGE */
+    .page-container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+    @media (max-width: 600px) {
+      .page-container { padding: 36px 16px 80px; }
+    }
+
+    /* HEADER */
+    .page-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .page-meta {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--divider);
+    }
+
+    /* SECTIONS */
+    .guide-section {
+      margin-bottom: 32px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    p {
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+    .intro-p {
+      font-size: 17px;
+    }
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* INFO BOX */
+    .info-box {
+      background: var(--teal-light);
+      border-left: 4px solid var(--teal);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+      font-weight: 500;
+    }
+
+    /* CTA BOX */
+    .contact-box {
+      background: white;
+      border: 1px solid var(--divider);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-top: 48px;
+      text-align: center;
+    }
+    .contact-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .contact-box p { font-size: 14px; color: var(--text-light); margin-bottom: 16px; }
+    .contact-btn {
+      display: inline-block;
+      background: var(--cta);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .contact-btn:hover { background: #a8501f; text-decoration: none; }
+
+    /* FOOTER */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+    }
+    footer a { color: rgba(255,255,255,0.7); }
+
+    /* HIDDEN */
+    .hidden { display: none !important; }
+  </style>
+  <!-- Analytics: Posthog -->
+  <script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]);t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_vhx9nKj5jE5ZTjQDugMuTfJfvaSionohP4CXBWWQuF5r', {api_host:'https://app.posthog.com'});
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Lettre d'intervention à votre fils : exemple + comment l'écrire",
+  "description": "Un vrai exemple de lettre d'intervention à un fils aux prises avec la drogue ou l'alcool — et la structure qui fait qu'une lettre passe au lieu de partir une chicane.",
+  "inLanguage": "fr",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://thefirstword.ca/lettre-intervention-a-votre-fils.html"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "TheFirstWord",
+    "url": "https://thefirstword.ca/",
+    "logo": "https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "TheFirstWord",
+    "url": "https://thefirstword.ca/",
+    "logo": "https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png"
+  },
+  "datePublished": "2026-07-21",
+  "dateModified": "2026-07-21"
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "inLanguage": "fr",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Par quoi commencer une lettre d'intervention?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Par un souvenir précis — pas par une accusation. Une première ligne qui rappelle qui est votre fils désarme; une première ligne sur ce qu'il a fait de mal lui fait arrêter de lire et commencer à se défendre."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quelle longueur devrait avoir une lettre d'intervention?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Une page. Environ 250 à 400 mots — assez court pour être lue à voix haute en moins de trois minutes. Passé une page, la lettre commence à ressembler à un dossier plutôt qu'à une lettre."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Est-ce que je devrais lire la lettre à voix haute ou l'envoyer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Lisez-la à voix haute dans un moment calme, sobre et privé si c'est possible — la lettre garde votre voix stable quand l'émotion monte. Si les face-à-face finissent toujours en chicane, l'envoyer est une vraie option : l'avantage d'une lettre, c'est justement qu'elle ne peut pas être interrompue."
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://thefirstword.ca" class="nav-logo">
+    <img id="nav-logo-img"
+      src="https://raw.githubusercontent.com/ssoussa/thefirstword/main/logo-fr.png"
+      alt="TheFirstWord" />
+  </a>
+  <a href="https://thefirstword.ca/intervention-letter-to-your-son.html" style="font-size:13px; font-weight:600; color:var(--text-light); text-decoration:none;">English →</a>
+</nav>
+
+<!-- PAGE -->
+<div class="page-container">
+
+    <p class="page-eyebrow">Guide pour les familles</p>
+    <h1 class="page-title">Comment écrire une lettre d'intervention à votre fils (avec un vrai exemple)</h1>
+    <p class="page-meta">TheFirstWord</p>
+
+    <p class="intro-p">Il est tard, la maison est tranquille, pis vous fixez une page blanche. Vous savez ce que vous voulez qu'il comprenne. Vous ne savez juste pas comment le dire sans qu'il froisse la lettre — ou la relation — dès le premier paragraphe. Voici comment une lettre comme ça s'écrit pour vrai, avec un exemple dont vous pouvez vous inspirer.</p>
+
+    <div class="info-box">
+      L'essentiel : une lettre fonctionne là où la parole échoue parce qu'elle ne peut pas être interrompue. C'est tout ce que vous diriez s'il vous laissait finir une phrase — et c'est exactement pour ça que la première ligne compte plus que toutes les autres.
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Pourquoi une lettre le rejoint quand la parole ne passe pas</h2>
+      <p>Chaque conversation sur sa consommation a probablement suivi le même scénario : vous commencez, il se met sur la défensive, le ton monte, quelqu'un quitte la pièce. Une lettre brise ce scénario. On ne peut pas parler par-dessus une page. Il peut la lire à deux heures du matin, quand la défensive est tombée. Pis il peut la relire — ce que les gens font presque toujours avec ce genre de lettre. Vous ne choisissez pas une lettre parce que c'est plus facile pour vous. Vous la choisissez parce que c'est plus difficile pour lui d'y échapper.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Commencez par un souvenir, pas par un acte d'accusation</h2>
+      <p>La première ligne décide s'il va lire la deuxième. Si elle commence par ce qu'il a fait — l'argent, les mensonges, les shifts manqués — il arrête de lire et commence à monter sa défense. Commencez plutôt par un moment qui prouve que vous le voyez <em>lui</em>, pas juste le problème : « Je repense souvent à l'été où t'as remonté ton vélo dans le garage. » Une ouverture comme ça, ça ne se conteste pas — et ça baisse la garde dont le reste de la lettre a besoin pour passer.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">La structure derrière toutes les lettres qui passent</h2>
+      <p>Après le souvenir, la lettre avance dans un ordre simple : ce que vous avez vu changer, dit en observations plutôt qu'en conclusions (« tu viens plus aux soupers du dimanche » — pas « t'es rendu un toxicomane »). Ensuite votre peur, nommée précisément — pas « je m'inquiète pour toi », mais « j'ai peur de l'appel que je pourrais recevoir un matin ». Ensuite une seule demande, assez petite pour qu'il puisse y répondre. Et à la fin, la porte, laissée visiblement ouverte : peu importe ce qu'il décide ce soir, il ne vous a pas perdu. Souvenir, changement, peur, demande, porte — dans cet ordre, sur une page.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Un vrai exemple</h2>
+      <div class="info-box" style="font-style: italic; font-weight: 400;">
+        <p style="font-size: 15px;">Alex,</p>
+        <p style="font-size: 15px;">J'ai recommencé cette lettre quatre fois. Chaque version sonnait comme un sermon, pis t'en as assez entendu venant de moi. Alors je vais juste te dire la vérité : mardi passé, quand t'as pas répondu avant deux heures de l'après-midi, je suis resté dix minutes dans l'entrée parce que j'avais peur de ce que j'allais trouver en dedans.</p>
+        <p style="font-size: 15px;">T'es mon gars. Je me souviens de l'été où t'as remonté ton vélo dans le garage — tu voulais pas rentrer souper tant que les freins marchaient pas. C'est ça que je sais de toi : quelqu'un qui lâche pas devant ce qui est difficile. J'ai besoin que tu saches que je vois à quel point celle-là est difficile.</p>
+        <p style="font-size: 15px; margin-bottom: 0;">Je t'écris pas pour faire la liste de tout ce qui a mal été cette année. Je t'écris parce que j'ai peur, pis parce que je t'aime plus fort que j'ai peur. Ce que je te demande est petit : …</p>
+      </div>
+      <p>Regardez ce que la lettre a accompli avant même d'arriver à la demande : elle a admis sa propre maladresse, elle s'est ancrée dans un mardi précis, pis elle lui a rappelé qui il est en dehors de la dépendance. Ce qui va dans le reste — la demande elle-même, et ce qui arrive si la réponse est non — dépend entièrement de votre fils et de votre situation. C'est exactement pour ça que copier la fin de quelqu'un d'autre ne fonctionne pas.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">Quoi laisser de côté</h2>
+      <p>Pas d'inventaire de chaque incident — il était là pour chacun d'eux, et une liste transforme la lettre en procès. Pas d'étiquette ni de diagnostic : « t'es un toxicomane », ça lui donne quelque chose à contester, tandis que « je t'ai vu disparaître cette année », non. Et pas d'ultimatum que vous n'êtes pas prêt à tenir — un ultimatum vide lui apprend que vos mots sont négociables, ce qui est le contraire du but de cette lettre. S'il lit la lettre et continue de dire qu'il n'y a aucun problème, c'est une autre conversation — voici <a href="https://thefirstword.ca/refuse-admettre-probleme.html">quoi dire quand il refuse d'admettre le problème</a>.</p>
+    </div>
+
+    <div class="guide-section">
+      <h2 class="section-title">La lire à voix haute ou l'envoyer</h2>
+      <p>Si vous le pouvez, lisez-la-lui à voix haute, dans un moment calme et sobre, sans public — la lettre garde votre voix stable quand le moment devient lourd. Si chaque face-à-face jusqu'ici a fini en chicane, l'envoyer n'est pas une défaite : c'est utiliser la lettre pour ce qu'elle fait de mieux. Dans les deux cas, sachez votre prochain move avant qu'il réponde. Si la réponse est un non ferme à l'idée d'aller chercher de l'aide, n'improvisez pas — <a href="https://thefirstword.ca/mon-enfant-refuse-aide.html">voici quoi faire quand votre enfant refuse l'aide</a>.</p>
+    </div>
+
+    <p>L'exemple ci-haut fonctionne parce qu'il est précis — une entrée de cour, un vélo, un mardi. Un modèle générique ne peut pas connaître le nom de votre fils, le moment où vous avez remarqué, ni ce qui a changé dans votre maison cette année. C'est ça que TheFirstWord construit : une lettre écrite à partir de vos réponses sur votre vraie situation, dans vos mots, prête en environ 60 secondes — avec un script de conversation et un Plan B pour ce qu'il répondra ensuite.</p>
+
+    <div class="contact-box">
+      <h3>Obtenez une lettre écrite pour votre fils</h3>
+      <p>Construite à partir de votre situation — son nom, vos moments, votre demande. Prête en une minute.</p>
+      <a href="https://thefirstword.ca/app.html?lang=fr" class="contact-btn">Commencer →</a>
+    </div>
+
+</div><!-- /page-container -->
+
+<footer>
+  <p>© <span id="footer-year"></span> TheFirstWord &nbsp;·&nbsp; <a href="https://thefirstword.ca">thefirstword.ca</a> &nbsp;·&nbsp; <a href="mailto:thefirstword.ca@gmail.com">thefirstword.ca@gmail.com</a></p>
+</footer>
+
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+</script>
+<script src="https://thefirstword.ca/lead-popup.js" defer></script>
+</body>
+</html>
